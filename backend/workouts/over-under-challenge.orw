@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workout_file>
+  <name>Over Under Challenge</name>
+  <author>Open Ride</author>
+  <description>Master the art of riding at and around your threshold. Over-under intervals teach your body to clear lactate while maintaining power.</description>
+  <sportType>bike</sportType>
+  <category>Medium Sessions</category>
+  <subcategory>Standard</subcategory>
+  <tags>
+    <tag name="Threshold"/>
+    <tag name="Over Under"/>
+    <tag name="FTP"/>
+  </tags>
+
+  <workout>
+    <Warmup Duration="360" PowerLow="0.40" PowerHigh="0.65" Cadence="85">
+      <textevent timeoffset="0" message="Over Under Challenge! Training your lactate clearance today."/>
+      <textevent timeoffset="120" message="Over-unders alternate above and below threshold."/>
+      <textevent timeoffset="240" message="This teaches your body to recover while still working hard."/>
+    </Warmup>
+
+    <SteadyState Duration="120" Power="0.75" Cadence="90">
+      <textevent timeoffset="0" message="Settling into tempo before the main work begins."/>
+    </SteadyState>
+
+    <!-- Set 1: 3x Over-Under -->
+    <SteadyState Duration="120" Power="1.05" Cadence="95">
+      <textevent timeoffset="0" message="Set 1 - OVER! Above threshold! Feel the burn building."/>
+    </SteadyState>
+    <SteadyState Duration="120" Power="0.90" Cadence="88">
+      <textevent timeoffset="0" message="UNDER! Still working but clearing that lactate."/>
+    </SteadyState>
+    <SteadyState Duration="120" Power="1.05" Cadence="95">
+      <textevent timeoffset="0" message="OVER again! Push through the discomfort!"/>
+    </SteadyState>
+    <SteadyState Duration="120" Power="0.90" Cadence="88">
+      <textevent timeoffset="0" message="UNDER! Your body is learning to recover at power."/>
+    </SteadyState>
+    <SteadyState Duration="120" Power="1.05" Cadence="95">
+      <textevent timeoffset="0" message="Last OVER this set! Strong finish!"/>
+    </SteadyState>
+    <SteadyState Duration="120" Power="0.90" Cadence="88">
+      <textevent timeoffset="0" message="Final under. Set 1 done!"/>
+    </SteadyState>
+
+    <SteadyState Duration="180" Power="0.55" Cadence="80">
+      <textevent timeoffset="0" message="Three minutes recovery. Set 2 is a bit harder."/>
+      <textevent timeoffset="120" message="Get ready. Higher over power coming up!"/>
+    </SteadyState>
+
+    <!-- Set 2: 3x Over-Under (harder) -->
+    <SteadyState Duration="120" Power="1.08" Cadence="95">
+      <textevent timeoffset="0" message="Set 2 - OVER! Higher power this time!"/>
+    </SteadyState>
+    <SteadyState Duration="120" Power="0.88" Cadence="88">
+      <textevent timeoffset="0" message="UNDER. Slightly lower recovery. Tougher to clear!"/>
+    </SteadyState>
+    <SteadyState Duration="120" Power="1.08" Cadence="95">
+      <textevent timeoffset="0" message="OVER! You are getting stronger at this!"/>
+    </SteadyState>
+    <SteadyState Duration="120" Power="0.88" Cadence="88">
+      <textevent timeoffset="0" message="UNDER. Control your breathing. Stay smooth."/>
+    </SteadyState>
+    <SteadyState Duration="120" Power="1.08" Cadence="95">
+      <textevent timeoffset="0" message="Final OVER! Give it everything!"/>
+    </SteadyState>
+    <SteadyState Duration="120" Power="0.88" Cadence="88">
+      <textevent timeoffset="0" message="Last under. Great work on Set 2!"/>
+    </SteadyState>
+
+    <SteadyState Duration="180" Power="0.55" Cadence="80">
+      <textevent timeoffset="0" message="Recovery. One final short set to finish it off."/>
+      <textevent timeoffset="120" message="Two more over-unders. Make them count!"/>
+    </SteadyState>
+
+    <!-- Set 3: 2x Over-Under (hardest) -->
+    <SteadyState Duration="120" Power="1.10" Cadence="95">
+      <textevent timeoffset="0" message="Set 3 - Highest power OVER! Dig deep!"/>
+    </SteadyState>
+    <SteadyState Duration="120" Power="0.85" Cadence="88">
+      <textevent timeoffset="0" message="UNDER. One more pair to go!"/>
+    </SteadyState>
+    <SteadyState Duration="120" Power="1.10" Cadence="95">
+      <textevent timeoffset="0" message="FINAL OVER! Leave nothing on the table!"/>
+      <textevent timeoffset="60" message="60 seconds! You can do ANYTHING for 60 seconds!"/>
+    </SteadyState>
+    <SteadyState Duration="120" Power="0.85" Cadence="88">
+      <textevent timeoffset="0" message="Last under. You conquered it!"/>
+    </SteadyState>
+
+    <Cooldown Duration="300" PowerHigh="0.55" PowerLow="0.35" Cadence="80">
+      <textevent timeoffset="0" message="Amazing over-under work! Cooling down."/>
+      <textevent timeoffset="120" message="Your lactate clearance just improved significantly."/>
+      <textevent timeoffset="240" message="Over Under Challenge complete!"/>
+    </Cooldown>
+  </workout>
+</workout_file>

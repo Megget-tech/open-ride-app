@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workout_file>
+  <name>Ultra Endurance</name>
+  <author>Open Ride</author>
+  <description>A pure aerobic builder with long sustained blocks at endurance pace. Progressive tempo touches train your body to sustain effort over extended time.</description>
+  <sportType>bike</sportType>
+  <category>Epic Sessions</category>
+  <subcategory>Marathon</subcategory>
+  <tags>
+    <tag name="Endurance"/>
+    <tag name="Zone 2"/>
+    <tag name="Aerobic"/>
+  </tags>
+
+  <workout>
+    <Warmup Duration="600" PowerLow="0.40" PowerHigh="0.58" Cadence="85">
+      <textevent timeoffset="0" message="Ultra Endurance! A long aerobic session with tempo touches."/>
+      <textevent timeoffset="180" message="Keep the effort easy. This is zone 2 territory."/>
+      <textevent timeoffset="360" message="Long sessions at moderate intensity build your aerobic base."/>
+      <textevent timeoffset="540" message="Warmup almost done. Settle into your rhythm."/>
+    </Warmup>
+
+    <SteadyState Duration="1500" Power="0.60" Cadence="85">
+      <textevent timeoffset="0" message="Twenty-five minutes of zone 2. Relax and ride."/>
+      <textevent timeoffset="300" message="Your breathing should be easy. Talk-test comfortable."/>
+      <textevent timeoffset="600" message="Ten minutes in. This is pure aerobic development."/>
+      <textevent timeoffset="900" message="Fifteen minutes. Halfway through this block."/>
+      <textevent timeoffset="1200" message="Five minutes to go. Hydrate now."/>
+    </SteadyState>
+
+    <SteadyState Duration="300" Power="0.70" Cadence="88">
+      <textevent timeoffset="0" message="Tempo touch! Five minutes slightly above endurance."/>
+      <textevent timeoffset="120" message="Still comfortable but working a bit harder."/>
+      <textevent timeoffset="240" message="Back to zone 2 soon."/>
+    </SteadyState>
+
+    <SteadyState Duration="1200" Power="0.62" Cadence="85">
+      <textevent timeoffset="0" message="Back to zone 2 for twenty minutes."/>
+      <textevent timeoffset="300" message="These long blocks build serious endurance."/>
+      <textevent timeoffset="600" message="Halfway. Stay smooth and relaxed."/>
+      <textevent timeoffset="900" message="Five minutes left. You are doing wonderfully."/>
+    </SteadyState>
+
+    <SteadyState Duration="300" Power="0.72" Cadence="88">
+      <textevent timeoffset="0" message="Second tempo touch. Slightly higher than the first."/>
+      <textevent timeoffset="120" message="Progressive effort within an endurance session."/>
+    </SteadyState>
+
+    <SteadyState Duration="900" Power="0.60" Cadence="85">
+      <textevent timeoffset="0" message="Final zone 2 block. Fifteen minutes."/>
+      <textevent timeoffset="300" message="Your aerobic system is getting a massive stimulus today."/>
+      <textevent timeoffset="600" message="Five minutes to go. Stay in the zone."/>
+    </SteadyState>
+
+    <SteadyState Duration="300" Power="0.75" Cadence="90">
+      <textevent timeoffset="0" message="Final tempo touch. Strongest one yet!"/>
+      <textevent timeoffset="120" message="Finishing strong after all this volume is impressive."/>
+    </SteadyState>
+
+    <SteadyState Duration="480" Power="0.55" Cadence="85">
+      <textevent timeoffset="0" message="Easy spinning. Main work is done."/>
+      <textevent timeoffset="240" message="Almost there. Great session."/>
+    </SteadyState>
+
+    <Cooldown Duration="420" PowerHigh="0.50" PowerLow="0.35" Cadence="80">
+      <textevent timeoffset="0" message="Cooling down from an epic endurance effort."/>
+      <textevent timeoffset="180" message="Your aerobic base just expanded significantly."/>
+      <textevent timeoffset="360" message="Ultra Endurance complete!"/>
+    </Cooldown>
+  </workout>
+</workout_file>

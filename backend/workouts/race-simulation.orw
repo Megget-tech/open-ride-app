@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workout_file>
+  <name>Race Simulation</name>
+  <author>Open Ride</author>
+  <description>Simulates the unpredictable demands of racing. Tempo riding punctuated by surges, attacks, and recovery—just like a real event.</description>
+  <sportType>bike</sportType>
+  <category>Long Sessions</category>
+  <subcategory>Extended</subcategory>
+  <tags>
+    <tag name="Race Prep"/>
+    <tag name="Mixed"/>
+    <tag name="Advanced"/>
+  </tags>
+
+  <workout>
+    <!-- Warmup: 8 minutes -->
+    <Warmup Duration="480" PowerLow="0.40" PowerHigh="0.65" Cadence="85">
+      <textevent timeoffset="0" message="Race Simulation. Today we replicate the chaos and demands of a real race."/>
+      <textevent timeoffset="120" message="Warmup easy. The race has not started yet—save your energy."/>
+      <textevent timeoffset="300" message="Surges, attacks, climbs, and a sprint finish are all ahead. Be ready for anything."/>
+      <textevent timeoffset="420" message="Rolling to the start line now. Focus up."/>
+    </Warmup>
+
+    <!-- Pre-race: 3 minutes at 0.75 -->
+    <SteadyState Duration="180" Power="0.75" Cadence="88">
+      <textevent timeoffset="0" message="Moderate effort as the peloton assembles. Controlled and calm."/>
+      <textevent timeoffset="90" message="Jostling for position. Stay alert and keep the power steady."/>
+      <textevent timeoffset="150" message="Neutral zone coming up. Easy rolling before the flag drops."/>
+    </SteadyState>
+
+    <!-- Neutral rollout: 5 minutes at 0.70 -->
+    <SteadyState Duration="300" Power="0.70" Cadence="85">
+      <textevent timeoffset="0" message="Neutral rollout. Easy pace—save your matches for when the race goes live."/>
+      <textevent timeoffset="120" message="Use this time to settle your breathing and find good wheels to follow."/>
+      <textevent timeoffset="240" message="The flag is about to drop. Get ready for the opening surge!"/>
+    </SteadyState>
+
+    <!-- Race start surge: 1 minute at 1.10 -->
+    <SteadyState Duration="60" Power="1.10" Cadence="100">
+      <textevent timeoffset="0" message="RACE IS ON! Opening surge—fight for position! Above threshold!"/>
+      <textevent timeoffset="30" message="Hold it! The pace will settle soon. Stay near the front."/>
+      <textevent timeoffset="50" message="Surge ending. Settle into race tempo."/>
+    </SteadyState>
+
+    <!-- Settle into tempo: 8 minutes at 0.80 -->
+    <SteadyState Duration="480" Power="0.80" Cadence="90">
+      <textevent timeoffset="0" message="Race tempo established. Firm and fast but not over the red line."/>
+      <textevent timeoffset="180" message="Three minutes in. The peloton is strung out. Hold your position."/>
+      <textevent timeoffset="360" message="Riding smart in the pack. An attack is forming ahead—be ready to respond!"/>
+      <textevent timeoffset="450" message="Here it comes! Someone is going off the front!"/>
+    </SteadyState>
+
+    <!-- Attack: 2 minutes at 1.15 -->
+    <SteadyState Duration="120" Power="1.15" Cadence="100">
+      <textevent timeoffset="0" message="ATTACK! Bridge across to the break! Everything you have got!"/>
+      <textevent timeoffset="60" message="One minute in—you are closing the gap. Do not let them get away!"/>
+      <textevent timeoffset="100" message="Almost there! Prepare to settle into the chase group."/>
+    </SteadyState>
+
+    <!-- Chase: 3 minutes at 0.95 -->
+    <SteadyState Duration="180" Power="0.95" Cadence="95">
+      <textevent timeoffset="0" message="In the chase group now. Threshold effort to maintain the gap on the peloton."/>
+      <textevent timeoffset="90" message="Working together. Take your pulls and rotate smoothly."/>
+      <textevent timeoffset="150" message="Easing out of the chase. Recovery coming up."/>
+    </SteadyState>
+
+    <!-- Recovery in pack: 5 minutes at 0.65 -->
+    <SteadyState Duration="300" Power="0.65" Cadence="80">
+      <textevent timeoffset="0" message="Absorbed back into the pack. Sit in and recover. Drink and eat."/>
+      <textevent timeoffset="120" message="Smart racing means knowing when to rest. Conserve energy now."/>
+      <textevent timeoffset="240" message="A climb is approaching on the course. Get ready to dig in."/>
+    </SteadyState>
+
+    <!-- Climb: 6 minutes at 0.95 -->
+    <SteadyState Duration="360" Power="0.95" Cadence="80">
+      <textevent timeoffset="0" message="The climb begins! Threshold power, lower cadence. Grind it out."/>
+      <textevent timeoffset="120" message="Two minutes up. The group is thinning. Stay with the front."/>
+      <textevent timeoffset="240" message="Four minutes. The summit is in sight. Keep pressing!"/>
+      <textevent timeoffset="330" message="Cresting the top! Get ready to recover on the descent."/>
+    </SteadyState>
+
+    <!-- Descent: 3 minutes at 0.55 -->
+    <SteadyState Duration="180" Power="0.55" Cadence="80">
+      <textevent timeoffset="0" message="Descent! Soft pedaling to recover. Let gravity do the work."/>
+      <textevent timeoffset="90" message="Use every second of this descent to get your legs back."/>
+      <textevent timeoffset="150" message="Approaching the final kilometers. Time to race again!"/>
+    </SteadyState>
+
+    <!-- Final 10km: 8 minutes at 0.85 -->
+    <SteadyState Duration="480" Power="0.85" Cadence="92">
+      <textevent timeoffset="0" message="Final 10 kilometers! The pace ramps up as teams position for the sprint."/>
+      <textevent timeoffset="180" message="Three minutes in. Elbows out, holding position. It is getting tense."/>
+      <textevent timeoffset="360" message="The leadout trains are forming. Get on a good wheel!"/>
+      <textevent timeoffset="440" message="Under the flamme rouge! Final kilometer! Get ready to SPRINT!"/>
+    </SteadyState>
+
+    <!-- Sprint finish: 1 minute at 1.30 -->
+    <SteadyState Duration="60" Power="1.30" Cadence="110">
+      <textevent timeoffset="0" message="SPRINT! EVERYTHING YOU HAVE! Out of the saddle and GO!"/>
+      <textevent timeoffset="20" message="HOLD IT! Do not sit down! Drive through the line!"/>
+      <textevent timeoffset="50" message="Across the line! What a finish!"/>
+    </SteadyState>
+
+    <!-- Immediate recovery: 3 minutes at 0.50 -->
+    <SteadyState Duration="180" Power="0.50" Cadence="75">
+      <textevent timeoffset="0" message="Race is over! Easy spinning. Catch your breath."/>
+      <textevent timeoffset="60" message="Hands off the bars, sit up, breathe deep. The adrenaline will fade."/>
+      <textevent timeoffset="150" message="Incredible effort. Time to ride easy back to the team bus."/>
+    </SteadyState>
+
+    <!-- Easy spin: 8 minutes at 0.65 -->
+    <SteadyState Duration="480" Power="0.65" Cadence="80">
+      <textevent timeoffset="0" message="Easy riding to flush the legs. Reflect on the race you just rode."/>
+      <textevent timeoffset="240" message="Every surge and recovery simulated the real demands of racing."/>
+      <textevent timeoffset="420" message="Cooldown coming up. Almost done."/>
+    </SteadyState>
+
+    <!-- Cooldown: 7 minutes -->
+    <Cooldown Duration="420" PowerHigh="0.55" PowerLow="0.35" Cadence="80">
+      <textevent timeoffset="0" message="Cooldown. Let the power taper off gently."/>
+      <textevent timeoffset="180" message="A full race simulation in one session. Your tactical fitness will thank you."/>
+      <textevent timeoffset="360" message="Session complete. Recover well—race day will feel familiar now."/>
+    </Cooldown>
+  </workout>
+</workout_file>

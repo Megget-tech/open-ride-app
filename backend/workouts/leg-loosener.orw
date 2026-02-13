@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workout_file>
+  <name>Leg Loosener</name>
+  <author>Open Ride</author>
+  <description>Loosen up stiff legs with this gentle session. Light cadence drills and easy spinning prepare your body for the next hard effort without adding fatigue.</description>
+  <sportType>bike</sportType>
+  <category>Recovery</category>
+  <subcategory>Active Recovery</subcategory>
+  <tags>
+    <tag name="Recovery"/>
+    <tag name="Pre-Race"/>
+    <tag name="Easy"/>
+  </tags>
+  <workout>
+    <Warmup Duration="300" PowerLow="0.30" PowerHigh="0.45" Cadence="82">
+      <textevent timeoffset="10" message="Welcome to the Leg Loosener. Time to shake out the stiffness and get those legs feeling fresh."/>
+      <textevent timeoffset="90" message="Start very gently. Let the warmth build gradually in your muscles."/>
+      <textevent timeoffset="200" message="Relax your ankles and let them move naturally through the pedal stroke."/>
+    </Warmup>
+    <SteadyState Duration="480" Power="0.45" Cadence="85">
+      <textevent timeoffset="30" message="Easy cruising power. Your legs should feel like they are just turning over."/>
+      <textevent timeoffset="150" message="This is a great pre-race or pre-hard-day opener. Just enough to wake the legs up."/>
+      <textevent timeoffset="300" message="Keep your core gently engaged but do not brace. Think supportive, not rigid."/>
+      <textevent timeoffset="420" message="Coming up next: short cadence pickups. Same easy power, just faster legs."/>
+    </SteadyState>
+    <IntervalsT Repeat="3" OnDuration="30" OffDuration="90" OnPower="0.55" OffPower="0.42" Cadence="100" CadenceResting="85">
+      <textevent timeoffset="5" message="Quick spin-up! Higher cadence but the power stays low. Fast and light."/>
+      <textevent timeoffset="25" message="Ease back. That was just a gentle leg opener, not a sprint."/>
+      <textevent timeoffset="60" message="Recover at a comfortable cadence. These pickups loosen tight muscles."/>
+      <textevent timeoffset="130" message="Next one coming soon. Remember: fast legs, low effort."/>
+      <textevent timeoffset="250" message="Last opener coming up. Keep it smooth and controlled."/>
+    </IntervalsT>
+    <SteadyState Duration="480" Power="0.42" Cadence="85">
+      <textevent timeoffset="30" message="Back to easy spinning. Let your legs settle after those openers."/>
+      <textevent timeoffset="150" message="Your legs should be feeling looser now. The blood is flowing."/>
+      <textevent timeoffset="300" message="Stay relaxed in the saddle. Light hands, quiet upper body."/>
+      <textevent timeoffset="420" message="One short block of slightly higher power ahead, then we wind down."/>
+    </SteadyState>
+    <SteadyState Duration="120" Power="0.50" Cadence="90">
+      <textevent timeoffset="10" message="A brief bump in power. Still easy, just opening things up a bit more."/>
+      <textevent timeoffset="60" message="This should feel controlled and comfortable. Not hard at all."/>
+      <textevent timeoffset="100" message="Good. Settling back down after this."/>
+    </SteadyState>
+    <SteadyState Duration="300" Power="0.42" Cadence="85">
+      <textevent timeoffset="10" message="Easy spinning for the last steady block. Enjoy the ride."/>
+      <textevent timeoffset="120" message="Your legs should feel much better than when you started. That is the goal."/>
+      <textevent timeoffset="240" message="Getting ready to cool down. You have done exactly what was needed today."/>
+    </SteadyState>
+    <Cooldown Duration="300" PowerHigh="0.42" PowerLow="0.30" Cadence="78">
+      <textevent timeoffset="10" message="Cooling down. Let the power drain away gradually."/>
+      <textevent timeoffset="120" message="Stretch your back gently on the bike. Stand briefly if it feels good."/>
+      <textevent timeoffset="250" message="Legs loosened and ready. Great session. Save your energy for when it counts."/>
+    </Cooldown>
+  </workout>
+</workout_file>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workout_file>
+  <name>Surge and Settle</name>
+  <author>Open Ride</author>
+  <description>Build durability with surge-and-settle efforts. Learn to control your recovery after hard pushes, a key skill for lasting fitness.</description>
+  <sportType>bike</sportType>
+  <category>Fitness Refresh</category>
+  <subcategory>Tune Up</subcategory>
+  <tags>
+    <tag name="Tune Up"/>
+    <tag name="Surges"/>
+    <tag name="Durability"/>
+  </tags>
+
+  <workout>
+    <Warmup Duration="360" PowerLow="0.40" PowerHigh="0.65" Cadence="85">
+      <textevent timeoffset="0" message="Surge and Settle! Teaching your body to recover at tempo."/>
+      <textevent timeoffset="120" message="Surge hard, then settle back to a moderate pace."/>
+      <textevent timeoffset="240" message="This builds the durability you need for longer rides."/>
+    </Warmup>
+
+    <SteadyState Duration="180" Power="0.70" Cadence="88">
+      <textevent timeoffset="0" message="Three minutes at tempo to prepare."/>
+    </SteadyState>
+
+    <!-- Set 1 -->
+    <IntervalsT Repeat="4" OnDuration="60" OffDuration="180" OnPower="0.95" OffPower="0.65" Cadence="95" CadenceResting="85">
+      <textevent timeoffset="0" message="SURGE! One minute at near threshold!"/>
+      <textevent timeoffset="60" message="Settle! Three minutes at endurance. Do not stop pedaling!"/>
+      <textevent timeoffset="120" message="Let your breathing come back down gradually."/>
+    </IntervalsT>
+
+    <SteadyState Duration="180" Power="0.55" Cadence="82">
+      <textevent timeoffset="0" message="Easy recovery between sets. Great surging!"/>
+      <textevent timeoffset="120" message="Set 2 has harder surges. You are ready."/>
+    </SteadyState>
+
+    <!-- Set 2 -->
+    <IntervalsT Repeat="3" OnDuration="90" OffDuration="180" OnPower="1.00" OffPower="0.65" Cadence="95" CadenceResting="85">
+      <textevent timeoffset="0" message="BIGGER SURGE! Ninety seconds at threshold!"/>
+      <textevent timeoffset="45" message="Halfway! Hold your form!"/>
+      <textevent timeoffset="90" message="Settle! Three minutes to recover at tempo."/>
+      <textevent timeoffset="150" message="Control your descent back to comfort."/>
+    </IntervalsT>
+
+    <SteadyState Duration="180" Power="0.55" Cadence="82">
+      <textevent timeoffset="0" message="Done with the surges! Easy spinning."/>
+    </SteadyState>
+
+    <SteadyState Duration="240" Power="0.60" Cadence="85">
+      <textevent timeoffset="0" message="Four minutes endurance to close out."/>
+      <textevent timeoffset="120" message="Your durability is rebuilding fast."/>
+    </SteadyState>
+
+    <Cooldown Duration="240" PowerHigh="0.55" PowerLow="0.35" Cadence="80">
+      <textevent timeoffset="0" message="Cooling down. Surge and settle is a powerful tool."/>
+      <textevent timeoffset="120" message="Recovery at pace is what separates fit from very fit."/>
+      <textevent timeoffset="200" message="Surge and Settle complete!"/>
+    </Cooldown>
+  </workout>
+</workout_file>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workout_file>
+  <name>Steady State</name>
+  <author>Open Ride</author>
+  <description>Pure zone 2 riding. Develop your sense of pacing by maintaining a consistent effort. The most important workout for building aerobic capacity.</description>
+  <sportType>bike</sportType>
+  <category>Endurance</category>
+  <subcategory>Aerobic Base</subcategory>
+  <tags>
+    <tag name="Endurance"/>
+    <tag name="Zone 2"/>
+    <tag name="Pacing"/>
+  </tags>
+  <workout>
+    <Warmup Duration="300" PowerLow="0.40" PowerHigh="0.58" Cadence="85">
+      <textevent timeoffset="10" message="Welcome to Steady State. Today is beautifully simple — one long zone 2 block. Consistency is the challenge."/>
+      <textevent timeoffset="90" message="Warm up gradually. Let the heart rate rise naturally as we approach the main effort."/>
+      <textevent timeoffset="220" message="Find a cadence and position that you can sustain for 30 minutes. Comfort matters today."/>
+    </Warmup>
+    <SteadyState Duration="1800" Power="0.62" Cadence="88">
+      <textevent timeoffset="30" message="Here we go — 30 minutes at 62% FTP. Zone 2. The single most valuable intensity for aerobic development."/>
+      <textevent timeoffset="180" message="Pacing check: Look at your power. Is it steady or bouncing around? Aim for a flat, consistent line."/>
+      <textevent timeoffset="360" message="Your breathing should be rhythmic and nasal breathing should still be possible. If not, back off slightly."/>
+      <textevent timeoffset="540" message="Six minutes in. Scan your body: relax the jaw, drop the shoulders, soften the elbows. Release all unnecessary tension."/>
+      <textevent timeoffset="720" message="At this intensity, your slow-twitch muscle fibers are doing most of the work. You are training them to be more efficient."/>
+      <textevent timeoffset="900" message="Halfway point! Excellent. The effort should feel very manageable. That is exactly the point."/>
+      <textevent timeoffset="1020" message="Pacing is a skill that transfers to racing and hard group rides. Learn to hold steady here and it becomes automatic."/>
+      <textevent timeoffset="1140" message="Check your power again. Has it drifted up or down? Bring it back to target. Precision matters."/>
+      <textevent timeoffset="1260" message="Twenty-one minutes done. Your heart is pumping more blood per beat right now than it did a month ago if you have been consistent."/>
+      <textevent timeoffset="1380" message="Mental discipline is part of the training. Staying focused on a moderate effort for a long time builds mental resilience."/>
+      <textevent timeoffset="1500" message="Final five minutes of the main block. Maintain your cadence and keep the power locked in."/>
+      <textevent timeoffset="1620" message="You have held zone 2 for 27 minutes. This kind of work builds the aerobic ceiling that limits all your harder efforts."/>
+      <textevent timeoffset="1740" message="Last minute! Do not surge to the finish. The goal is the same power on the last pedal stroke as the first."/>
+    </SteadyState>
+    <SteadyState Duration="300" Power="0.55" Cadence="85">
+      <textevent timeoffset="10" message="Main block complete. Easing back to 55%. Let the effort drop but keep the legs turning over."/>
+      <textevent timeoffset="120" message="That was 30 unbroken minutes of aerobic work. Simple, but profoundly effective over time."/>
+      <textevent timeoffset="240" message="Preparing for the cooldown. Shake out your hands and roll your neck gently."/>
+    </SteadyState>
+    <Cooldown Duration="300" PowerHigh="0.50" PowerLow="0.35" Cadence="80">
+      <textevent timeoffset="10" message="Cooldown. Gradually bring the power down and let everything settle."/>
+      <textevent timeoffset="120" message="Steady state zone 2 work is the backbone of every successful training plan. You just invested in your future."/>
+      <textevent timeoffset="250" message="Great discipline today. Recovery nutrition, sleep, and consistency will turn this session into real fitness. Well done!"/>
+    </Cooldown>
+  </workout>
+</workout_file>

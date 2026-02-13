@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workout_file>
+  <name>Power Hour Lite</name>
+  <author>Open Ride</author>
+  <description>A balanced session touching every training zone in manageable doses. Develop well-rounded fitness with this all-in-one daily workout.</description>
+  <sportType>bike</sportType>
+  <category>Daily Training</category>
+  <subcategory>Mixed</subcategory>
+  <tags>
+    <tag name="Daily"/>
+    <tag name="Balanced"/>
+    <tag name="All Zones"/>
+  </tags>
+
+  <workout>
+    <Warmup Duration="300" PowerLow="0.40" PowerHigh="0.60" Cadence="85">
+      <textevent timeoffset="0" message="Power Hour Lite! Every zone gets some love today."/>
+      <textevent timeoffset="120" message="We will progress through all training zones."/>
+      <textevent timeoffset="240" message="Each dose is small but effective. Quality training!"/>
+    </Warmup>
+
+    <SteadyState Duration="240" Power="0.60" Cadence="85">
+      <textevent timeoffset="0" message="Zone 2 endurance. Building the base."/>
+      <textevent timeoffset="120" message="Easy and sustainable. Your aerobic foundation."/>
+    </SteadyState>
+
+    <SteadyState Duration="180" Power="0.75" Cadence="88">
+      <textevent timeoffset="0" message="Zone 3 tempo. A bit more pressure now."/>
+      <textevent timeoffset="90" message="Comfortably hard. The training sweet spot."/>
+    </SteadyState>
+
+    <SteadyState Duration="180" Power="0.88" Cadence="90">
+      <textevent timeoffset="0" message="Zone 4 sweet spot. Real work begins!"/>
+      <textevent timeoffset="90" message="Building muscular endurance here."/>
+    </SteadyState>
+
+    <SteadyState Duration="120" Power="1.00" Cadence="92">
+      <textevent timeoffset="0" message="Threshold! Two minutes at your limit!"/>
+      <textevent timeoffset="60" message="One minute! Hold the power!"/>
+    </SteadyState>
+
+    <SteadyState Duration="120" Power="0.50" Cadence="80">
+      <textevent timeoffset="0" message="Recovery before VO2 work."/>
+    </SteadyState>
+
+    <SteadyState Duration="120" Power="1.10" Cadence="100">
+      <textevent timeoffset="0" message="VO2max zone! Two minutes above threshold!"/>
+      <textevent timeoffset="60" message="Lungs burning but your ceiling is rising!"/>
+    </SteadyState>
+
+    <SteadyState Duration="120" Power="0.50" Cadence="80">
+      <textevent timeoffset="0" message="Recovery. Sprint time!"/>
+    </SteadyState>
+
+    <IntervalsT Repeat="4" OnDuration="15" OffDuration="45" OnPower="1.35" OffPower="0.45" Cadence="110" CadenceResting="80">
+      <textevent timeoffset="0" message="SPRINT! 15 seconds of neuromuscular power!"/>
+      <textevent timeoffset="15" message="Quick recovery. Short and sharp!"/>
+    </IntervalsT>
+
+    <SteadyState Duration="180" Power="0.55" Cadence="85">
+      <textevent timeoffset="0" message="All zones visited! Easy spinning to close."/>
+    </SteadyState>
+
+    <Cooldown Duration="240" PowerHigh="0.50" PowerLow="0.35" Cadence="80">
+      <textevent timeoffset="0" message="Complete training in a compact format."/>
+      <textevent timeoffset="120" message="Every energy system got attention today."/>
+      <textevent timeoffset="200" message="Power Hour Lite complete!"/>
+    </Cooldown>
+  </workout>
+</workout_file>

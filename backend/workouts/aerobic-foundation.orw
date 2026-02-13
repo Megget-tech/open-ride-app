@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workout_file>
+  <name>Aerobic Foundation</name>
+  <author>Open Ride</author>
+  <description>Build your aerobic engine with sustained zone 2 work and form drills. The foundation that all other fitness is built upon.</description>
+  <sportType>bike</sportType>
+  <category>Endurance</category>
+  <subcategory>Aerobic Base</subcategory>
+  <tags>
+    <tag name="Endurance"/>
+    <tag name="Zone 2"/>
+    <tag name="Foundation"/>
+  </tags>
+  <workout>
+    <Warmup Duration="360" PowerLow="0.40" PowerHigh="0.58" Cadence="85">
+      <textevent timeoffset="10" message="Welcome to Aerobic Foundation. Today we build the engine that powers everything else."/>
+      <textevent timeoffset="90" message="Keep the effort easy as we warm up. Let your legs find their rhythm naturally."/>
+      <textevent timeoffset="240" message="Gradually bring the power up. Focus on smooth, round pedal strokes."/>
+    </Warmup>
+    <SteadyState Duration="900" Power="0.60" Cadence="88">
+      <textevent timeoffset="30" message="Settling into zone 2. This is conversational pace — you should be able to speak in full sentences."/>
+      <textevent timeoffset="240" message="Zone 2 trains your body to burn fat efficiently and builds mitochondrial density in your muscles."/>
+      <textevent timeoffset="480" message="Check your breathing. It should be steady and controlled. If you are gasping, ease off slightly."/>
+      <textevent timeoffset="720" message="Relax your shoulders, loosen your grip. Tension in the upper body wastes energy."/>
+    </SteadyState>
+    <SteadyState Duration="120" Power="0.55" Cadence="100">
+      <textevent timeoffset="10" message="Cadence drill time! Spin the legs up to 100 RPM while keeping your hips stable in the saddle."/>
+      <textevent timeoffset="60" message="High cadence work improves neuromuscular efficiency. Stay smooth — no bouncing."/>
+    </SteadyState>
+    <SteadyState Duration="720" Power="0.62" Cadence="88">
+      <textevent timeoffset="30" message="Back to zone 2. A slight bump in power — stay aerobic and keep your breathing relaxed."/>
+      <textevent timeoffset="240" message="This effort level maximizes fat oxidation. Your body is learning to spare glycogen for harder efforts."/>
+      <textevent timeoffset="480" message="Consistency is king in zone 2. Avoid surges and keep the power steady within a few watts."/>
+      <textevent timeoffset="660" message="Preparing for the next drill. Keep pedaling smoothly through the transition."/>
+    </SteadyState>
+    <SteadyState Duration="120" Power="0.55" Cadence="70">
+      <textevent timeoffset="10" message="Low cadence drill. Drop to 70 RPM and feel each pedal stroke through the full revolution."/>
+      <textevent timeoffset="60" message="Push and pull deliberately. This strengthens the muscular component of your pedal stroke."/>
+    </SteadyState>
+    <SteadyState Duration="600" Power="0.60" Cadence="88">
+      <textevent timeoffset="30" message="Final zone 2 block. Return to your natural cadence around 88 RPM."/>
+      <textevent timeoffset="180" message="Aerobic fitness is built through volume and consistency. Every minute here counts."/>
+      <textevent timeoffset="400" message="Check in with your form. Elbows slightly bent, core gently engaged, eyes forward."/>
+      <textevent timeoffset="540" message="Almost through the main set. You are building a stronger aerobic foundation with every pedal stroke."/>
+    </SteadyState>
+    <SteadyState Duration="240" Power="0.55">
+      <textevent timeoffset="10" message="Easing the effort down. Let the heart rate drift lower while you keep the legs moving."/>
+      <textevent timeoffset="120" message="This transition zone helps your body begin the recovery process while still turning the pedals."/>
+    </SteadyState>
+    <Cooldown Duration="240" PowerHigh="0.50" PowerLow="0.35" Cadence="80">
+      <textevent timeoffset="10" message="Cooldown time. Gradually reduce the power and let your heart rate come down."/>
+      <textevent timeoffset="120" message="Great session. Consistent zone 2 work like this is the single best investment in your long-term fitness."/>
+      <textevent timeoffset="200" message="Stretch after you finish and rehydrate. Well done today!"/>
+    </Cooldown>
+  </workout>
+</workout_file>

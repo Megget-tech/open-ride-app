@@ -1,0 +1,869 @@
+/* ===== Training Program Page ===== */
+
+/* Header */
+.tp-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+  gap: 1rem;
+}
+
+.tp-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  flex-shrink: 0;
+}
+
+.tp-weekly-stats {
+  display: flex;
+  gap: 1.25rem;
+  align-items: center;
+}
+
+.tp-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.tp-stat-value {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+
+.tp-stat-label {
+  font-size: 0.65rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.tp-clear-all-btn {
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.tp-clear-all-btn:hover {
+  color: var(--error);
+  border-color: var(--error);
+}
+
+/* ===== Today's Workout Hero ===== */
+.tp-today-hero {
+  margin-bottom: 1.5rem;
+  background: linear-gradient(135deg, rgba(0, 153, 255, 0.12) 0%, rgba(0, 210, 0, 0.06) 100%);
+  border: 1px solid rgba(0, 153, 255, 0.2);
+  border-radius: 16px;
+  padding: 1.5rem;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.tp-today-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--primary-blue);
+  margin-bottom: 1rem;
+}
+
+.tp-today-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.tp-today-card {
+  display: flex;
+  background: var(--surface);
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  transition: border-color 0.2s;
+}
+
+.tp-today-card:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.tp-today-chart {
+  width: 220px;
+  min-height: 140px;
+  background: linear-gradient(135deg, var(--dark-blue) 0%, var(--primary-blue) 100%);
+  display: flex;
+  align-items: flex-end;
+  padding: 0.75rem 0.5rem 0.5rem;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.tp-today-chart-bar {
+  flex: 1;
+  border-radius: 1px 1px 0 0;
+  min-height: 4px;
+}
+
+.tp-today-info {
+  flex: 1;
+  padding: 1rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.tp-today-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.tp-today-category {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--primary-blue);
+}
+
+.tp-today-duration {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.tp-today-tss {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.tp-today-name {
+  font-size: 1.35rem;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.tp-start-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.25rem;
+  background: linear-gradient(135deg, #FF6B00 0%, #FF8500 100%);
+  color: #fff;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+  box-shadow: 0 3px 12px rgba(255, 107, 0, 0.3);
+  align-self: flex-start;
+  margin-top: 0.25rem;
+}
+
+.tp-start-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 5px 16px rgba(255, 107, 0, 0.4);
+}
+
+/* ===== Mobile Day Strip ===== */
+.tp-day-strip {
+  display: none; /* hidden on desktop, shown on mobile */
+  gap: 0.25rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding: 0 0 0.75rem;
+  margin-bottom: 0;
+}
+
+.tp-day-strip::-webkit-scrollbar {
+  display: none;
+}
+
+.tp-day-strip-btn {
+  flex: 1;
+  min-width: 48px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.6rem 0.5rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid transparent;
+  border-radius: 10px;
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.tp-day-strip-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.tp-day-strip-btn.today {
+  color: var(--primary-blue);
+  font-weight: 700;
+}
+
+.tp-day-strip-btn.selected {
+  background: rgba(0, 153, 255, 0.12);
+  border-color: var(--primary-blue);
+  color: var(--text-primary);
+}
+
+.tp-day-strip-label {
+  font-size: 0.8rem;
+}
+
+.tp-day-strip-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--primary-blue);
+}
+
+/* ===== Mobile Day Detail ===== */
+.tp-mobile-day-detail {
+  display: none; /* hidden on desktop */
+}
+
+.tp-mobile-day {
+  margin-bottom: 1.5rem;
+}
+
+.tp-mobile-day-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.tp-mobile-day-header h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.tp-mobile-clear-btn {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: color 0.15s;
+}
+
+.tp-mobile-clear-btn:hover {
+  color: var(--error);
+}
+
+.tp-mobile-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 12px;
+  border: 1px dashed rgba(255, 255, 255, 0.1);
+  gap: 0.75rem;
+}
+
+.tp-mobile-empty p {
+  font-size: 0.9rem;
+  opacity: 0.6;
+}
+
+.tp-mobile-add-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1rem;
+  background: rgba(0, 153, 255, 0.1);
+  border: 1px solid rgba(0, 153, 255, 0.25);
+  border-radius: 8px;
+  color: var(--primary-blue);
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+  margin-top: 0.5rem;
+}
+
+.tp-mobile-add-btn:hover {
+  background: rgba(0, 153, 255, 0.18);
+}
+
+.tp-mobile-workout-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.tp-mobile-workout-card {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.75rem;
+  transition: border-color 0.2s;
+}
+
+.tp-mobile-workout-card:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.tp-mobile-workout-chart {
+  width: 64px;
+  height: 40px;
+  display: flex;
+  align-items: flex-end;
+  gap: 1px;
+  background: rgba(0, 119, 204, 0.2);
+  border-radius: 4px;
+  padding: 4px 3px;
+  flex-shrink: 0;
+}
+
+.tp-mobile-chart-bar {
+  flex: 1;
+  border-radius: 1px 1px 0 0;
+  min-height: 2px;
+}
+
+.tp-mobile-workout-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  min-width: 0;
+}
+
+.tp-mobile-workout-category {
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--primary-blue);
+}
+
+.tp-mobile-workout-name {
+  font-size: 0.9rem;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tp-mobile-workout-meta {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.tp-mobile-workout-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  flex-shrink: 0;
+}
+
+/* ===== Desktop 7-Column Weekly Grid ===== */
+.tp-week-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+}
+
+.tp-day-column {
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  min-height: 200px;
+  transition: all 0.2s;
+}
+
+.tp-day-column.today {
+  border-color: rgba(0, 153, 255, 0.3);
+  background: rgba(0, 153, 255, 0.04);
+}
+
+.tp-day-column.drag-over {
+  border-color: var(--primary-blue);
+  background: rgba(0, 153, 255, 0.08);
+  box-shadow: inset 0 0 20px rgba(0, 153, 255, 0.1);
+}
+
+.tp-day-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.6rem 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.tp-day-name {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-secondary);
+}
+
+.tp-day-name.today {
+  color: var(--primary-blue);
+}
+
+.tp-today-badge {
+  font-size: 0.6rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 0.15rem 0.4rem;
+  background: rgba(0, 153, 255, 0.2);
+  color: var(--primary-blue);
+  border-radius: 4px;
+}
+
+.tp-day-workouts {
+  flex: 1;
+  padding: 0.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.tp-day-empty {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem 0.5rem;
+}
+
+.tp-day-empty-label {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.2);
+  font-style: italic;
+}
+
+/* Workout Cards in Grid */
+.tp-workout-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: grab;
+  transition: all 0.15s;
+  position: relative;
+}
+
+.tp-workout-card:active {
+  cursor: grabbing;
+}
+
+.tp-workout-card:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.tp-workout-card:hover .tp-workout-card-actions {
+  opacity: 1;
+}
+
+.tp-workout-chart-mini {
+  height: 28px;
+  display: flex;
+  align-items: flex-end;
+  gap: 1px;
+  padding: 3px 4px;
+  background: linear-gradient(135deg, rgba(0, 119, 204, 0.3) 0%, rgba(0, 153, 255, 0.15) 100%);
+}
+
+.tp-workout-chart-bar-mini {
+  flex: 1;
+  border-radius: 1px 1px 0 0;
+  min-height: 2px;
+}
+
+.tp-workout-card-body {
+  padding: 0.35rem 0.4rem;
+}
+
+.tp-workout-card-name {
+  font-size: 0.72rem;
+  font-weight: 600;
+  line-height: 1.25;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tp-workout-card-meta {
+  display: flex;
+  gap: 0.35rem;
+  font-size: 0.62rem;
+  color: var(--text-secondary);
+  margin-top: 0.15rem;
+}
+
+.tp-workout-card-actions {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  display: flex;
+  gap: 2px;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.tp-workout-go-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 4px;
+  background: rgba(0, 210, 0, 0.8);
+  color: #fff;
+  text-decoration: none;
+  transition: all 0.15s;
+}
+
+.tp-workout-go-btn:hover {
+  background: rgba(0, 210, 0, 1);
+  transform: scale(1.1);
+}
+
+.tp-workout-remove-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 4px;
+  background: rgba(244, 67, 54, 0.7);
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.tp-workout-remove-btn:hover {
+  background: rgba(244, 67, 54, 1);
+  transform: scale(1.1);
+}
+
+/* Add Button */
+.tp-add-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.4rem;
+  margin: 0 0.4rem 0.4rem;
+  border-radius: 6px;
+  border: 1px dashed rgba(255, 255, 255, 0.12);
+  background: none;
+  color: rgba(255, 255, 255, 0.3);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.tp-add-btn:hover {
+  border-color: var(--primary-blue);
+  color: var(--primary-blue);
+  background: rgba(0, 153, 255, 0.06);
+}
+
+/* ===== Empty State ===== */
+.tp-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1rem;
+  text-align: center;
+  color: var(--text-secondary);
+}
+
+.tp-empty-state h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0.75rem 0 0.5rem;
+}
+
+.tp-empty-state p {
+  font-size: 0.9rem;
+  max-width: 400px;
+}
+
+/* ===== Workout Picker Modal ===== */
+.tp-picker-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.15s ease-out;
+}
+
+.tp-picker-modal {
+  width: 90%;
+  max-width: 560px;
+  max-height: 80vh;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: slideUp 0.2s ease-out;
+}
+
+.tp-picker-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.tp-picker-header h2 {
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+.tp-picker-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.06);
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.tp-picker-close:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+}
+
+.tp-picker-search {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-secondary);
+}
+
+.tp-picker-search input {
+  flex: 1;
+  background: none;
+  border: none;
+  color: var(--text-primary);
+  font-size: 0.95rem;
+  outline: none;
+}
+
+.tp-picker-search input::placeholder {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.tp-picker-list {
+  overflow-y: auto;
+  flex: 1;
+  padding: 0.5rem 0;
+}
+
+.tp-picker-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.7rem 1.5rem;
+  background: none;
+  border: none;
+  color: var(--text-primary);
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.1s;
+}
+
+.tp-picker-item:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.tp-picker-item-chart {
+  width: 60px;
+  height: 32px;
+  display: flex;
+  align-items: flex-end;
+  gap: 1px;
+  background: rgba(0, 119, 204, 0.2);
+  border-radius: 4px;
+  padding: 4px 3px;
+  flex-shrink: 0;
+}
+
+.tp-picker-chart-bar {
+  flex: 1;
+  border-radius: 1px 1px 0 0;
+  min-height: 2px;
+}
+
+.tp-picker-item-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  min-width: 0;
+}
+
+.tp-picker-item-category {
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--primary-blue);
+}
+
+.tp-picker-item-name {
+  font-size: 0.9rem;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tp-picker-item-meta {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.tp-picker-item-add {
+  flex-shrink: 0;
+  color: var(--primary-blue);
+  opacity: 0.5;
+  transition: opacity 0.15s;
+}
+
+.tp-picker-item:hover .tp-picker-item-add {
+  opacity: 1;
+}
+
+.tp-picker-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1rem;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+/* ===== Responsive ===== */
+
+/* Mobile: show day strip + day detail, hide grid */
+@media (max-width: 768px) {
+  .tp-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .tp-header-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .tp-week-grid {
+    display: none;
+  }
+
+  .tp-day-strip {
+    display: flex;
+  }
+
+  .tp-mobile-day-detail {
+    display: block;
+  }
+
+  .tp-today-card {
+    flex-direction: column;
+  }
+
+  .tp-today-chart {
+    width: 100%;
+    height: 110px;
+    min-height: 110px;
+  }
+
+  .tp-today-name {
+    font-size: 1.15rem;
+  }
+
+  .tp-picker-modal {
+    width: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    height: 100%;
+    border-radius: 0;
+  }
+
+  .tp-empty-state {
+    padding: 2rem 1rem;
+  }
+}
+
+/* Tablet: show grid but with fewer visible details */
+@media (min-width: 769px) and (max-width: 1100px) {
+  .tp-workout-card-meta {
+    flex-direction: column;
+    gap: 0.1rem;
+  }
+
+  .tp-workout-card-name {
+    font-size: 0.68rem;
+  }
+}
+
+/* Desktop: full grid */
+@media (min-width: 769px) {
+  .tp-day-strip {
+    display: none;
+  }
+
+  .tp-mobile-day-detail {
+    display: none;
+  }
+}

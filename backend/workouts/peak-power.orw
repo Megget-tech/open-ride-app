@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workout_file>
+  <name>Peak Power</name>
+  <author>Open Ride</author>
+  <description>Short, punchy climbing efforts simulate rolling hills and steep pitches. Develops the explosive low-cadence power needed for sharp gradients.</description>
+  <sportType>bike</sportType>
+  <category>Climbing</category>
+  <subcategory>Hill Power</subcategory>
+  <tags>
+    <tag name="Climbing"/>
+    <tag name="Short Climbs"/>
+    <tag name="Power"/>
+  </tags>
+
+  <workout>
+    <Warmup Duration="360" PowerLow="0.40" PowerHigh="0.65" Cadence="85">
+      <textevent timeoffset="0" message="Peak Power! Short punchy climbs today."/>
+      <textevent timeoffset="120" message="These simulate steep hills you encounter on any ride."/>
+      <textevent timeoffset="240" message="Low cadence, high power. Ready your legs!"/>
+    </Warmup>
+
+    <SteadyState Duration="120" Power="0.70" Cadence="85">
+      <textevent timeoffset="0" message="Quick tempo section before the hills start."/>
+    </SteadyState>
+
+    <!-- Set 1: Longer hill repeats -->
+    <IntervalsT Repeat="8" OnDuration="90" OffDuration="90" OnPower="1.00" OffPower="0.50" Cadence="62" CadenceResting="90">
+      <textevent timeoffset="0" message="HILL! 90 seconds at threshold, low cadence!"/>
+      <textevent timeoffset="45" message="Grind through! Push the full pedal stroke!"/>
+      <textevent timeoffset="90" message="Over the top! Spin out on the descent."/>
+    </IntervalsT>
+
+    <SteadyState Duration="180" Power="0.55" Cadence="85">
+      <textevent timeoffset="0" message="Recovery between sets. The next hills are steeper!"/>
+      <textevent timeoffset="120" message="Shorter but more intense. Stay focused."/>
+    </SteadyState>
+
+    <!-- Set 2: Steeper, shorter pitches -->
+    <IntervalsT Repeat="4" OnDuration="60" OffDuration="120" OnPower="1.10" OffPower="0.50" Cadence="60" CadenceResting="90">
+      <textevent timeoffset="0" message="STEEP PITCH! One minute of pure climbing power!"/>
+      <textevent timeoffset="30" message="Halfway! Force through every pedal stroke!"/>
+      <textevent timeoffset="60" message="Over! Two minutes to recover fully."/>
+    </IntervalsT>
+
+    <Cooldown Duration="300" PowerHigh="0.55" PowerLow="0.35" Cadence="80">
+      <textevent timeoffset="0" message="All climbs conquered! Cooling down."/>
+      <textevent timeoffset="120" message="Short hill power translates to real-world climbing."/>
+      <textevent timeoffset="240" message="Peak Power complete!"/>
+    </Cooldown>
+  </workout>
+</workout_file>

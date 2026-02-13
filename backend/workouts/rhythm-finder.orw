@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workout_file>
+  <name>Rhythm Finder</name>
+  <author>Open Ride</author>
+  <description>Re-establish your training rhythm after time away. Controlled efforts help you reconnect with your body and find your baseline.</description>
+  <sportType>bike</sportType>
+  <category>Fitness Refresh</category>
+  <subcategory>Tune Up</subcategory>
+  <tags>
+    <tag name="Tune Up"/>
+    <tag name="Rhythm"/>
+    <tag name="Moderate"/>
+  </tags>
+
+  <workout>
+    <Warmup Duration="360" PowerLow="0.40" PowerHigh="0.60" Cadence="85">
+      <textevent timeoffset="0" message="Rhythm Finder! Welcome back to structured training."/>
+      <textevent timeoffset="120" message="No pressure today. We are finding your rhythm."/>
+      <textevent timeoffset="240" message="Easy efforts with short tempo touches. Let your body remember."/>
+    </Warmup>
+
+    <SteadyState Duration="480" Power="0.65" Cadence="85">
+      <textevent timeoffset="0" message="Eight minutes at endurance. How does this feel?"/>
+      <textevent timeoffset="180" message="Your body remembers fitness more than you think."/>
+      <textevent timeoffset="360" message="Tempo touch coming up. Just two minutes."/>
+    </SteadyState>
+
+    <SteadyState Duration="120" Power="0.75" Cadence="90">
+      <textevent timeoffset="0" message="Tempo touch! A brief step up."/>
+      <textevent timeoffset="60" message="One more minute. Nothing you cannot handle."/>
+    </SteadyState>
+
+    <SteadyState Duration="300" Power="0.60" Cadence="85">
+      <textevent timeoffset="0" message="Back to easy. Notice how the tempo felt?"/>
+      <textevent timeoffset="180" message="Your fitness baseline is still there."/>
+    </SteadyState>
+
+    <SteadyState Duration="480" Power="0.68" Cadence="88">
+      <textevent timeoffset="0" message="Eight minutes slightly higher. Building endurance."/>
+      <textevent timeoffset="180" message="Patience is key when coming back to training."/>
+      <textevent timeoffset="360" message="Two minutes left. You are finding your groove!"/>
+    </SteadyState>
+
+    <SteadyState Duration="120" Power="0.78" Cadence="90">
+      <textevent timeoffset="0" message="Second tempo touch. A bit higher this time."/>
+      <textevent timeoffset="60" message="Your body is waking up!"/>
+    </SteadyState>
+
+    <SteadyState Duration="300" Power="0.60" Cadence="85">
+      <textevent timeoffset="0" message="Easy riding. The rhythm is coming back."/>
+    </SteadyState>
+
+    <SteadyState Duration="240" Power="0.70" Cadence="88">
+      <textevent timeoffset="0" message="Four minutes at light tempo to finish off."/>
+      <textevent timeoffset="120" message="Great session for getting back on track."/>
+    </SteadyState>
+
+    <Cooldown Duration="300" PowerHigh="0.55" PowerLow="0.35" Cadence="80">
+      <textevent timeoffset="0" message="Cooling down. Your rhythm is returning!"/>
+      <textevent timeoffset="120" message="Consistency is what rebuilds fitness fastest."/>
+      <textevent timeoffset="240" message="Rhythm Finder complete!"/>
+    </Cooldown>
+  </workout>
+</workout_file>

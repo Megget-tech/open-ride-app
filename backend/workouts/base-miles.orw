@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workout_file>
+  <name>Base Miles</name>
+  <author>Open Ride</author>
+  <description>Continuous moderate riding with gentle undulations. Like a long road ride without interruptions, building the mitochondrial density that powers performance.</description>
+  <sportType>bike</sportType>
+  <category>Endurance</category>
+  <subcategory>Aerobic Base</subcategory>
+  <tags>
+    <tag name="Endurance"/>
+    <tag name="Zone 2"/>
+    <tag name="Base"/>
+  </tags>
+  <workout>
+    <Warmup Duration="360" PowerLow="0.40" PowerHigh="0.58" Cadence="85">
+      <textevent timeoffset="10" message="Welcome to Base Miles. Think of this as your long road ride — steady, uninterrupted aerobic work."/>
+      <textevent timeoffset="120" message="Let the legs warm up gently. There is no rush to get to full power today."/>
+      <textevent timeoffset="270" message="Settle into a comfortable position. We will be here for a while, so find what feels sustainable."/>
+    </Warmup>
+    <SteadyState Duration="600" Power="0.60" Cadence="85">
+      <textevent timeoffset="30" message="First block at 60% FTP. This is the low end of zone 2 — comfortable and controlled."/>
+      <textevent timeoffset="180" message="Base miles build the capillary networks that deliver oxygen to your working muscles."/>
+      <textevent timeoffset="360" message="Maintain a cadence around 85. Smooth and efficient is the goal today."/>
+      <textevent timeoffset="540" message="Think about your breathing pattern. In through the nose, out through the mouth — calm and rhythmic."/>
+    </SteadyState>
+    <SteadyState Duration="600" Power="0.63" Cadence="88">
+      <textevent timeoffset="30" message="Small bump to 63%. Imagine cresting a gentle false flat — just a touch more effort."/>
+      <textevent timeoffset="200" message="Bring the cadence up slightly to 88 RPM. Higher cadence at this power reduces muscular strain."/>
+      <textevent timeoffset="400" message="At this intensity your body is primarily burning fat for fuel, with a small contribution from carbohydrates."/>
+      <textevent timeoffset="540" message="Stay relaxed in the upper body. Drop your shoulders away from your ears."/>
+    </SteadyState>
+    <SteadyState Duration="600" Power="0.60" Cadence="85">
+      <textevent timeoffset="30" message="Back to 60%. Think of this as descending the other side of that gentle rise."/>
+      <textevent timeoffset="200" message="Consistent base work increases stroke volume — your heart pumps more blood with each beat."/>
+      <textevent timeoffset="400" message="Check your hand position. Alternate between hoods and tops to prevent numbness."/>
+      <textevent timeoffset="540" message="Halfway through the ride. You are doing exactly what you need to do — steady and patient."/>
+    </SteadyState>
+    <SteadyState Duration="600" Power="0.65" Cadence="90">
+      <textevent timeoffset="30" message="Lifting to 65% — the upper end of zone 2. A bit more purposeful but still very much aerobic."/>
+      <textevent timeoffset="180" message="Cadence up to 90. The combination of moderate power and higher cadence is excellent aerobic training."/>
+      <textevent timeoffset="360" message="This is where the magic happens. Training just below the aerobic threshold maximizes adaptations."/>
+      <textevent timeoffset="500" message="One more block after this. Keep the effort honest — no drifting above zone 2."/>
+    </SteadyState>
+    <SteadyState Duration="480" Power="0.58" Cadence="85">
+      <textevent timeoffset="30" message="Final riding block. Easing back to 58% to close out the main set."/>
+      <textevent timeoffset="180" message="You have put in quality base work today. These sessions compound over weeks and months."/>
+      <textevent timeoffset="360" message="Let the effort feel easy now. The body is already beginning to adapt from today's work."/>
+    </SteadyState>
+    <Cooldown Duration="360" PowerHigh="0.50" PowerLow="0.35" Cadence="80">
+      <textevent timeoffset="10" message="Cooldown. Gradually wind the power down and let your heart rate settle."/>
+      <textevent timeoffset="120" message="Base miles are the most underrated workout in cycling. Patience here yields huge dividends later."/>
+      <textevent timeoffset="270" message="Great ride today. Refuel within 30 minutes for optimal recovery. See you next time!"/>
+    </Cooldown>
+  </workout>
+</workout_file>

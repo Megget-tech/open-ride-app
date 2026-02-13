@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workout_file>
+  <name>Power Mixer</name>
+  <author>Open Ride</author>
+  <description>A potent mix of threshold work, VO2max hits, and sprint bursts. Targets multiple energy systems in one efficient session.</description>
+  <sportType>bike</sportType>
+  <category>Medium Sessions</category>
+  <subcategory>Standard</subcategory>
+  <tags>
+    <tag name="Mixed"/>
+    <tag name="Intervals"/>
+    <tag name="All Zones"/>
+  </tags>
+
+  <workout>
+    <Warmup Duration="300" PowerLow="0.40" PowerHigh="0.65" Cadence="85">
+      <textevent timeoffset="0" message="Power Mixer! Three energy systems, one workout."/>
+      <textevent timeoffset="120" message="Threshold, VO2max, and sprint. The complete package."/>
+      <textevent timeoffset="240" message="Warm up thoroughly. We hit every system today."/>
+    </Warmup>
+
+    <SteadyState Duration="60" Power="0.75" Cadence="90">
+      <textevent timeoffset="0" message="Quick tempo primer. Main set starting soon!"/>
+    </SteadyState>
+
+    <!-- Threshold block -->
+    <SteadyState Duration="180" Power="1.00" Cadence="92">
+      <textevent timeoffset="0" message="Three minutes at THRESHOLD! Right at your limit!"/>
+      <textevent timeoffset="60" message="This is your current ceiling. Push against it!"/>
+      <textevent timeoffset="120" message="One minute left at threshold!"/>
+    </SteadyState>
+
+    <SteadyState Duration="120" Power="0.55" Cadence="85">
+      <textevent timeoffset="0" message="Recovery. VO2 effort coming next!"/>
+    </SteadyState>
+
+    <!-- VO2max block -->
+    <SteadyState Duration="120" Power="1.12" Cadence="100">
+      <textevent timeoffset="0" message="Two minutes VO2max! Above threshold! Breathe hard!"/>
+      <textevent timeoffset="60" message="This is expanding your aerobic ceiling!"/>
+    </SteadyState>
+
+    <SteadyState Duration="120" Power="0.55" Cadence="85">
+      <textevent timeoffset="0" message="Recovery. Sprint set coming up!"/>
+    </SteadyState>
+
+    <!-- Sprint block -->
+    <IntervalsT Repeat="4" OnDuration="15" OffDuration="45" OnPower="1.40" OffPower="0.50" Cadence="115" CadenceResting="80">
+      <textevent timeoffset="0" message="SPRINT! Maximum power for 15 seconds!"/>
+      <textevent timeoffset="15" message="Recover. Neuromuscular power activated!"/>
+    </IntervalsT>
+
+    <SteadyState Duration="120" Power="0.55" Cadence="85">
+      <textevent timeoffset="0" message="Great sprints! Round 2 of the mix coming up."/>
+    </SteadyState>
+
+    <!-- Second threshold block -->
+    <SteadyState Duration="180" Power="1.00" Cadence="92">
+      <textevent timeoffset="0" message="Back to THRESHOLD! You know the drill!"/>
+      <textevent timeoffset="60" message="Holding threshold after sprints is a real skill!"/>
+      <textevent timeoffset="120" message="Last minute! Stay strong!"/>
+    </SteadyState>
+
+    <SteadyState Duration="120" Power="0.55" Cadence="85">
+      <textevent timeoffset="0" message="Recovery. One more VO2 hit."/>
+    </SteadyState>
+
+    <!-- Second VO2max -->
+    <SteadyState Duration="120" Power="1.15" Cadence="100">
+      <textevent timeoffset="0" message="Final VO2 effort! Higher power! Dig deep!"/>
+      <textevent timeoffset="60" message="One minute left! You are incredible!"/>
+    </SteadyState>
+
+    <SteadyState Duration="120" Power="0.55" Cadence="85">
+      <textevent timeoffset="0" message="Great effort! Easy spinning to transition."/>
+    </SteadyState>
+
+    <SteadyState Duration="240" Power="0.85" Cadence="90">
+      <textevent timeoffset="0" message="Four minutes sweet spot to close out."/>
+      <textevent timeoffset="120" message="You have trained three energy systems today!"/>
+    </SteadyState>
+
+    <Cooldown Duration="240" PowerHigh="0.55" PowerLow="0.35" Cadence="80">
+      <textevent timeoffset="0" message="Amazing variety today! Cooling down."/>
+      <textevent timeoffset="120" message="Mixed sessions build complete, well-rounded fitness."/>
+      <textevent timeoffset="200" message="Power Mixer complete!"/>
+    </Cooldown>
+  </workout>
+</workout_file>

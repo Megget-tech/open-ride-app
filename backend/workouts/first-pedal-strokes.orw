@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workout_file>
+  <name>First Pedal Strokes</name>
+  <author>Open Ride</author>
+  <description>Your cycling journey starts here. A gentle introduction to structured training with easy efforts and plenty of rest. No experience needed.</description>
+  <sportType>bike</sportType>
+  <category>Fitness Kickstart</category>
+  <subcategory>Getting Started</subcategory>
+  <tags>
+    <tag name="Beginner"/>
+    <tag name="Introduction"/>
+    <tag name="Easy"/>
+  </tags>
+
+  <workout>
+    <Warmup Duration="300" PowerLow="0.35" PowerHigh="0.50" Cadence="80">
+      <textevent timeoffset="0" message="Welcome! This is your first structured workout."/>
+      <textevent timeoffset="60" message="There is no wrong way to start. Just keep pedaling!"/>
+      <textevent timeoffset="180" message="We will keep everything easy and comfortable today."/>
+      <textevent timeoffset="240" message="If anything feels too hard, just ease up a bit."/>
+    </Warmup>
+
+    <SteadyState Duration="300" Power="0.50" Cadence="80">
+      <textevent timeoffset="0" message="Five minutes at an easy pace. You are doing great!"/>
+      <textevent timeoffset="120" message="Focus on smooth pedaling. No need to force it."/>
+      <textevent timeoffset="240" message="How does this feel? It should be comfortable."/>
+    </SteadyState>
+
+    <SteadyState Duration="180" Power="0.55" Cadence="85">
+      <textevent timeoffset="0" message="A tiny bit more effort. Still easy though!"/>
+      <textevent timeoffset="90" message="Notice the slight change? That is training zones!"/>
+    </SteadyState>
+
+    <SteadyState Duration="180" Power="0.50" Cadence="80">
+      <textevent timeoffset="0" message="Back to easy. Recovery is part of training."/>
+    </SteadyState>
+
+    <SteadyState Duration="180" Power="0.60" Cadence="85">
+      <textevent timeoffset="0" message="A bit more effort this time. Still comfortable!"/>
+      <textevent timeoffset="90" message="You might feel your breathing increase slightly. Good!"/>
+    </SteadyState>
+
+    <SteadyState Duration="180" Power="0.50" Cadence="80">
+      <textevent timeoffset="0" message="Easy again. You are learning to pace yourself!"/>
+    </SteadyState>
+
+    <SteadyState Duration="180" Power="0.55" Cadence="82">
+      <textevent timeoffset="0" message="One more gentle push. Almost done!"/>
+      <textevent timeoffset="120" message="You are finishing your first workout strong!"/>
+    </SteadyState>
+
+    <Cooldown Duration="300" PowerHigh="0.45" PowerLow="0.30" Cadence="78">
+      <textevent timeoffset="0" message="Cooling down. You did it! Your first workout!"/>
+      <textevent timeoffset="120" message="Every expert was once a beginner."/>
+      <textevent timeoffset="240" message="First Pedal Strokes complete! You are on your way!"/>
+    </Cooldown>
+  </workout>
+</workout_file>

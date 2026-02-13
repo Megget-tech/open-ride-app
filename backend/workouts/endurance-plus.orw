@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workout_file>
+  <name>Endurance Plus</name>
+  <author>Open Ride</author>
+  <description>A long aerobic ride spiced with tempo spikes. Builds your base while teaching your body to handle occasional surges without losing rhythm.</description>
+  <sportType>bike</sportType>
+  <category>Long Sessions</category>
+  <subcategory>Extended</subcategory>
+  <tags>
+    <tag name="Endurance"/>
+    <tag name="Tempo"/>
+    <tag name="Zone 2"/>
+  </tags>
+
+  <workout>
+    <!-- Warmup: 8 minutes -->
+    <Warmup Duration="480" PowerLow="0.40" PowerHigh="0.60" Cadence="85">
+      <textevent timeoffset="0" message="Endurance Plus. A long aerobic session with tempo surges woven in."/>
+      <textevent timeoffset="120" message="Easy spinning to start. Today is about building your aerobic engine."/>
+      <textevent timeoffset="300" message="The majority of today will be zone 2 with three tempo spikes to keep things interesting."/>
+      <textevent timeoffset="420" message="Warmup wrapping up. Settling into your endurance pace next."/>
+    </Warmup>
+
+    <!-- Zone 2 Block 1: 12 minutes at 0.62 -->
+    <SteadyState Duration="720" Power="0.62" Cadence="85">
+      <textevent timeoffset="0" message="Zone 2 riding. This should feel easy and conversational. Relax into it."/>
+      <textevent timeoffset="240" message="Your breathing should be light and controlled. If you are gasping, ease off slightly."/>
+      <textevent timeoffset="480" message="Eight minutes in. Enjoy this pace—a tempo spike is coming in a few minutes."/>
+      <textevent timeoffset="660" message="Almost time for the first surge. Get ready to pick up the power."/>
+    </SteadyState>
+
+    <!-- Tempo Spike 1: 5 minutes at 0.76 -->
+    <SteadyState Duration="300" Power="0.76" Cadence="90">
+      <textevent timeoffset="0" message="First tempo spike! Bring the power up to 76% FTP. Firm but controlled."/>
+      <textevent timeoffset="120" message="Two minutes in. This simulates a surge in a group ride. Hold your line."/>
+      <textevent timeoffset="240" message="One minute left in this spike. Maintain power and then we settle back down."/>
+    </SteadyState>
+
+    <!-- Zone 2 Block 2: 10 minutes at 0.62 -->
+    <SteadyState Duration="600" Power="0.62" Cadence="85">
+      <textevent timeoffset="0" message="Back to zone 2. Let the breathing normalize and the heart rate drop."/>
+      <textevent timeoffset="300" message="Halfway through this endurance block. Smooth and steady."/>
+      <textevent timeoffset="540" message="Next tempo spike coming soon—this one is a touch harder at 78% FTP."/>
+    </SteadyState>
+
+    <!-- Tempo Spike 2: 5 minutes at 0.78 -->
+    <SteadyState Duration="300" Power="0.78" Cadence="90">
+      <textevent timeoffset="0" message="Second tempo spike! Slightly higher power now. Push through it cleanly."/>
+      <textevent timeoffset="120" message="You should feel the effort but still be in control. Strong and composed."/>
+      <textevent timeoffset="240" message="One minute to go. Hold the power and then recover."/>
+    </SteadyState>
+
+    <!-- Zone 2 Block 3: 10 minutes at 0.62 -->
+    <SteadyState Duration="600" Power="0.62" Cadence="85">
+      <textevent timeoffset="0" message="Zone 2 again. Easy effort—let the body absorb the work you have done."/>
+      <textevent timeoffset="300" message="Halfway. One more tempo spike remains and it will be the highest of the three."/>
+      <textevent timeoffset="540" message="Final spike coming up at 80% FTP. Get your head in the game."/>
+    </SteadyState>
+
+    <!-- Tempo Spike 3: 5 minutes at 0.80 -->
+    <SteadyState Duration="300" Power="0.80" Cadence="92">
+      <textevent timeoffset="0" message="Final tempo spike! Eighty percent FTP—the hardest surge of the day."/>
+      <textevent timeoffset="120" message="Two minutes done. This is building your ability to respond to real-world surges."/>
+      <textevent timeoffset="240" message="Last minute of hard effort today. Make it count!"/>
+    </SteadyState>
+
+    <!-- Zone 2 Finish: 8 minutes at 0.60 -->
+    <SteadyState Duration="480" Power="0.60" Cadence="85">
+      <textevent timeoffset="0" message="All spikes are done. Easy riding to close out the session."/>
+      <textevent timeoffset="240" message="Four minutes of gentle spinning left before the cooldown. Great ride today."/>
+      <textevent timeoffset="420" message="Preparing for cooldown. Let the effort fade naturally."/>
+    </SteadyState>
+
+    <!-- Cooldown: 7 minutes -->
+    <Cooldown Duration="420" PowerHigh="0.55" PowerLow="0.35" Cadence="80">
+      <textevent timeoffset="0" message="Cooldown. Gradually ease off the power and let your body unwind."/>
+      <textevent timeoffset="180" message="Quality endurance work with tempo variety today. Your base is growing."/>
+      <textevent timeoffset="360" message="Workout complete. Great aerobic session—refuel and rest up."/>
+    </Cooldown>
+  </workout>
+</workout_file>

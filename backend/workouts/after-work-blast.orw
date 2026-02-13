@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workout_file>
+  <name>After Work Blast</name>
+  <author>Open Ride</author>
+  <description>Shake off the workday with varied intervals that engage every energy system. The changing intensities keep boredom at bay and fitness on track.</description>
+  <sportType>bike</sportType>
+  <category>Daily Training</category>
+  <subcategory>Mixed</subcategory>
+  <tags>
+    <tag name="Daily"/>
+    <tag name="Mixed"/>
+    <tag name="Intervals"/>
+  </tags>
+
+  <workout>
+    <Warmup Duration="300" PowerLow="0.40" PowerHigh="0.65" Cadence="85">
+      <textevent timeoffset="0" message="After Work Blast! Time to shake off the desk."/>
+      <textevent timeoffset="120" message="Varied efforts ahead. Something for every system!"/>
+      <textevent timeoffset="240" message="Threshold, sprints, and sweet spot. Let's go!"/>
+    </Warmup>
+
+    <SteadyState Duration="120" Power="0.70" Cadence="88">
+      <textevent timeoffset="0" message="Quick tempo to ease into the work."/>
+    </SteadyState>
+
+    <!-- Threshold set -->
+    <IntervalsT Repeat="3" OnDuration="90" OffDuration="90" OnPower="0.95" OffPower="0.55" Cadence="92" CadenceResting="85">
+      <textevent timeoffset="0" message="Threshold interval! Ninety seconds at your limit!"/>
+      <textevent timeoffset="45" message="Halfway! Control your breathing!"/>
+      <textevent timeoffset="90" message="Recovery! Keep spinning."/>
+    </IntervalsT>
+
+    <SteadyState Duration="120" Power="0.55" Cadence="85">
+      <textevent timeoffset="0" message="Extra recovery. Sprint set coming up!"/>
+    </SteadyState>
+
+    <!-- Sprint set -->
+    <IntervalsT Repeat="6" OnDuration="30" OffDuration="30" OnPower="1.20" OffPower="0.50" Cadence="105" CadenceResting="80">
+      <textevent timeoffset="0" message="SPRINT! Thirty seconds of explosive power!"/>
+      <textevent timeoffset="30" message="Quick recovery. Next sprint in 30 seconds!"/>
+    </IntervalsT>
+
+    <SteadyState Duration="120" Power="0.55" Cadence="85">
+      <textevent timeoffset="0" message="Catching your breath. Sweet spot to close it out."/>
+    </SteadyState>
+
+    <SteadyState Duration="240" Power="0.80" Cadence="90">
+      <textevent timeoffset="0" message="Four minutes at sweet spot. Steady to finish."/>
+      <textevent timeoffset="120" message="You covered all the bases today!"/>
+    </SteadyState>
+
+    <Cooldown Duration="240" PowerHigh="0.55" PowerLow="0.35" Cadence="80">
+      <textevent timeoffset="0" message="Workday stress eliminated! Cooling down."/>
+      <textevent timeoffset="120" message="Evening sessions are a great way to decompress."/>
+      <textevent timeoffset="200" message="After Work Blast complete!"/>
+    </Cooldown>
+  </workout>
+</workout_file>

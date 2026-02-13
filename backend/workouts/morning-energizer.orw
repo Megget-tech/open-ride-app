@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workout_file>
+  <name>Morning Energizer</name>
+  <author>Open Ride</author>
+  <description>A light session to start your day with energy. Gentle intervals wake up your muscles and cardiovascular system without digging into recovery.</description>
+  <sportType>bike</sportType>
+  <category>Daily Training</category>
+  <subcategory>Mixed</subcategory>
+  <tags>
+    <tag name="Daily"/>
+    <tag name="Light"/>
+    <tag name="Energizing"/>
+  </tags>
+
+  <workout>
+    <Warmup Duration="300" PowerLow="0.40" PowerHigh="0.60" Cadence="85">
+      <textevent timeoffset="0" message="Morning Energizer! Time to wake up those legs."/>
+      <textevent timeoffset="120" message="Easy start. Let your body come online gradually."/>
+      <textevent timeoffset="240" message="Gentle intervals ahead. Nothing too hard!"/>
+    </Warmup>
+
+    <IntervalsT Repeat="4" OnDuration="120" OffDuration="60" OnPower="0.75" OffPower="0.55" Cadence="90" CadenceResting="85">
+      <textevent timeoffset="0" message="Two minutes at moderate effort. Wake up!"/>
+      <textevent timeoffset="60" message="Halfway! Feeling more alive yet?"/>
+      <textevent timeoffset="120" message="Easy minute to recover."/>
+    </IntervalsT>
+
+    <SteadyState Duration="180" Power="0.60" Cadence="88">
+      <textevent timeoffset="0" message="Three minutes easy. Second set is slightly harder."/>
+    </SteadyState>
+
+    <IntervalsT Repeat="3" OnDuration="60" OffDuration="60" OnPower="0.80" OffPower="0.55" Cadence="92" CadenceResting="85">
+      <textevent timeoffset="0" message="One minute at upper tempo! Getting the blood flowing!"/>
+      <textevent timeoffset="60" message="Easy recovery. You are fully awake now!"/>
+    </IntervalsT>
+
+    <SteadyState Duration="180" Power="0.55" Cadence="85">
+      <textevent timeoffset="0" message="Easy spinning to wind down."/>
+      <textevent timeoffset="120" message="Great way to start the day!"/>
+    </SteadyState>
+
+    <Cooldown Duration="240" PowerHigh="0.50" PowerLow="0.35" Cadence="80">
+      <textevent timeoffset="0" message="Cooling down. You are energized for the day ahead!"/>
+      <textevent timeoffset="120" message="Light morning sessions boost energy without fatigue."/>
+      <textevent timeoffset="200" message="Morning Energizer complete! Have a great day!"/>
+    </Cooldown>
+  </workout>
+</workout_file>

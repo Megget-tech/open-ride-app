@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workout_file>
+  <name>Hill Force Reps</name>
+  <author>Open Ride</author>
+  <description>Low cadence force repetitions build the muscular strength needed for sustained climbing. Heavy pedaling at moderate power develops crank torque.</description>
+  <sportType>bike</sportType>
+  <category>Climbing</category>
+  <subcategory>Hill Power</subcategory>
+  <tags>
+    <tag name="Climbing"/>
+    <tag name="Strength"/>
+    <tag name="Low Cadence"/>
+  </tags>
+
+  <workout>
+    <!-- Warmup: 6 minutes from 40% to 65% FTP -->
+    <Warmup Duration="360" PowerLow="0.40" PowerHigh="0.65" Cadence="85">
+      <textevent timeoffset="0" message="Welcome to Hill Force Reps. Today we build raw climbing strength."/>
+      <textevent timeoffset="60" message="Keep your spin light and easy as we warm up the legs."/>
+      <textevent timeoffset="180" message="We will be doing low cadence efforts today. Let the muscles warm up fully."/>
+      <textevent timeoffset="300" message="Almost ready. Stay seated and relaxed through the shoulders."/>
+    </Warmup>
+
+    <!-- Steady state at 70% FTP for 3 minutes -->
+    <SteadyState Duration="180" Power="0.70" Cadence="85">
+      <textevent timeoffset="0" message="Settle in at 70% FTP. Keep the cadence at 85 RPM for now."/>
+      <textevent timeoffset="60" message="The low cadence intervals are coming. Focus on steady breathing."/>
+      <textevent timeoffset="120" message="Drop your heels slightly on the downstroke to engage your glutes."/>
+    </SteadyState>
+
+    <!-- 6x[3min at 0.85 low cadence + 2min at 0.55 recovery] -->
+    <IntervalsT Repeat="6" OnDuration="180" OffDuration="120" OnPower="0.85" OffPower="0.55" Cadence="65" CadenceResting="90">
+      <textevent timeoffset="0" message="Drop the cadence to 65 RPM. Push a big gear and feel the torque through each pedal stroke."/>
+      <textevent timeoffset="60" message="Stay seated. Grip the tops of the bars and keep your hips stable on the saddle."/>
+      <textevent timeoffset="120" message="Drive through the full pedal circle. Think about scraping mud off your shoe at the bottom."/>
+      <textevent timeoffset="180" message="Recovery. Spin it up to 90 RPM and let the muscles flush out."/>
+      <textevent timeoffset="240" message="Breathe deep. The next force rep is coming. Stay hydrated."/>
+    </IntervalsT>
+
+    <!-- Steady state at 60% FTP for 5 minutes -->
+    <SteadyState Duration="300" Power="0.60" Cadence="85">
+      <textevent timeoffset="0" message="Great work on those reps. Spin easy and let the legs recover."/>
+      <textevent timeoffset="60" message="Roll your ankles and keep the pedal stroke smooth."/>
+      <textevent timeoffset="150" message="Your legs have done serious strength work today. That pays off on every climb."/>
+      <textevent timeoffset="240" message="Cooldown is next. You are almost done."/>
+    </SteadyState>
+
+    <!-- Cooldown: 5 minutes from 55% to 35% FTP -->
+    <Cooldown Duration="300" PowerHigh="0.55" PowerLow="0.35" Cadence="85">
+      <textevent timeoffset="0" message="Cooldown time. Let the power fade gradually."/>
+      <textevent timeoffset="60" message="Relax your grip, drop your shoulders, and spin easy."/>
+      <textevent timeoffset="180" message="Low cadence force work builds the foundation for climbing power. Well done today."/>
+      <textevent timeoffset="260" message="Great session. Your legs will thank you on the next big climb."/>
+    </Cooldown>
+  </workout>
+</workout_file>

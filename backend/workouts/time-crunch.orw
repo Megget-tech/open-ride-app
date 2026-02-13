@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workout_file>
+  <name>Time Crunch</name>
+  <author>Open Ride</author>
+  <description>When time is short but ambition is high. Sharp VO2-style intervals packed into 25 efficient minutes.</description>
+  <sportType>bike</sportType>
+  <category>Quick Sessions</category>
+  <subcategory>Express</subcategory>
+  <tags>
+    <tag name="VO2Max"/>
+    <tag name="Intervals"/>
+    <tag name="Quick"/>
+  </tags>
+
+  <workout>
+    <Warmup Duration="180" PowerLow="0.40" PowerHigh="0.70" Cadence="90">
+      <textevent timeoffset="0" message="Time Crunch! No time to waste, let's warm up fast."/>
+      <textevent timeoffset="60" message="Short and sharp intervals ahead. Prepare mentally."/>
+      <textevent timeoffset="120" message="Almost ready. Find your rhythm."/>
+    </Warmup>
+
+    <SteadyState Duration="60" Power="0.75" Cadence="90">
+      <textevent timeoffset="0" message="One minute at tempo to finish the warmup."/>
+    </SteadyState>
+
+    <IntervalsT Repeat="6" OnDuration="40" OffDuration="40" OnPower="1.15" OffPower="0.50" Cadence="100" CadenceResting="80">
+      <textevent timeoffset="0" message="GO! 40 seconds of high power!"/>
+      <textevent timeoffset="20" message="Halfway! Keep pushing!"/>
+      <textevent timeoffset="40" message="Recover. Keep those legs turning."/>
+    </IntervalsT>
+
+    <SteadyState Duration="120" Power="0.55" Cadence="85">
+      <textevent timeoffset="0" message="Two minutes easy. Second set is harder but shorter."/>
+      <textevent timeoffset="60" message="Get ready for the final push!"/>
+    </SteadyState>
+
+    <IntervalsT Repeat="4" OnDuration="30" OffDuration="45" OnPower="1.25" OffPower="0.50" Cadence="105" CadenceResting="80">
+      <textevent timeoffset="0" message="Higher power! 30 seconds, make it count!"/>
+      <textevent timeoffset="30" message="Breathe! A bit more rest this time."/>
+    </IntervalsT>
+
+    <Cooldown Duration="180" PowerHigh="0.50" PowerLow="0.35" Cadence="80">
+      <textevent timeoffset="0" message="Done! That was efficient training at its finest."/>
+      <textevent timeoffset="60" message="25 minutes well spent. Quality over quantity."/>
+      <textevent timeoffset="150" message="Time Crunch complete!"/>
+    </Cooldown>
+  </workout>
+</workout_file>

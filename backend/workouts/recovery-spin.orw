@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workout_file>
+  <name>Recovery Spin</name>
+  <author>Open Ride</author>
+  <description>An easy recovery ride to promote blood flow and active recovery. Keep the power low and the cadence smooth. Perfect for the day after a hard workout.</description>
+  <sportType>bike</sportType>
+  <category>Recovery</category>
+  <subcategory>Easy Day</subcategory>
+  <tags>
+    <tag name="Recovery"/>
+    <tag name="Easy"/>
+    <tag name="Active Recovery"/>
+  </tags>
+  
+  <workout>
+    <!-- Easy warmup -->
+    <Warmup Duration="300" PowerLow="0.35" PowerHigh="0.45" Cadence="85">
+      <textevent timeoffset="0" message="Welcome to your recovery ride! Keep it EASY today."/>
+      <textevent timeoffset="60" message="Recovery is when your body adapts and gets stronger."/>
+      <textevent timeoffset="180" message="If you feel the urge to go harder - resist it! Easy means easy."/>
+    </Warmup>
+    
+    <!-- Main easy block 1 -->
+    <SteadyState Duration="600" Power="0.45" Cadence="90">
+      <textevent timeoffset="0" message="Nice and easy. Your heart rate should stay low."/>
+      <textevent timeoffset="180" message="Focus on smooth, round pedal strokes."/>
+      <textevent timeoffset="360" message="This is active recovery - better than sitting on the couch!"/>
+      <textevent timeoffset="540" message="How's your breathing? Should be completely relaxed."/>
+    </SteadyState>
+    
+    <!-- Tiny bump -->
+    <SteadyState Duration="300" Power="0.50" Cadence="90">
+      <textevent timeoffset="0" message="Tiny increase - still recovery zone."/>
+      <textevent timeoffset="180" message="Keep it conversational. You should be able to chat easily."/>
+    </SteadyState>
+    
+    <!-- Back to super easy -->
+    <SteadyState Duration="600" Power="0.42" Cadence="85">
+      <textevent timeoffset="0" message="Back to super easy. Let the legs spin freely."/>
+      <textevent timeoffset="300" message="Recovery rides help clear metabolic waste from your muscles."/>
+      <textevent timeoffset="540" message="Almost done with this block."/>
+    </SteadyState>
+    
+    <!-- Optional small pickup (still easy) -->
+    <SteadyState Duration="120" Power="0.55" Cadence="95">
+      <textevent timeoffset="0" message="Small pickup - still easy! Just opening the legs a bit."/>
+      <textevent timeoffset="60" message="Stay relaxed!"/>
+    </SteadyState>
+    
+    <!-- Final easy block -->
+    <SteadyState Duration="480" Power="0.45" Cadence="85">
+      <textevent timeoffset="0" message="Final easy block. Enjoy the spin."/>
+      <textevent timeoffset="180" message="Think about your next hard workout - you'll be ready for it!"/>
+      <textevent timeoffset="360" message="Almost done. Great recovery session!"/>
+    </SteadyState>
+    
+    <!-- Cooldown -->
+    <Cooldown Duration="180" PowerHigh="0.42" PowerLow="0.30" Cadence="80">
+      <textevent timeoffset="0" message="Spinning down to finish."/>
+      <textevent timeoffset="60" message="Remember: rest is training too!"/>
+      <textevent timeoffset="150" message="Recovery complete! Your body thanks you. 😌"/>
+    </Cooldown>
+  </workout>
+</workout_file>

@@ -1,0 +1,257 @@
+/* Free Ride Page Styles */
+
+.freeride-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0a0a1e 0%, #1a1a3a 100%);
+}
+
+.freeride-main {
+  max-width: 900px;
+  margin: 0 auto;
+  margin-top: 60px;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  min-height: calc(100vh - 60px);
+  justify-content: center;
+}
+
+
+/* Time Display */
+.time-display {
+  text-align: center;
+}
+
+.time-value {
+  font-size: 5rem;
+  font-weight: 700;
+  color: #fff;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 2px;
+}
+
+.time-label {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+/* Metrics Grid */
+.freeride-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  width: 100%;
+  max-width: 700px;
+}
+
+.freeride-metrics .metric-card {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  padding: 1.5rem;
+  text-align: center;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.2s;
+}
+
+.freeride-metrics .metric-card.primary {
+  background: rgba(0, 210, 0, 0.1);
+  border-color: rgba(0, 210, 0, 0.3);
+  grid-column: span 1;
+}
+
+.freeride-metrics .metric-label {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 0.5rem;
+}
+
+.freeride-metrics .metric-value {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.freeride-metrics .metric-unit {
+  font-size: 1rem;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.5);
+  margin-left: 4px;
+}
+
+.freeride-metrics .metric-card.primary .metric-value {
+  color: #00d200;
+}
+
+/* Controls */
+.freeride-controls {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.control-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 2rem;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.control-btn.secondary {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.control-btn.secondary:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.control-btn.danger {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+}
+
+.control-btn.danger:hover {
+  background: rgba(239, 68, 68, 0.3);
+}
+
+
+/* Summary overlay */
+.summary-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(10, 10, 30, 0.98), rgba(20, 20, 50, 0.98));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.summary-content {
+  max-width: 500px;
+  width: 90%;
+  text-align: center;
+}
+
+.summary-icon {
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, #00d200, #00a000);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  color: #fff;
+  margin: 0 auto 1rem;
+  box-shadow: 0 4px 20px rgba(0, 210, 0, 0.4);
+}
+
+.summary-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 2rem;
+}
+
+.summary-stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.summary-stat {
+  text-align: center;
+}
+
+.summary-stat-value {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.summary-stat-value .stat-unit {
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.summary-stat-label {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+  margin-top: 0.25rem;
+}
+
+.summary-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.summary-btn {
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.summary-btn.primary {
+  background: linear-gradient(135deg, #00d200, #00a000);
+  color: #fff;
+}
+
+.summary-btn.primary:hover {
+  transform: translateY(-2px);
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .freeride-metrics {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .time-value {
+    font-size: 3.5rem;
+  }
+
+  .freeride-metrics .metric-value {
+    font-size: 2rem;
+  }
+
+  .freeride-controls {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .control-btn {
+    justify-content: center;
+  }
+}

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workout_file>
+  <name>Ready to Roll</name>
+  <author>Open Ride</author>
+  <description>The culmination of your kickstart journey. A mix of everything you have learned with slightly higher demands to prove you are ready for more.</description>
+  <sportType>bike</sportType>
+  <category>Fitness Kickstart</category>
+  <subcategory>Getting Started</subcategory>
+  <tags>
+    <tag name="Beginner"/>
+    <tag name="Graduation"/>
+    <tag name="Mixed"/>
+  </tags>
+
+  <workout>
+    <Warmup Duration="300" PowerLow="0.35" PowerHigh="0.60" Cadence="85">
+      <textevent timeoffset="0" message="Ready to Roll! The graduation ride of your kickstart!"/>
+      <textevent timeoffset="120" message="You have built a foundation. Time to show it off!"/>
+      <textevent timeoffset="240" message="A mix of everything you have learned. Let's go!"/>
+    </Warmup>
+
+    <SteadyState Duration="180" Power="0.65" Cadence="88">
+      <textevent timeoffset="0" message="Three minutes at endurance pace. You know this zone!"/>
+    </SteadyState>
+
+    <IntervalsT Repeat="3" OnDuration="120" OffDuration="60" OnPower="0.80" OffPower="0.50" Cadence="90" CadenceResting="82">
+      <textevent timeoffset="0" message="Two-minute interval! Show your fitness!"/>
+      <textevent timeoffset="60" message="Halfway! You trained for this!"/>
+      <textevent timeoffset="120" message="Recovery! Well done!"/>
+    </IntervalsT>
+
+    <SteadyState Duration="180" Power="0.55" Cadence="82">
+      <textevent timeoffset="0" message="Recovery. A couple of harder efforts ahead!"/>
+    </SteadyState>
+
+    <SteadyState Duration="120" Power="0.85" Cadence="90">
+      <textevent timeoffset="0" message="Two minutes at sweet spot! New territory!"/>
+      <textevent timeoffset="60" message="One minute! You can handle this!"/>
+    </SteadyState>
+
+    <SteadyState Duration="120" Power="0.50" Cadence="80">
+      <textevent timeoffset="0" message="Recovery. One more push!"/>
+    </SteadyState>
+
+    <SteadyState Duration="120" Power="0.90" Cadence="92">
+      <textevent timeoffset="0" message="Your highest effort yet! Two minutes!"/>
+      <textevent timeoffset="60" message="You are stronger than you think! Hold it!"/>
+    </SteadyState>
+
+    <SteadyState Duration="120" Power="0.50" Cadence="80">
+      <textevent timeoffset="0" message="Amazing! You just rode at 90 percent FTP!"/>
+    </SteadyState>
+
+    <SteadyState Duration="300" Power="0.70" Cadence="88">
+      <textevent timeoffset="0" message="Five minutes at tempo to finish off."/>
+      <textevent timeoffset="120" message="Remember when this felt hard? Look at you now!"/>
+      <textevent timeoffset="240" message="Almost done with the kickstart series!"/>
+    </SteadyState>
+
+    <SteadyState Duration="240" Power="0.55" Cadence="82">
+      <textevent timeoffset="0" message="Easy riding before the cooldown."/>
+    </SteadyState>
+
+    <Cooldown Duration="240" PowerHigh="0.50" PowerLow="0.35" Cadence="80">
+      <textevent timeoffset="0" message="Congratulations! You graduated from the kickstart!"/>
+      <textevent timeoffset="120" message="You are ready for any workout in the collection now."/>
+      <textevent timeoffset="200" message="Ready to Roll complete! The road is yours!"/>
+    </Cooldown>
+  </workout>
+</workout_file>

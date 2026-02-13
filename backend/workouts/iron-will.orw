@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workout_file>
+  <name>Iron Will</name>
+  <author>Open Ride</author>
+  <description>The ultimate test of endurance and intensity. Extended threshold blocks combined with VO2max efforts demand both physical and mental fortitude.</description>
+  <sportType>bike</sportType>
+  <category>Epic Sessions</category>
+  <subcategory>Marathon</subcategory>
+  <tags>
+    <tag name="Threshold"/>
+    <tag name="VO2Max"/>
+    <tag name="Epic"/>
+  </tags>
+
+  <workout>
+    <Warmup Duration="600" PowerLow="0.40" PowerHigh="0.65" Cadence="85">
+      <textevent timeoffset="0" message="Iron Will! The most demanding workout in the collection."/>
+      <textevent timeoffset="180" message="Threshold blocks, then VO2max intervals. Be ready."/>
+      <textevent timeoffset="360" message="This workout is about mental and physical strength."/>
+      <textevent timeoffset="540" message="Warmup finishing. The battle begins soon."/>
+    </Warmup>
+
+    <SteadyState Duration="300" Power="0.70" Cadence="88">
+      <textevent timeoffset="0" message="Five minutes at tempo to ease into the session."/>
+      <textevent timeoffset="180" message="Sweet spot block coming. Settle your mind."/>
+    </SteadyState>
+
+    <SteadyState Duration="900" Power="0.88" Cadence="88">
+      <textevent timeoffset="0" message="Fifteen minutes at sweet spot. This is the base layer."/>
+      <textevent timeoffset="300" message="Stay controlled. Harder efforts are still ahead."/>
+      <textevent timeoffset="600" message="Ten minutes done. Five to go in this block."/>
+      <textevent timeoffset="780" message="Two minutes left. Steady effort!"/>
+    </SteadyState>
+
+    <SteadyState Duration="300" Power="0.55" Cadence="85">
+      <textevent timeoffset="0" message="Recovery. Threshold block coming up."/>
+      <textevent timeoffset="180" message="Fifteen minutes at threshold. Pace it wisely."/>
+    </SteadyState>
+
+    <SteadyState Duration="900" Power="0.95" Cadence="90">
+      <textevent timeoffset="0" message="THRESHOLD! Fifteen minutes right at your limit."/>
+      <textevent timeoffset="180" message="This is the effort that defines your ability."/>
+      <textevent timeoffset="360" message="Six minutes done. Nine to go. Stay with it."/>
+      <textevent timeoffset="540" message="Halfway! You are proving your iron will!"/>
+      <textevent timeoffset="720" message="Three minutes left! Dig deep!"/>
+      <textevent timeoffset="840" message="Final minute at threshold! Hold on!"/>
+    </SteadyState>
+
+    <SteadyState Duration="300" Power="0.55" Cadence="85">
+      <textevent timeoffset="0" message="Incredible threshold work! Recovery before VO2max."/>
+      <textevent timeoffset="180" message="Five VO2 intervals ahead. Three minutes each."/>
+    </SteadyState>
+
+    <IntervalsT Repeat="5" OnDuration="180" OffDuration="180" OnPower="1.08" OffPower="0.50" Cadence="100" CadenceResting="80">
+      <textevent timeoffset="0" message="VO2 INTERVAL! Three minutes above threshold!"/>
+      <textevent timeoffset="60" message="Breathe hard! Your lungs are the engine!"/>
+      <textevent timeoffset="120" message="One minute left! Push through the pain!"/>
+      <textevent timeoffset="180" message="Recovery! You earned every second of this rest."/>
+    </IntervalsT>
+
+    <SteadyState Duration="300" Power="0.55" Cadence="85">
+      <textevent timeoffset="0" message="The hard work is done. You survived!"/>
+      <textevent timeoffset="180" message="Easy spinning to begin the cooldown process."/>
+    </SteadyState>
+
+    <SteadyState Duration="600" Power="0.80" Cadence="88">
+      <textevent timeoffset="0" message="Ten minutes at moderate tempo to flush the legs."/>
+      <textevent timeoffset="300" message="Reflecting on an incredible achievement today."/>
+    </SteadyState>
+
+    <Cooldown Duration="600" PowerHigh="0.55" PowerLow="0.35" Cadence="80">
+      <textevent timeoffset="0" message="Extended cooldown. You need it after that effort."/>
+      <textevent timeoffset="180" message="Iron Will demands everything. You delivered."/>
+      <textevent timeoffset="360" message="Recovery nutrition and rest are vital after this."/>
+      <textevent timeoffset="540" message="Iron Will complete! You are forged in fire."/>
+    </Cooldown>
+  </workout>
+</workout_file>

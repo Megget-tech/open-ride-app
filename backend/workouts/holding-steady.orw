@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workout_file>
+  <name>Holding Steady</name>
+  <author>Open Ride</author>
+  <description>Practice sustained threshold efforts as you rebuild your fitness ceiling. Controlled blocks at and near FTP test your growing capacity.</description>
+  <sportType>bike</sportType>
+  <category>Fitness Refresh</category>
+  <subcategory>Tune Up</subcategory>
+  <tags>
+    <tag name="Tune Up"/>
+    <tag name="Threshold"/>
+    <tag name="Sustained"/>
+  </tags>
+
+  <workout>
+    <Warmup Duration="360" PowerLow="0.40" PowerHigh="0.65" Cadence="85">
+      <textevent timeoffset="0" message="Holding Steady! Testing your rebuilt threshold."/>
+      <textevent timeoffset="120" message="Progressive blocks building toward threshold power."/>
+      <textevent timeoffset="240" message="Listen to your body. It will tell you how far to push."/>
+    </Warmup>
+
+    <SteadyState Duration="180" Power="0.70" Cadence="88">
+      <textevent timeoffset="0" message="Three minutes at tempo to ease in."/>
+    </SteadyState>
+
+    <SteadyState Duration="360" Power="0.88" Cadence="88">
+      <textevent timeoffset="0" message="Six minutes at sweet spot. Finding your threshold range."/>
+      <textevent timeoffset="120" message="How does this feel? It should be comfortably hard."/>
+      <textevent timeoffset="240" message="Two minutes left. Stay smooth!"/>
+    </SteadyState>
+
+    <SteadyState Duration="180" Power="0.55" Cadence="85">
+      <textevent timeoffset="0" message="Recovery. Next block is a bit harder."/>
+    </SteadyState>
+
+    <SteadyState Duration="360" Power="0.92" Cadence="90">
+      <textevent timeoffset="0" message="Six minutes at upper sweet spot! Closer to threshold."/>
+      <textevent timeoffset="120" message="Your fitness ceiling is rebuilding. Trust the process."/>
+      <textevent timeoffset="240" message="Two minutes! You are holding steady beautifully!"/>
+    </SteadyState>
+
+    <SteadyState Duration="180" Power="0.55" Cadence="85">
+      <textevent timeoffset="0" message="Recovery. One more block at near-threshold."/>
+      <textevent timeoffset="120" message="Five minutes at your highest effort today. Ready?"/>
+    </SteadyState>
+
+    <SteadyState Duration="300" Power="0.95" Cadence="90">
+      <textevent timeoffset="0" message="Five minutes at near-threshold! This is the test!"/>
+      <textevent timeoffset="120" message="You are holding power that matters. Real fitness!"/>
+      <textevent timeoffset="180" message="Two minutes left! You can do this!"/>
+      <textevent timeoffset="240" message="Final minute! Hold steady!"/>
+    </SteadyState>
+
+    <SteadyState Duration="180" Power="0.55" Cadence="85">
+      <textevent timeoffset="0" message="Incredible! Your threshold is alive and well."/>
+    </SteadyState>
+
+    <SteadyState Duration="240" Power="0.85" Cadence="88">
+      <textevent timeoffset="0" message="Four minutes at moderate effort to flush."/>
+      <textevent timeoffset="120" message="Your fitness is coming back strong."/>
+    </SteadyState>
+
+    <SteadyState Duration="300" Power="0.60" Cadence="85">
+      <textevent timeoffset="0" message="Easy riding before cooldown."/>
+    </SteadyState>
+
+    <Cooldown Duration="480" PowerHigh="0.55" PowerLow="0.35" Cadence="80">
+      <textevent timeoffset="0" message="Cooling down. Your threshold is rebuilding!"/>
+      <textevent timeoffset="180" message="Sustained efforts are the key to real fitness."/>
+      <textevent timeoffset="360" message="Be patient. The gains are coming."/>
+      <textevent timeoffset="440" message="Holding Steady complete!"/>
+    </Cooldown>
+  </workout>
+</workout_file>

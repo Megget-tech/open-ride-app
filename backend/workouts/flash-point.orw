@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workout_file>
+  <name>Flash Point</name>
+  <author>Open Ride</author>
+  <description>A fast-paced session mixing short explosive sprints with sweet spot blocks. Designed to maximize training effect in minimal time.</description>
+  <sportType>bike</sportType>
+  <category>Quick Sessions</category>
+  <subcategory>Express</subcategory>
+  <tags>
+    <tag name="HIIT"/>
+    <tag name="Sprint"/>
+    <tag name="Quick"/>
+  </tags>
+
+  <workout>
+    <Warmup Duration="240" PowerLow="0.40" PowerHigh="0.65" Cadence="90">
+      <textevent timeoffset="0" message="Flash Point! Quick warmup then we get to work."/>
+      <textevent timeoffset="60" message="Short sprints are coming. Get the legs ready."/>
+      <textevent timeoffset="180" message="Almost there. Deep breaths, focus your mind."/>
+    </Warmup>
+
+    <Ramp Duration="60" PowerLow="0.65" PowerHigh="0.85" Cadence="95">
+      <textevent timeoffset="0" message="Building into it. Power is climbing!"/>
+    </Ramp>
+
+    <IntervalsT Repeat="8" OnDuration="20" OffDuration="20" OnPower="1.30" OffPower="0.50" Cadence="110" CadenceResting="80">
+      <textevent timeoffset="0" message="EXPLOSIVE! 20 seconds full gas!"/>
+      <textevent timeoffset="20" message="Quick recovery. Next one is coming fast!"/>
+    </IntervalsT>
+
+    <SteadyState Duration="120" Power="0.55" Cadence="85">
+      <textevent timeoffset="0" message="Two minutes to regroup. You crushed those sprints!"/>
+      <textevent timeoffset="60" message="Sweet spot block coming next. Steady effort."/>
+    </SteadyState>
+
+    <SteadyState Duration="300" Power="0.88" Cadence="90">
+      <textevent timeoffset="0" message="Five minutes at sweet spot. Strong and controlled."/>
+      <textevent timeoffset="120" message="This is where fitness is forged. Hold it steady."/>
+      <textevent timeoffset="240" message="One more minute! You are doing great!"/>
+    </SteadyState>
+
+    <SteadyState Duration="60" Power="0.50" Cadence="85">
+      <textevent timeoffset="0" message="Brief rest. One more interval set to go!"/>
+    </SteadyState>
+
+    <IntervalsT Repeat="4" OnDuration="30" OffDuration="30" OnPower="1.15" OffPower="0.50" Cadence="100" CadenceResting="80">
+      <textevent timeoffset="0" message="Thirty seconds! Push through the burn!"/>
+      <textevent timeoffset="30" message="Recover. You are almost done!"/>
+    </IntervalsT>
+
+    <Cooldown Duration="180" PowerHigh="0.55" PowerLow="0.35" Cadence="80">
+      <textevent timeoffset="0" message="Excellent work! Spinning down now."/>
+      <textevent timeoffset="60" message="Maximum training in minimum time."/>
+      <textevent timeoffset="150" message="Flash Point complete! Great session."/>
+    </Cooldown>
+  </workout>
+</workout_file>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workout_file>
+  <name>Building Blocks</name>
+  <author>Open Ride</author>
+  <description>Your first taste of structured intervals. Simple on-off efforts introduce your body to higher intensities with generous recovery between.</description>
+  <sportType>bike</sportType>
+  <category>Fitness Kickstart</category>
+  <subcategory>Getting Started</subcategory>
+  <tags>
+    <tag name="Beginner"/>
+    <tag name="Intervals"/>
+    <tag name="Moderate"/>
+  </tags>
+
+  <workout>
+    <Warmup Duration="300" PowerLow="0.35" PowerHigh="0.55" Cadence="82">
+      <textevent timeoffset="0" message="Building Blocks! Your first real interval session."/>
+      <textevent timeoffset="120" message="Intervals alternate between harder and easier efforts."/>
+      <textevent timeoffset="240" message="Do not worry - plenty of recovery between each one!"/>
+    </Warmup>
+
+    <SteadyState Duration="180" Power="0.60" Cadence="85">
+      <textevent timeoffset="0" message="Three minutes to settle in before intervals."/>
+      <textevent timeoffset="120" message="First set coming up. You got this!"/>
+    </SteadyState>
+
+    <IntervalsT Repeat="4" OnDuration="60" OffDuration="120" OnPower="0.75" OffPower="0.50" Cadence="88" CadenceResting="82">
+      <textevent timeoffset="0" message="One minute at a brisker pace! You can do it!"/>
+      <textevent timeoffset="60" message="Great! Two minutes to recover. Take it easy."/>
+    </IntervalsT>
+
+    <SteadyState Duration="180" Power="0.55" Cadence="82">
+      <textevent timeoffset="0" message="Nice work on your first intervals! Rest up."/>
+      <textevent timeoffset="120" message="Second set is similar but slightly different."/>
+    </SteadyState>
+
+    <IntervalsT Repeat="3" OnDuration="90" OffDuration="90" OnPower="0.70" OffPower="0.50" Cadence="85" CadenceResting="82">
+      <textevent timeoffset="0" message="Ninety seconds! A bit longer, a bit easier."/>
+      <textevent timeoffset="45" message="Halfway through this one!"/>
+      <textevent timeoffset="90" message="Recovery! Equal rest to work."/>
+    </IntervalsT>
+
+    <SteadyState Duration="180" Power="0.50" Cadence="80">
+      <textevent timeoffset="0" message="Main work is done! Easy spinning."/>
+      <textevent timeoffset="120" message="You just completed structured intervals!"/>
+    </SteadyState>
+
+    <Cooldown Duration="240" PowerHigh="0.45" PowerLow="0.30" Cadence="78">
+      <textevent timeoffset="0" message="Cooling down. You are building fitness block by block!"/>
+      <textevent timeoffset="120" message="Each session adds another building block."/>
+      <textevent timeoffset="200" message="Building Blocks complete!"/>
+    </Cooldown>
+  </workout>
+</workout_file>

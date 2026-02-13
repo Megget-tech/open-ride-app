@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workout_file>
+  <name>Gentle Pedals</name>
+  <author>Open Ride</author>
+  <description>The easiest workout in the collection. Minimal effort, maximum recovery benefit. Perfect for the day after your hardest training.</description>
+  <sportType>bike</sportType>
+  <category>Recovery</category>
+  <subcategory>Active Recovery</subcategory>
+  <tags>
+    <tag name="Recovery"/>
+    <tag name="Easy"/>
+    <tag name="Minimal"/>
+  </tags>
+  <workout>
+    <Warmup Duration="240" PowerLow="0.30" PowerHigh="0.40" Cadence="78">
+      <textevent timeoffset="10" message="Welcome to Gentle Pedals. This is the easiest ride we offer. Embrace it."/>
+      <textevent timeoffset="60" message="Start with the lightest effort imaginable. Barely turning the pedals."/>
+      <textevent timeoffset="180" message="Relax everything: hands, jaw, shoulders, hips. Just float on the bike."/>
+    </Warmup>
+    <SteadyState Duration="480" Power="0.38" Cadence="82">
+      <textevent timeoffset="30" message="Settling in at a very low power. This should feel like a rest with moving legs."/>
+      <textevent timeoffset="150" message="After a hard training day, your body needs this. Resist any temptation to push."/>
+      <textevent timeoffset="300" message="Focus on your breathing. Slow, deep inhales. Long, relaxed exhales."/>
+      <textevent timeoffset="420" message="Your muscles are rebuilding right now. This gentle movement speeds up that process."/>
+    </SteadyState>
+    <SteadyState Duration="360" Power="0.42" Cadence="85">
+      <textevent timeoffset="30" message="A small increase in power. It should still feel completely effortless."/>
+      <textevent timeoffset="120" message="Think of this as active rest. You should be able to hold a full conversation."/>
+      <textevent timeoffset="240" message="Scan your body for tension. If you find any, consciously let it go."/>
+      <textevent timeoffset="330" message="Smooth circles with the pedals. No dead spots, no surges, just steady flow."/>
+    </SteadyState>
+    <SteadyState Duration="360" Power="0.38" Cadence="82">
+      <textevent timeoffset="30" message="Back down to our lowest cruising power. Enjoy the ease."/>
+      <textevent timeoffset="150" message="The best athletes in the world take their easy days very easy. Follow their example."/>
+      <textevent timeoffset="300" message="Almost through the main block. You are doing exactly what your body needs."/>
+    </SteadyState>
+    <SteadyState Duration="180" Power="0.35" Cadence="80">
+      <textevent timeoffset="10" message="Dropping power even further as we start winding down."/>
+      <textevent timeoffset="60" message="Your heart rate should be very low right now. If it is not, ease off even more."/>
+      <textevent timeoffset="140" message="Take a deep breath and let your body feel light on the bike."/>
+    </SteadyState>
+    <Cooldown Duration="180" PowerHigh="0.35" PowerLow="0.28" Cadence="75">
+      <textevent timeoffset="10" message="Final cooldown. Let the power drift down to almost nothing."/>
+      <textevent timeoffset="60" message="Gently roll your neck from side to side. Shake out your fingers."/>
+      <textevent timeoffset="150" message="Perfect recovery session. Sleep well, eat well, and come back fresh."/>
+    </Cooldown>
+  </workout>
+</workout_file>

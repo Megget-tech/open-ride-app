@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workout_file>
+  <name>Stepping Up</name>
+  <author>Open Ride</author>
+  <description>Each interval asks a little more. Progressive efforts that nudge you out of your comfort zone while building confidence in your growing fitness.</description>
+  <sportType>bike</sportType>
+  <category>Fitness Kickstart</category>
+  <subcategory>Getting Started</subcategory>
+  <tags>
+    <tag name="Beginner"/>
+    <tag name="Progressive"/>
+    <tag name="Building"/>
+  </tags>
+
+  <workout>
+    <Warmup Duration="300" PowerLow="0.35" PowerHigh="0.55" Cadence="82">
+      <textevent timeoffset="0" message="Stepping Up! Each effort gets a tiny bit harder."/>
+      <textevent timeoffset="120" message="Progressive training teaches your body to adapt."/>
+      <textevent timeoffset="240" message="You will surprise yourself with what you can do!"/>
+    </Warmup>
+
+    <SteadyState Duration="180" Power="0.60" Cadence="85">
+      <textevent timeoffset="0" message="Settling in before the progressive efforts."/>
+    </SteadyState>
+
+    <SteadyState Duration="180" Power="0.70" Cadence="85">
+      <textevent timeoffset="0" message="Step 1! Three minutes at moderate effort."/>
+      <textevent timeoffset="90" message="This is your baseline. Everything builds from here."/>
+    </SteadyState>
+
+    <SteadyState Duration="120" Power="0.50" Cadence="80">
+      <textevent timeoffset="0" message="Easy recovery. Next step is a bit higher."/>
+    </SteadyState>
+
+    <SteadyState Duration="180" Power="0.75" Cadence="88">
+      <textevent timeoffset="0" message="Step 2! Slightly higher. Feel the difference?"/>
+      <textevent timeoffset="90" message="Your body is responding. This is adaptation!"/>
+    </SteadyState>
+
+    <SteadyState Duration="120" Power="0.50" Cadence="80">
+      <textevent timeoffset="0" message="Recovery. One more step up!"/>
+    </SteadyState>
+
+    <SteadyState Duration="180" Power="0.80" Cadence="88">
+      <textevent timeoffset="0" message="Step 3! The highest effort today!"/>
+      <textevent timeoffset="90" message="You are doing something that was hard a week ago!"/>
+      <textevent timeoffset="150" message="Almost there! Hold on!"/>
+    </SteadyState>
+
+    <SteadyState Duration="120" Power="0.50" Cadence="80">
+      <textevent timeoffset="0" message="Incredible! Now we step back down."/>
+    </SteadyState>
+
+    <SteadyState Duration="180" Power="0.75" Cadence="85">
+      <textevent timeoffset="0" message="Notice how this feels easier now?"/>
+      <textevent timeoffset="90" message="That is the power of progressive training!"/>
+    </SteadyState>
+
+    <SteadyState Duration="120" Power="0.50" Cadence="80">
+      <textevent timeoffset="0" message="Easy again."/>
+    </SteadyState>
+
+    <SteadyState Duration="180" Power="0.70" Cadence="85">
+      <textevent timeoffset="0" message="Back to step 1 level. Feels easy now, right?"/>
+    </SteadyState>
+
+    <SteadyState Duration="300" Power="0.55" Cadence="82">
+      <textevent timeoffset="0" message="Gentle cooldown riding."/>
+      <textevent timeoffset="180" message="You stepped up today. Be proud!"/>
+    </SteadyState>
+
+    <Cooldown Duration="240" PowerHigh="0.45" PowerLow="0.30" Cadence="78">
+      <textevent timeoffset="0" message="Cooling down. Your fitness is growing!"/>
+      <textevent timeoffset="120" message="Each step up makes the previous step feel easier."/>
+      <textevent timeoffset="200" message="Stepping Up complete!"/>
+    </Cooldown>
+  </workout>
+</workout_file>

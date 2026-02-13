@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workout_file>
+  <name>Long Ascent</name>
+  <author>Open Ride</author>
+  <description>Extended climbing intervals at moderate intensity. Trains the sustained effort needed for long mountain passes where pacing is critical.</description>
+  <sportType>bike</sportType>
+  <category>Climbing</category>
+  <subcategory>Hill Power</subcategory>
+  <tags>
+    <tag name="Climbing"/>
+    <tag name="Endurance"/>
+    <tag name="Sustained"/>
+  </tags>
+
+  <workout>
+    <Warmup Duration="480" PowerLow="0.40" PowerHigh="0.65" Cadence="85">
+      <textevent timeoffset="0" message="Long Ascent! Extended climbs that test your pacing."/>
+      <textevent timeoffset="120" message="Long climbs reward patience and steady effort."/>
+      <textevent timeoffset="300" message="Three big climbing blocks ahead. Pace wisely."/>
+      <textevent timeoffset="420" message="Warmup done. First ascent approaching."/>
+    </Warmup>
+
+    <SteadyState Duration="180" Power="0.70" Cadence="85">
+      <textevent timeoffset="0" message="Approach road to the first climb."/>
+    </SteadyState>
+
+    <!-- Climb 1 -->
+    <SteadyState Duration="720" Power="0.85" Cadence="72">
+      <textevent timeoffset="0" message="Climb 1! Twelve minutes of sustained climbing."/>
+      <textevent timeoffset="180" message="Find a rhythm you can hold for the whole climb."/>
+      <textevent timeoffset="360" message="Halfway up! This is where discipline pays off."/>
+      <textevent timeoffset="540" message="Three minutes to go. Do not surge, stay steady!"/>
+      <textevent timeoffset="660" message="One minute! The summit is near!"/>
+    </SteadyState>
+
+    <SteadyState Duration="240" Power="0.55" Cadence="90">
+      <textevent timeoffset="0" message="Over the top! Descend and recover."/>
+      <textevent timeoffset="180" message="Second climb coming. Slightly harder."/>
+    </SteadyState>
+
+    <!-- Climb 2 -->
+    <SteadyState Duration="720" Power="0.88" Cadence="70">
+      <textevent timeoffset="0" message="Climb 2! Twelve minutes at a higher intensity."/>
+      <textevent timeoffset="180" message="Steeper gradient. Drop your cadence a bit more."/>
+      <textevent timeoffset="360" message="Halfway! Your climbing endurance is growing."/>
+      <textevent timeoffset="540" message="Three minutes! Stay in the saddle."/>
+      <textevent timeoffset="660" message="Final minute! Push to the summit!"/>
+    </SteadyState>
+
+    <SteadyState Duration="240" Power="0.55" Cadence="90">
+      <textevent timeoffset="0" message="Descent! One more climb to go."/>
+      <textevent timeoffset="180" message="Final climb is slightly shorter. Give it all."/>
+    </SteadyState>
+
+    <!-- Climb 3 -->
+    <SteadyState Duration="600" Power="0.85" Cadence="72">
+      <textevent timeoffset="0" message="Final climb! Ten minutes of sustained effort."/>
+      <textevent timeoffset="180" message="Your legs are tired but your spirit is strong."/>
+      <textevent timeoffset="360" message="Four minutes left! Dig into your reserves."/>
+      <textevent timeoffset="480" message="Two minutes! The last summit awaits!"/>
+    </SteadyState>
+
+    <SteadyState Duration="300" Power="0.60" Cadence="85">
+      <textevent timeoffset="0" message="All three climbs conquered! Easy riding."/>
+      <textevent timeoffset="180" message="Incredible climbing endurance shown today."/>
+    </SteadyState>
+
+    <Cooldown Duration="420" PowerHigh="0.55" PowerLow="0.35" Cadence="80">
+      <textevent timeoffset="0" message="Cooling down from a long day in the mountains."/>
+      <textevent timeoffset="180" message="Long climbs build the patience for real mountain riding."/>
+      <textevent timeoffset="360" message="Long Ascent complete!"/>
+    </Cooldown>
+  </workout>
+</workout_file>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workout_file>
+  <name>Century Prep</name>
+  <author>Open Ride</author>
+  <description>Prepare for your longest rides with this extended endurance session. Sustained moderate effort with progressive tempo blocks builds the stamina for century rides.</description>
+  <sportType>bike</sportType>
+  <category>Epic Sessions</category>
+  <subcategory>Marathon</subcategory>
+  <tags>
+    <tag name="Endurance"/>
+    <tag name="Long Ride"/>
+    <tag name="Base"/>
+  </tags>
+
+  <workout>
+    <Warmup Duration="600" PowerLow="0.40" PowerHigh="0.60" Cadence="85">
+      <textevent timeoffset="0" message="Century Prep! Building the engine for your longest rides."/>
+      <textevent timeoffset="180" message="This is all about sustained, moderate effort."/>
+      <textevent timeoffset="360" message="Patience is the key to long-distance riding."/>
+      <textevent timeoffset="540" message="Warmup finishing. Settle into endurance pace."/>
+    </Warmup>
+
+    <SteadyState Duration="1200" Power="0.62" Cadence="85">
+      <textevent timeoffset="0" message="Twenty minutes of base endurance. Find your rhythm."/>
+      <textevent timeoffset="300" message="This is the pace that builds mitochondria."/>
+      <textevent timeoffset="600" message="Halfway through this block. Stay comfortable."/>
+      <textevent timeoffset="900" message="Five minutes left. You are doing great."/>
+    </SteadyState>
+
+    <SteadyState Duration="600" Power="0.72" Cadence="88">
+      <textevent timeoffset="0" message="Ten minutes at tempo. Slightly harder but manageable."/>
+      <textevent timeoffset="180" message="Tempo work within endurance rides builds real strength."/>
+      <textevent timeoffset="420" message="Three minutes left in this tempo block."/>
+    </SteadyState>
+
+    <SteadyState Duration="300" Power="0.55" Cadence="85">
+      <textevent timeoffset="0" message="Recovery. Drink and eat if needed."/>
+      <textevent timeoffset="180" message="Fueling during long rides is essential."/>
+    </SteadyState>
+
+    <SteadyState Duration="1200" Power="0.65" Cadence="85">
+      <textevent timeoffset="0" message="Second endurance block. Twenty minutes."/>
+      <textevent timeoffset="300" message="Your body is adapting to sustained effort right now."/>
+      <textevent timeoffset="600" message="Halfway! Check your posture."/>
+      <textevent timeoffset="900" message="Five minutes to go. Stay smooth."/>
+    </SteadyState>
+
+    <SteadyState Duration="600" Power="0.75" Cadence="88">
+      <textevent timeoffset="0" message="Second tempo block. Slightly harder than the first."/>
+      <textevent timeoffset="180" message="Progressive effort teaches your body to handle rising demands."/>
+      <textevent timeoffset="420" message="Three minutes to go! Strong riding."/>
+    </SteadyState>
+
+    <SteadyState Duration="300" Power="0.55" Cadence="85">
+      <textevent timeoffset="0" message="Recovery again. You are deep into this session now."/>
+    </SteadyState>
+
+    <SteadyState Duration="900" Power="0.62" Cadence="85">
+      <textevent timeoffset="0" message="Final endurance block. Fifteen minutes."/>
+      <textevent timeoffset="300" message="Riding well at this point proves your endurance."/>
+      <textevent timeoffset="600" message="Five minutes left before the final tempo push."/>
+    </SteadyState>
+
+    <SteadyState Duration="300" Power="0.78" Cadence="90">
+      <textevent timeoffset="0" message="Final tempo push! Five minutes, strongest yet!"/>
+      <textevent timeoffset="120" message="This is where you prove you can finish strong."/>
+      <textevent timeoffset="240" message="One minute! You are ready for any distance!"/>
+    </SteadyState>
+
+    <Cooldown Duration="600" PowerHigh="0.55" PowerLow="0.35" Cadence="80">
+      <textevent timeoffset="0" message="Incredible endurance work! Extended cooldown."/>
+      <textevent timeoffset="180" message="You just logged some serious training volume."/>
+      <textevent timeoffset="360" message="Recovery nutrition is critical after long sessions."/>
+      <textevent timeoffset="540" message="Century Prep complete! You are going the distance."/>
+    </Cooldown>
+  </workout>
+</workout_file>

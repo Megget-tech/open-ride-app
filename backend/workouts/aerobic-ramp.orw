@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workout_file>
+  <name>Aerobic Ramp</name>
+  <author>Open Ride</author>
+  <description>A gradually building aerobic session. Start easy and progressively increase through the endurance zones, training your body to handle rising demands.</description>
+  <sportType>bike</sportType>
+  <category>Endurance</category>
+  <subcategory>Aerobic Base</subcategory>
+  <tags>
+    <tag name="Endurance"/>
+    <tag name="Progressive"/>
+    <tag name="Aerobic"/>
+  </tags>
+  <workout>
+    <Warmup Duration="360" PowerLow="0.40" PowerHigh="0.55" Cadence="85">
+      <textevent timeoffset="10" message="Welcome to Aerobic Ramp. Today we progressively build through the endurance zones — starting easy and finishing strong."/>
+      <textevent timeoffset="120" message="Easy spinning to start. Enjoy the low intensity while it lasts — each block gets a little harder."/>
+      <textevent timeoffset="280" message="The progressive structure teaches your body to perform under gradually increasing physiological demand."/>
+    </Warmup>
+    <SteadyState Duration="480" Power="0.55" Cadence="85">
+      <textevent timeoffset="30" message="First block at 55% — the low end of zone 2. This should feel very easy, almost too easy. That is perfect."/>
+      <textevent timeoffset="150" message="Use this block to dial in your position and cadence. Everything should feel natural and effortless."/>
+      <textevent timeoffset="300" message="At 55% your body relies heavily on fat oxidation. You are training the metabolic pathways that fuel long rides."/>
+      <textevent timeoffset="420" message="Next block steps up to 60%. A small increase — you will barely notice the change."/>
+    </SteadyState>
+    <SteadyState Duration="480" Power="0.60" Cadence="88">
+      <textevent timeoffset="30" message="Stepping up to 60% FTP. Bring the cadence up slightly to 88 RPM."/>
+      <textevent timeoffset="150" message="This is the heart of zone 2. Comfortable, sustainable, and highly productive for aerobic development."/>
+      <textevent timeoffset="300" message="Notice your breathing has increased just slightly. Still easy, still controlled — exactly where we want to be."/>
+      <textevent timeoffset="420" message="Preparing to move to 65%. Each step up is deliberate and measured."/>
+    </SteadyState>
+    <SteadyState Duration="480" Power="0.65" Cadence="88">
+      <textevent timeoffset="30" message="Now at 65% — the upper end of zone 2. This is where you start to feel like you are actually working."/>
+      <textevent timeoffset="150" message="Your heart rate should be noticeably higher than the first block but still well within the aerobic range."/>
+      <textevent timeoffset="300" message="This intensity maximizes the aerobic training stimulus. Your body is being pushed to improve oxygen delivery."/>
+      <textevent timeoffset="420" message="One more step up ahead to 68%. You are climbing the aerobic ladder beautifully."/>
+    </SteadyState>
+    <SteadyState Duration="480" Power="0.68" Cadence="90">
+      <textevent timeoffset="30" message="Final step — 68% FTP with cadence at 90. This is the top of the endurance zone. Hold it here."/>
+      <textevent timeoffset="150" message="You have ramped from 55% to 68% over the course of this ride. Your body has adapted in real time."/>
+      <textevent timeoffset="300" message="Maintain composure. Breathing is faster but still rhythmic. Power is steady. This is controlled aerobic stress."/>
+      <textevent timeoffset="420" message="Final minute at this power. You have proven you can handle a progressive load. Time to bring it down."/>
+    </SteadyState>
+    <Ramp Duration="240" PowerLow="0.68" PowerHigh="0.55" Cadence="85">
+      <textevent timeoffset="10" message="Ramping back down from 68% to 55%. A gradual descent — enjoy the relief as the power drops."/>
+      <textevent timeoffset="90" message="Progressive sessions like this improve your ability to handle surges and rising efforts in races and group rides."/>
+      <textevent timeoffset="180" message="Almost at the bottom of the ramp. Let the legs recover while staying active."/>
+    </Ramp>
+    <SteadyState Duration="300" Power="0.55" Cadence="85">
+      <textevent timeoffset="10" message="Easy spinning at 55%. The hard work is behind you. Just keep the legs turning over."/>
+      <textevent timeoffset="120" message="Your aerobic system was challenged across a wide range of intensities today. That variety drives adaptation."/>
+      <textevent timeoffset="240" message="Preparing for the cooldown. You are almost done."/>
+    </SteadyState>
+    <Cooldown Duration="300" PowerHigh="0.50" PowerLow="0.35" Cadence="80">
+      <textevent timeoffset="10" message="Cooldown. Let the power fade gradually and the heart rate come down."/>
+      <textevent timeoffset="120" message="Aerobic Ramp is a fantastic way to build endurance while keeping the session engaging and progressive."/>
+      <textevent timeoffset="250" message="Excellent work today. Recover well — your body will be stronger for the next session. See you soon!"/>
+    </Cooldown>
+  </workout>
+</workout_file>

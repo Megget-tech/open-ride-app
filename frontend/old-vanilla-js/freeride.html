@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Open Ride - Free Ride</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="freeride.css">
+  <link rel="stylesheet" href="notifications.css">
+</head>
+<body class="freeride-page">
+  <!-- Top nav injected by top-bar.js -->
+
+  <!-- Main Free Ride Area -->
+  <main class="freeride-main">
+    <!-- Time Display -->
+    <div class="time-display">
+      <div class="time-value" id="elapsed-time">0:00</div>
+      <div class="time-label">Elapsed Time</div>
+    </div>
+
+    <!-- Main Metrics Grid -->
+    <div class="freeride-metrics">
+      <div class="metric-card power primary">
+        <div class="metric-label">POWER</div>
+        <div class="metric-value">
+          <span id="current-power">0</span>
+          <span class="metric-unit">W</span>
+        </div>
+      </div>
+
+      <div class="metric-card cadence">
+        <div class="metric-label">CADENCE</div>
+        <div class="metric-value">
+          <span id="current-cadence">0</span>
+          <span class="metric-unit">rpm</span>
+        </div>
+      </div>
+
+      <div class="metric-card speed">
+        <div class="metric-label">SPEED</div>
+        <div class="metric-value">
+          <span id="current-speed">0.0</span>
+          <span class="metric-unit">km/h</span>
+        </div>
+      </div>
+
+      <div class="metric-card heart-rate">
+        <div class="metric-label">HEART RATE</div>
+        <div class="metric-value">
+          <span id="current-hr">--</span>
+          <span class="metric-unit">bpm</span>
+        </div>
+      </div>
+
+      <div class="metric-card distance">
+        <div class="metric-label">DISTANCE</div>
+        <div class="metric-value">
+          <span id="current-distance">0.00</span>
+          <span class="metric-unit">km</span>
+        </div>
+      </div>
+
+      <div class="metric-card calories">
+        <div class="metric-label">CALORIES</div>
+        <div class="metric-value">
+          <span id="current-calories">0</span>
+          <span class="metric-unit">kcal</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Controls -->
+    <div class="freeride-controls">
+      <button class="control-btn secondary" id="btn-pause" onclick="togglePause()">
+        <svg id="pause-icon" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+          <rect x="6" y="4" width="4" height="16"/>
+          <rect x="14" y="4" width="4" height="16"/>
+        </svg>
+        <svg id="play-icon" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" style="display:none">
+          <polygon points="5,3 19,12 5,21"/>
+        </svg>
+        <span id="pause-text">Pause</span>
+      </button>
+
+      <button class="control-btn danger" onclick="endRide()">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+          <rect x="6" y="6" width="12" height="12"/>
+        </svg>
+        End Ride
+      </button>
+    </div>
+  </main>
+
+  <!-- Device modal injected by device-modal.js -->
+
+  <script src="top-bar.js"></script>
+  <script src="notifications.js"></script>
+  <script src="device-modal.js"></script>
+  <script type="module" src="freeride.js"></script>
+</body>
+</html>

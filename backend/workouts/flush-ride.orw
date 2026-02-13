@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workout_file>
+  <name>Flush Ride</name>
+  <author>Open Ride</author>
+  <description>Active recovery with cadence variations to flush metabolic waste from your muscles. The variety keeps things interesting while staying genuinely easy.</description>
+  <sportType>bike</sportType>
+  <category>Recovery</category>
+  <subcategory>Active Recovery</subcategory>
+  <tags>
+    <tag name="Recovery"/>
+    <tag name="Cadence"/>
+    <tag name="Active Recovery"/>
+  </tags>
+  <workout>
+    <Warmup Duration="300" PowerLow="0.30" PowerHigh="0.42" Cadence="80">
+      <textevent timeoffset="10" message="Welcome to the Flush Ride. We will use cadence changes to keep things fresh while staying easy."/>
+      <textevent timeoffset="90" message="Begin with a gentle spin. Let your legs wake up at their own pace."/>
+      <textevent timeoffset="200" message="Relax your upper body. Recovery rides should feel effortless from head to toe."/>
+    </Warmup>
+    <SteadyState Duration="300" Power="0.42" Cadence="80">
+      <textevent timeoffset="10" message="Low cadence block. Keep the pedals turning slowly and smoothly."/>
+      <textevent timeoffset="90" message="Even at low cadence, the power should feel trivially easy. No muscular strain."/>
+      <textevent timeoffset="180" message="Think of this as a moving meditation. Calm mind, calm body."/>
+      <textevent timeoffset="260" message="Preparing to shift to a higher cadence next. Stay relaxed."/>
+    </SteadyState>
+    <SteadyState Duration="300" Power="0.42" Cadence="100">
+      <textevent timeoffset="10" message="High cadence now. Spin the legs up but keep the effort the same: easy."/>
+      <textevent timeoffset="90" message="Fast legs, low power. This helps flush waste products from your muscles."/>
+      <textevent timeoffset="180" message="Stay smooth at the top and bottom of the pedal stroke. No bouncing in the saddle."/>
+      <textevent timeoffset="260" message="Breathe naturally. If you are panting, you have gone too hard. Dial it back."/>
+    </SteadyState>
+    <SteadyState Duration="300" Power="0.45" Cadence="85">
+      <textevent timeoffset="10" message="Normal cadence and just a touch more power. Still firmly in recovery territory."/>
+      <textevent timeoffset="120" message="Your body repairs itself during easy sessions like this. Going harder would be counterproductive."/>
+      <textevent timeoffset="240" message="Relax your grip on the bars. Let your wrists stay neutral and loose."/>
+    </SteadyState>
+    <SteadyState Duration="300" Power="0.42" Cadence="95">
+      <textevent timeoffset="10" message="Slightly higher cadence again. Spin the legs lightly."/>
+      <textevent timeoffset="120" message="Think about pulling your foot back at the bottom of the stroke like scraping mud off your shoe."/>
+      <textevent timeoffset="240" message="Check your shoulders. Drop them down and back. Release the tension."/>
+    </SteadyState>
+    <SteadyState Duration="300" Power="0.40" Cadence="80">
+      <textevent timeoffset="10" message="Back to a low cadence. Power is dropping as we approach the end."/>
+      <textevent timeoffset="120" message="Slow, easy pedaling. Let gravity help you. Minimal effort."/>
+      <textevent timeoffset="250" message="You are doing great. The discipline to go easy is a skill in itself."/>
+    </SteadyState>
+    <SteadyState Duration="300" Power="0.42" Cadence="90">
+      <textevent timeoffset="10" message="Last steady block. A comfortable cadence for the final stretch."/>
+      <textevent timeoffset="120" message="Blood flow is doing its job right now: delivering nutrients and clearing fatigue."/>
+      <textevent timeoffset="240" message="One more block and then we cool down. Stay patient."/>
+    </SteadyState>
+    <Cooldown Duration="300" PowerHigh="0.40" PowerLow="0.30" Cadence="78">
+      <textevent timeoffset="10" message="Cooling down now. Let the power gradually fade to almost nothing."/>
+      <textevent timeoffset="120" message="Take some deep, cleansing breaths. You have earned this recovery."/>
+      <textevent timeoffset="250" message="Well done. Your muscles will thank you tomorrow. Rest up."/>
+    </Cooldown>
+  </workout>
+</workout_file>

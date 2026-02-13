@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workout_file>
+  <name>30 Minutes to Burn</name>
+  <author>Open Ride</author>
+  <description>A quick and intense 30-minute workout that will torch calories and boost your fitness. High intensity intervals keep your body guessing and your metabolism elevated.</description>
+  <sportType>bike</sportType>
+  <category>Quick Workouts</category>
+  <subcategory>30 Minutes</subcategory>
+  <tags>
+    <tag name="HIIT"/>
+    <tag name="Fat Burn"/>
+    <tag name="Quick"/>
+  </tags>
+  
+  <workout>
+    <!-- Warmup: 4 minutes -->
+    <Warmup Duration="240" PowerLow="0.40" PowerHigh="0.65" Cadence="90">
+      <textevent timeoffset="0" message="30 Minutes to Burn! Let's get warmed up quickly."/>
+      <textevent timeoffset="60" message="We're going to work hard today - prepare yourself mentally!"/>
+      <textevent timeoffset="180" message="Almost ready. Get into your power position."/>
+    </Warmup>
+    
+    <!-- Ramp up -->
+    <Ramp Duration="60" PowerLow="0.65" PowerHigh="0.85" Cadence="95">
+      <textevent timeoffset="0" message="Building up the power. Here we go!"/>
+    </Ramp>
+    
+    <!-- First HIIT Block: 6x30sec ON / 30sec OFF at high intensity -->
+    <IntervalsT Repeat="6" OnDuration="30" OffDuration="30" OnPower="1.20" OffPower="0.50" Cadence="100" CadenceResting="80">
+      <textevent timeoffset="0" message="SPRINT! 30 seconds - give it everything!"/>
+      <textevent timeoffset="30" message="Recover! Keep the legs moving."/>
+    </IntervalsT>
+    
+    <!-- Active recovery -->
+    <SteadyState Duration="120" Power="0.55" Cadence="85">
+      <textevent timeoffset="0" message="Two minutes to catch your breath. You're doing amazing!"/>
+      <textevent timeoffset="60" message="Next block is longer intervals. Pace yourself."/>
+    </SteadyState>
+    
+    <!-- Second Block: 4x1min at threshold -->
+    <IntervalsT Repeat="4" OnDuration="60" OffDuration="45" OnPower="1.00" OffPower="0.55" Cadence="95" CadenceResting="85">
+      <textevent timeoffset="0" message="One minute at threshold! Strong and steady."/>
+      <textevent timeoffset="30" message="Halfway! Don't let up now!"/>
+      <textevent timeoffset="60" message="Brief recovery - stay focused!"/>
+    </IntervalsT>
+    
+    <!-- Steady state -->
+    <SteadyState Duration="180" Power="0.80" Cadence="90">
+      <textevent timeoffset="0" message="Three minutes at sweet spot. Controlled effort."/>
+      <textevent timeoffset="90" message="This is building your aerobic engine!"/>
+    </SteadyState>
+    
+    <!-- Final push: 3x20sec MAX effort -->
+    <IntervalsT Repeat="3" OnDuration="20" OffDuration="40" OnPower="1.50" OffPower="0.45" Cadence="110" CadenceResting="75">
+      <textevent timeoffset="0" message="FINAL SPRINTS! 20 seconds MAXIMUM effort!"/>
+      <textevent timeoffset="20" message="Breathe! Two more sprints to go!"/>
+    </IntervalsT>
+    
+    <!-- Cooldown -->
+    <Cooldown Duration="180" PowerHigh="0.55" PowerLow="0.35" Cadence="80">
+      <textevent timeoffset="0" message="You crushed it! Time to cool down."/>
+      <textevent timeoffset="60" message="Great calorie burn today. Feel proud!"/>
+      <textevent timeoffset="150" message="Workout complete! 🔥 You burned it down!"/>
+    </Cooldown>
+  </workout>
+</workout_file>

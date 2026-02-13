@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workout_file>
+  <name>Lunch Express</name>
+  <author>Open Ride</author>
+  <description>Make the most of your lunch break with this focused session. Quick transitions between efforts maximize training stimulus in minimal time.</description>
+  <sportType>bike</sportType>
+  <category>Daily Training</category>
+  <subcategory>Mixed</subcategory>
+  <tags>
+    <tag name="Daily"/>
+    <tag name="Quick"/>
+    <tag name="Efficient"/>
+  </tags>
+
+  <workout>
+    <Warmup Duration="240" PowerLow="0.40" PowerHigh="0.65" Cadence="90">
+      <textevent timeoffset="0" message="Lunch Express! Maximum efficiency in your break."/>
+      <textevent timeoffset="60" message="Quick warmup then straight to business."/>
+      <textevent timeoffset="180" message="Each block gets harder but shorter. Let's go!"/>
+    </Warmup>
+
+    <SteadyState Duration="180" Power="0.85" Cadence="90">
+      <textevent timeoffset="0" message="Three minutes at sweet spot. Solid start!"/>
+      <textevent timeoffset="90" message="Controlled effort. Building up from here."/>
+    </SteadyState>
+
+    <SteadyState Duration="120" Power="0.55" Cadence="85">
+      <textevent timeoffset="0" message="Quick recovery. Next block is harder!"/>
+    </SteadyState>
+
+    <SteadyState Duration="180" Power="0.90" Cadence="92">
+      <textevent timeoffset="0" message="Three minutes at upper sweet spot!"/>
+      <textevent timeoffset="90" message="Pushing higher. Feel the difference!"/>
+    </SteadyState>
+
+    <SteadyState Duration="120" Power="0.55" Cadence="85">
+      <textevent timeoffset="0" message="Recovery. Threshold effort next!"/>
+    </SteadyState>
+
+    <SteadyState Duration="120" Power="1.00" Cadence="95">
+      <textevent timeoffset="0" message="Two minutes at threshold! Right at your limit!"/>
+      <textevent timeoffset="60" message="One minute left! Hold it!"/>
+    </SteadyState>
+
+    <SteadyState Duration="120" Power="0.55" Cadence="85">
+      <textevent timeoffset="0" message="Recovery. One more push above threshold!"/>
+    </SteadyState>
+
+    <SteadyState Duration="60" Power="1.10" Cadence="100">
+      <textevent timeoffset="0" message="One minute ABOVE threshold! Everything you have got!"/>
+      <textevent timeoffset="30" message="Thirty seconds! Push to the end!"/>
+    </SteadyState>
+
+    <SteadyState Duration="120" Power="0.55" Cadence="85">
+      <textevent timeoffset="0" message="Done with the hard work! Easy spinning."/>
+    </SteadyState>
+
+    <SteadyState Duration="300" Power="0.70" Cadence="88">
+      <textevent timeoffset="0" message="Five minutes tempo to flush the legs."/>
+      <textevent timeoffset="180" message="Back to work soon. Great use of your break!"/>
+    </SteadyState>
+
+    <Cooldown Duration="240" PowerHigh="0.50" PowerLow="0.35" Cadence="80">
+      <textevent timeoffset="0" message="Cooling down. Efficient session complete!"/>
+      <textevent timeoffset="120" message="Lunch break well spent."/>
+      <textevent timeoffset="200" message="Lunch Express complete!"/>
+    </Cooldown>
+  </workout>
+</workout_file>

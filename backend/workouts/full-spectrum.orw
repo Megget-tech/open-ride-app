@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workout_file>
+  <name>Full Spectrum</name>
+  <author>Open Ride</author>
+  <description>The graduation ride of your fitness refresh. Every training zone gets visited in this comprehensive session that proves your fitness is back on track.</description>
+  <sportType>bike</sportType>
+  <category>Fitness Refresh</category>
+  <subcategory>Tune Up</subcategory>
+  <tags>
+    <tag name="Tune Up"/>
+    <tag name="All Zones"/>
+    <tag name="Progressive"/>
+  </tags>
+
+  <workout>
+    <Warmup Duration="360" PowerLow="0.40" PowerHigh="0.60" Cadence="85">
+      <textevent timeoffset="0" message="Full Spectrum! The graduation ride. Every zone, one session."/>
+      <textevent timeoffset="120" message="We will climb through every training zone today."/>
+      <textevent timeoffset="240" message="This proves your fitness refresh is complete!"/>
+    </Warmup>
+
+    <SteadyState Duration="240" Power="0.55" Cadence="82">
+      <textevent timeoffset="0" message="Zone 1 - Active Recovery. The easiest effort."/>
+      <textevent timeoffset="120" message="Remember when this was your whole workout? Look at you now!"/>
+    </SteadyState>
+
+    <SteadyState Duration="300" Power="0.65" Cadence="85">
+      <textevent timeoffset="0" message="Zone 2 - Endurance. Your aerobic foundation."/>
+      <textevent timeoffset="120" message="Five minutes building the base."/>
+    </SteadyState>
+
+    <SteadyState Duration="300" Power="0.76" Cadence="88">
+      <textevent timeoffset="0" message="Zone 3 - Tempo. Comfortably hard now."/>
+      <textevent timeoffset="120" message="Your body handles this with ease now."/>
+      <textevent timeoffset="240" message="One minute left at tempo!"/>
+    </SteadyState>
+
+    <SteadyState Duration="240" Power="0.88" Cadence="90">
+      <textevent timeoffset="0" message="Zone 4 - Sweet Spot. Real training territory!"/>
+      <textevent timeoffset="120" message="This builds the fitness that matters most."/>
+    </SteadyState>
+
+    <SteadyState Duration="180" Power="1.00" Cadence="92">
+      <textevent timeoffset="0" message="THRESHOLD! Three minutes at your limit!"/>
+      <textevent timeoffset="60" message="You rebuilt this capacity. Use it!"/>
+      <textevent timeoffset="120" message="One minute! Your FTP is back!"/>
+    </SteadyState>
+
+    <SteadyState Duration="120" Power="0.50" Cadence="80">
+      <textevent timeoffset="0" message="Recovery! VO2 zone next!"/>
+    </SteadyState>
+
+    <SteadyState Duration="120" Power="1.10" Cadence="100">
+      <textevent timeoffset="0" message="VO2max! Two minutes above threshold!"/>
+      <textevent timeoffset="60" message="Your lungs are at full capacity! Breathe hard!"/>
+    </SteadyState>
+
+    <SteadyState Duration="120" Power="0.50" Cadence="80">
+      <textevent timeoffset="0" message="Recovery! Sprint zone to complete the spectrum!"/>
+    </SteadyState>
+
+    <IntervalsT Repeat="3" OnDuration="20" OffDuration="40" OnPower="1.30" OffPower="0.50" Cadence="110" CadenceResting="80">
+      <textevent timeoffset="0" message="SPRINT! Neuromuscular power unleashed!"/>
+      <textevent timeoffset="20" message="Quick recovery before the next one!"/>
+    </IntervalsT>
+
+    <SteadyState Duration="240" Power="0.65" Cadence="88">
+      <textevent timeoffset="0" message="All zones visited! Easy endurance to close."/>
+      <textevent timeoffset="120" message="You covered the full spectrum. Incredible!"/>
+    </SteadyState>
+
+    <SteadyState Duration="300" Power="0.55" Cadence="85">
+      <textevent timeoffset="0" message="Easy spinning before cooldown."/>
+      <textevent timeoffset="180" message="Your fitness refresh is complete. Welcome back!"/>
+    </SteadyState>
+
+    <Cooldown Duration="360" PowerHigh="0.55" PowerLow="0.35" Cadence="80">
+      <textevent timeoffset="0" message="Cooling down from a comprehensive session."/>
+      <textevent timeoffset="120" message="Every zone confirmed. Your fitness is refreshed!"/>
+      <textevent timeoffset="240" message="You are ready for anything now."/>
+      <textevent timeoffset="320" message="Full Spectrum complete! Welcome back to full fitness!"/>
+    </Cooldown>
+  </workout>
+</workout_file>

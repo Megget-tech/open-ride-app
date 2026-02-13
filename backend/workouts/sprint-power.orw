@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workout_file>
+  <name>Sprint Power Development</name>
+  <author>Open Ride</author>
+  <description>Develop explosive power with short, maximal sprints. This workout focuses on neuromuscular power - your ability to generate force quickly. Essential for racing!</description>
+  <sportType>bike</sportType>
+  <category>Sprint</category>
+  <subcategory>Power</subcategory>
+  <tags>
+    <tag name="Sprint"/>
+    <tag name="Power"/>
+    <tag name="Neuromuscular"/>
+  </tags>
+  
+  <workout>
+    <!-- Extended warmup for sprint work -->
+    <Warmup Duration="480" PowerLow="0.40" PowerHigh="0.65" Cadence="90">
+      <textevent timeoffset="0" message="Sprint Power Development! We need a thorough warmup first."/>
+      <textevent timeoffset="120" message="Sprinting cold muscles = injury risk. Be patient."/>
+      <textevent timeoffset="300" message="Starting to feel warmer? Good! Keep building."/>
+      <textevent timeoffset="420" message="Almost ready for some leg openers."/>
+    </Warmup>
+    
+    <!-- Leg openers -->
+    <IntervalsT Repeat="4" OnDuration="10" OffDuration="50" OnPower="1.30" OffPower="0.50" Cadence="110" CadenceResting="85">
+      <textevent timeoffset="0" message="Quick 10-second pickup! Wake up those fast-twitch fibers!"/>
+      <textevent timeoffset="10" message="Easy spin. These are just openers."/>
+    </IntervalsT>
+    
+    <!-- Rest before sprint set -->
+    <SteadyState Duration="180" Power="0.50" Cadence="85">
+      <textevent timeoffset="0" message="Three minutes easy. Sprint set coming up!"/>
+      <textevent timeoffset="60" message="Sprints are about QUALITY not quantity."/>
+      <textevent timeoffset="120" message="Each sprint should be MAXIMUM effort!"/>
+    </SteadyState>
+    
+    <!-- Sprint Set 1: Standing starts -->
+    <SteadyState Duration="15" Power="1.80" Cadence="120">
+      <textevent timeoffset="0" message="SPRINT 1! Out of the saddle! MAXIMUM POWER!"/>
+    </SteadyState>
+    
+    <SteadyState Duration="225" Power="0.45" Cadence="80">
+      <textevent timeoffset="0" message="Full recovery. Walk it off mentally."/>
+      <textevent timeoffset="180" message="Next sprint in 45 seconds."/>
+    </SteadyState>
+    
+    <SteadyState Duration="15" Power="1.80" Cadence="120">
+      <textevent timeoffset="0" message="SPRINT 2! EXPLODE!"/>
+    </SteadyState>
+    
+    <SteadyState Duration="225" Power="0.45" Cadence="80">
+      <textevent timeoffset="0" message="Recover. Quality sprints need full recovery."/>
+      <textevent timeoffset="180" message="Two down, getting stronger!"/>
+    </SteadyState>
+    
+    <SteadyState Duration="15" Power="1.80" Cadence="120">
+      <textevent timeoffset="0" message="SPRINT 3! Beat your last one!"/>
+    </SteadyState>
+    
+    <SteadyState Duration="225" Power="0.45" Cadence="80">
+      <textevent timeoffset="0" message="Excellent! Catch your breath."/>
+    </SteadyState>
+    
+    <!-- Transition -->
+    <SteadyState Duration="180" Power="0.55" Cadence="90">
+      <textevent timeoffset="0" message="Short tempo section to keep you warm."/>
+      <textevent timeoffset="120" message="Next: seated sprints for power!"/>
+    </SteadyState>
+    
+    <!-- Sprint Set 2: Seated power -->
+    <SteadyState Duration="20" Power="1.50" Cadence="130">
+      <textevent timeoffset="0" message="SEATED SPRINT! High cadence power!"/>
+    </SteadyState>
+    
+    <SteadyState Duration="220" Power="0.45" Cadence="80">
+      <textevent timeoffset="0" message="Recover. Shake out the legs."/>
+    </SteadyState>
+    
+    <SteadyState Duration="20" Power="1.50" Cadence="130">
+      <textevent timeoffset="0" message="SPIN IT UP! Fast legs!"/>
+    </SteadyState>
+    
+    <SteadyState Duration="220" Power="0.45" Cadence="80">
+      <textevent timeoffset="0" message="Great leg speed! One more seated sprint."/>
+    </SteadyState>
+    
+    <SteadyState Duration="20" Power="1.50" Cadence="130">
+      <textevent timeoffset="0" message="LAST SEATED SPRINT! Make it count!"/>
+    </SteadyState>
+    
+    <!-- Final big sprint -->
+    <SteadyState Duration="240" Power="0.50" Cadence="85">
+      <textevent timeoffset="0" message="Extended recovery for final sprint."/>
+      <textevent timeoffset="120" message="One final all-out effort coming up!"/>
+      <textevent timeoffset="200" message="Get ready... this is your moment!"/>
+    </SteadyState>
+    
+    <SteadyState Duration="20" Power="2.00" Cadence="130">
+      <textevent timeoffset="0" message="🚀 FINAL SPRINT! EVERYTHING YOU'VE GOT! GO GO GO!"/>
+    </SteadyState>
+    
+    <!-- Cooldown -->
+    <Cooldown Duration="360" PowerHigh="0.50" PowerLow="0.30" Cadence="80">
+      <textevent timeoffset="0" message="AMAZING SPRINTS! Now spin it out."/>
+      <textevent timeoffset="120" message="Sprint training builds explosive power for attacks and finishes."/>
+      <textevent timeoffset="240" message="Your neuromuscular system just got an upgrade!"/>
+      <textevent timeoffset="330" message="Workout complete! You're getting faster! ⚡"/>
+    </Cooldown>
+  </workout>
+</workout_file>

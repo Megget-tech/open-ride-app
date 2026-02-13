@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workout_file>
+  <name>Ignite</name>
+  <author>Open Ride</author>
+  <description>Tabata-inspired intensity in a compact format. Three rounds of high-intensity bursts separated by active recovery to fire up your metabolism.</description>
+  <sportType>bike</sportType>
+  <category>Quick Sessions</category>
+  <subcategory>Express</subcategory>
+  <tags>
+    <tag name="Tabata"/>
+    <tag name="HIIT"/>
+    <tag name="Quick"/>
+  </tags>
+
+  <workout>
+    <Warmup Duration="240" PowerLow="0.40" PowerHigh="0.65" Cadence="90">
+      <textevent timeoffset="0" message="Ignite! Tabata-style efforts coming up."/>
+      <textevent timeoffset="60" message="These are short but intense. Give each burst everything."/>
+      <textevent timeoffset="180" message="Warmup finishing. Three rounds ahead!"/>
+    </Warmup>
+
+    <SteadyState Duration="120" Power="0.70" Cadence="90">
+      <textevent timeoffset="0" message="Two minutes at tempo to prime the engine."/>
+      <textevent timeoffset="60" message="Round 1 starting soon. Deep breath!"/>
+    </SteadyState>
+
+    <IntervalsT Repeat="6" OnDuration="20" OffDuration="10" OnPower="1.20" OffPower="0.50" Cadence="110" CadenceResting="80">
+      <textevent timeoffset="0" message="ROUND 1! Twenty seconds ALL OUT!"/>
+      <textevent timeoffset="20" message="Ten seconds rest. Keep moving!"/>
+    </IntervalsT>
+
+    <SteadyState Duration="120" Power="0.50" Cadence="85">
+      <textevent timeoffset="0" message="Two minutes to recover. You survived round 1!"/>
+      <textevent timeoffset="60" message="Round 2 is slightly harder. You are ready."/>
+    </SteadyState>
+
+    <IntervalsT Repeat="6" OnDuration="20" OffDuration="10" OnPower="1.25" OffPower="0.50" Cadence="110" CadenceResting="80">
+      <textevent timeoffset="0" message="ROUND 2! Higher power! Dig deep!"/>
+      <textevent timeoffset="20" message="Brief rest! Stay focused!"/>
+    </IntervalsT>
+
+    <SteadyState Duration="120" Power="0.50" Cadence="85">
+      <textevent timeoffset="0" message="Breathe! One more round to go!"/>
+      <textevent timeoffset="60" message="Final round is the hardest. Leave nothing behind!"/>
+    </SteadyState>
+
+    <IntervalsT Repeat="6" OnDuration="20" OffDuration="10" OnPower="1.30" OffPower="0.50" Cadence="110" CadenceResting="80">
+      <textevent timeoffset="0" message="FINAL ROUND! Everything you have got!"/>
+      <textevent timeoffset="20" message="Minimum rest! Maximum effort!"/>
+    </IntervalsT>
+
+    <Cooldown Duration="180" PowerHigh="0.55" PowerLow="0.35" Cadence="80">
+      <textevent timeoffset="0" message="Incredible effort! Cool down time."/>
+      <textevent timeoffset="60" message="Tabata intervals deliver massive fitness gains."/>
+      <textevent timeoffset="150" message="Ignite complete! Your metabolism is on fire!"/>
+    </Cooldown>
+  </workout>
+</workout_file>

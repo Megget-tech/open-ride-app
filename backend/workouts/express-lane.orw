@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workout_file>
+  <name>Express Lane</name>
+  <author>Open Ride</author>
+  <description>Three focused sweet spot blocks with short surges woven in. Efficient training that targets your power at threshold.</description>
+  <sportType>bike</sportType>
+  <category>Quick Sessions</category>
+  <subcategory>Express</subcategory>
+  <tags>
+    <tag name="Sweet Spot"/>
+    <tag name="Threshold"/>
+    <tag name="Quick"/>
+  </tags>
+
+  <workout>
+    <Warmup Duration="240" PowerLow="0.40" PowerHigh="0.65" Cadence="90">
+      <textevent timeoffset="0" message="Express Lane! Sweet spot with surges."/>
+      <textevent timeoffset="120" message="We will ride at sweet spot and throw in short power bursts."/>
+      <textevent timeoffset="180" message="This mimics real-world race accelerations."/>
+    </Warmup>
+
+    <Ramp Duration="60" PowerLow="0.65" PowerHigh="0.88" Cadence="90">
+      <textevent timeoffset="0" message="Ramping into sweet spot territory."/>
+    </Ramp>
+
+    <!-- Block 1 -->
+    <SteadyState Duration="90" Power="0.88" Cadence="90">
+      <textevent timeoffset="0" message="Block 1. Settle into sweet spot."/>
+    </SteadyState>
+    <SteadyState Duration="20" Power="1.10" Cadence="100">
+      <textevent timeoffset="0" message="SURGE! Quick burst!"/>
+    </SteadyState>
+    <SteadyState Duration="90" Power="0.88" Cadence="90">
+      <textevent timeoffset="0" message="Back to sweet spot. Absorb the surge."/>
+    </SteadyState>
+    <SteadyState Duration="20" Power="1.10" Cadence="100">
+      <textevent timeoffset="0" message="SURGE again!"/>
+    </SteadyState>
+
+    <SteadyState Duration="120" Power="0.55" Cadence="85">
+      <textevent timeoffset="0" message="Recovery. Block 2 comes at slightly higher power."/>
+    </SteadyState>
+
+    <!-- Block 2 -->
+    <SteadyState Duration="90" Power="0.90" Cadence="90">
+      <textevent timeoffset="0" message="Block 2! A notch higher. Controlled effort."/>
+    </SteadyState>
+    <SteadyState Duration="20" Power="1.12" Cadence="100">
+      <textevent timeoffset="0" message="SURGE! Power!"/>
+    </SteadyState>
+    <SteadyState Duration="90" Power="0.90" Cadence="90">
+      <textevent timeoffset="0" message="Settle back in. You are handling this well."/>
+    </SteadyState>
+    <SteadyState Duration="20" Power="1.12" Cadence="100">
+      <textevent timeoffset="0" message="SURGE! Last one this block!"/>
+    </SteadyState>
+
+    <SteadyState Duration="120" Power="0.55" Cadence="85">
+      <textevent timeoffset="0" message="Recovery. Final block is the hardest!"/>
+      <textevent timeoffset="60" message="You have got this. One more block to greatness."/>
+    </SteadyState>
+
+    <!-- Block 3 -->
+    <SteadyState Duration="90" Power="0.92" Cadence="90">
+      <textevent timeoffset="0" message="Final block! Highest sweet spot power!"/>
+    </SteadyState>
+    <SteadyState Duration="20" Power="1.15" Cadence="102">
+      <textevent timeoffset="0" message="BIG SURGE! Attack!"/>
+    </SteadyState>
+    <SteadyState Duration="70" Power="0.92" Cadence="90">
+      <textevent timeoffset="0" message="Hold on! Almost done!"/>
+    </SteadyState>
+
+    <Cooldown Duration="180" PowerHigh="0.55" PowerLow="0.35" Cadence="80">
+      <textevent timeoffset="0" message="Brilliant session! That is how you train efficiently."/>
+      <textevent timeoffset="60" message="Sweet spot with surges builds real-world race fitness."/>
+      <textevent timeoffset="150" message="Express Lane complete!"/>
+    </Cooldown>
+  </workout>
+</workout_file>

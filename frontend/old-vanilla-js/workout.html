@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Open Ride - Workout</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="workout.css">
+  <link rel="stylesheet" href="notifications.css">
+</head>
+<body class="workout-page">
+  <!-- Top nav injected by top-bar.js -->
+
+  <!-- Main Workout Area -->
+  <main class="workout-main">
+    <!-- Workout Progress Graph -->
+    <div class="workout-graph-container">
+      <canvas id="workout-graph"></canvas>
+      <div class="workout-progress-line" id="progress-line"></div>
+    </div>
+
+    <!-- Current Segment Info -->
+    <div class="segment-info">
+      <div class="segment-current" id="segment-name">Warmup</div>
+      <div class="segment-timing">
+        <span id="segment-elapsed">0:00</span>
+        <span class="segment-separator">/</span>
+        <span id="segment-duration">5:00</span>
+      </div>
+    </div>
+
+    <!-- Main Metrics -->
+    <div class="workout-metrics">
+      <div class="metric-card power">
+        <div class="metric-label">POWER</div>
+        <div class="metric-value">
+          <span id="current-power">0</span>
+          <span class="metric-unit">W</span>
+        </div>
+        <div class="metric-target">
+          <span>Target:</span>
+          <span id="target-power">0</span>W
+        </div>
+      </div>
+
+      <div class="metric-card cadence">
+        <div class="metric-label">CADENCE</div>
+        <div class="metric-value">
+          <span id="current-cadence">0</span>
+          <span class="metric-unit">rpm</span>
+        </div>
+        <div class="metric-target">
+          <span>Target:</span>
+          <span id="target-cadence">90</span> rpm
+        </div>
+      </div>
+
+      <div class="metric-card time">
+        <div class="metric-label">TIME</div>
+        <div class="metric-value" id="elapsed-time">0:00</div>
+        <div class="metric-secondary">
+          <span>Remaining:</span>
+          <span id="remaining-time">0:00</span>
+        </div>
+      </div>
+
+      <div class="metric-card heart-rate">
+        <div class="metric-label">HEART RATE</div>
+        <div class="metric-value">
+          <span id="current-hr">--</span>
+          <span class="metric-unit">bpm</span>
+        </div>
+        <div class="metric-zone" id="hr-zone">--</div>
+      </div>
+
+      <div class="metric-card speed">
+        <div class="metric-label">SPEED</div>
+        <div class="metric-value">
+          <span id="current-speed">0.0</span>
+          <span class="metric-unit">km/h</span>
+        </div>
+      </div>
+
+      <div class="metric-card distance">
+        <div class="metric-label">DISTANCE</div>
+        <div class="metric-value">
+          <span id="current-distance">0.00</span>
+          <span class="metric-unit">km</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Workout Controls -->
+    <div class="workout-controls">
+      <button class="control-btn secondary" id="btn-pause" onclick="togglePause()">
+        <svg id="pause-icon" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+          <rect x="6" y="4" width="4" height="16"/>
+          <rect x="14" y="4" width="4" height="16"/>
+        </svg>
+        <svg id="play-icon" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" style="display:none">
+          <polygon points="5,3 19,12 5,21"/>
+        </svg>
+        <span id="pause-text">Pause</span>
+      </button>
+      
+      <button class="control-btn secondary" onclick="skipSegment()">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+          <polygon points="5,4 15,12 5,20"/>
+          <rect x="18" y="4" width="3" height="16"/>
+        </svg>
+        Skip
+      </button>
+      
+      <button class="control-btn danger" onclick="endWorkout()">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+          <rect x="6" y="6" width="12" height="12"/>
+        </svg>
+        End
+      </button>
+    </div>
+  </main>
+
+  <!-- Upcoming Segments -->
+  <aside class="upcoming-segments">
+    <h3>Up Next</h3>
+    <div id="upcoming-list" class="upcoming-list">
+      <!-- Populated by JS -->
+    </div>
+  </aside>
+
+  <!-- Device modal injected by device-modal.js -->
+
+  <script src="top-bar.js"></script>
+  <script src="notifications.js"></script>
+  <script src="device-modal.js"></script>
+  <script type="module" src="workout-runner.js"></script>
+</body>
+</html>

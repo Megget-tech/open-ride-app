@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workout_file>
+  <name>Expedition</name>
+  <author>Open Ride</author>
+  <description>Rolling terrain simulation with constant intensity changes. Flats, hills, and descents keep your body adapting throughout this varied adventure.</description>
+  <sportType>bike</sportType>
+  <category>Epic Sessions</category>
+  <subcategory>Marathon</subcategory>
+  <tags>
+    <tag name="Mixed"/>
+    <tag name="Terrain"/>
+    <tag name="Varied"/>
+  </tags>
+
+  <workout>
+    <Warmup Duration="480" PowerLow="0.40" PowerHigh="0.60" Cadence="85">
+      <textevent timeoffset="0" message="Expedition! An adventure across varied terrain."/>
+      <textevent timeoffset="120" message="Flats, hills, and descents. Your body must adapt."/>
+      <textevent timeoffset="300" message="Stay engaged mentally. The terrain changes constantly."/>
+      <textevent timeoffset="420" message="Warmup done. Rolling out onto the flat."/>
+    </Warmup>
+
+    <!-- Flat road -->
+    <SteadyState Duration="480" Power="0.68" Cadence="90">
+      <textevent timeoffset="0" message="Open flat road. Settle into a steady tempo."/>
+      <textevent timeoffset="180" message="Smooth and efficient. Save energy for the hills."/>
+      <textevent timeoffset="360" message="Rolling hills approaching!"/>
+    </SteadyState>
+
+    <!-- Rolling hills -->
+    <IntervalsT Repeat="3" OnDuration="180" OffDuration="120" OnPower="0.88" OffPower="0.55" Cadence="85" CadenceResting="80">
+      <textevent timeoffset="0" message="Hill! Three minutes up, two minutes down."/>
+      <textevent timeoffset="90" message="Halfway up this roller!"/>
+      <textevent timeoffset="180" message="Over the top! Coast down."/>
+    </IntervalsT>
+
+    <!-- Long flat -->
+    <SteadyState Duration="600" Power="0.65" Cadence="90">
+      <textevent timeoffset="0" message="Long flat valley. Ten minutes to recover and ride."/>
+      <textevent timeoffset="180" message="Drink and eat. A big climb is coming."/>
+      <textevent timeoffset="480" message="Big climb in two minutes. Get ready!"/>
+    </SteadyState>
+
+    <!-- Big climb -->
+    <Ramp Duration="480" PowerLow="0.75" PowerHigh="0.98" Cadence="75">
+      <textevent timeoffset="0" message="BIG CLIMB! Eight minutes, getting steeper!"/>
+      <textevent timeoffset="120" message="The gradient is rising. Drop your cadence."/>
+      <textevent timeoffset="240" message="Halfway! The hardest part is still coming."/>
+      <textevent timeoffset="360" message="Two minutes to the summit! Push through!"/>
+      <textevent timeoffset="420" message="Almost there! Summit effort!"/>
+    </Ramp>
+
+    <!-- Descent -->
+    <SteadyState Duration="300" Power="0.50" Cadence="90">
+      <textevent timeoffset="0" message="Descent! Easy spinning. Enjoy the reward."/>
+      <textevent timeoffset="180" message="Recovery on the way down."/>
+    </SteadyState>
+
+    <!-- Second climb -->
+    <SteadyState Duration="360" Power="0.90" Cadence="78">
+      <textevent timeoffset="0" message="Second climb! Six minutes of sustained effort."/>
+      <textevent timeoffset="120" message="Low cadence, high torque. Mountain riding."/>
+      <textevent timeoffset="240" message="Two minutes to go! Strong climbing!"/>
+    </SteadyState>
+
+    <!-- Second descent -->
+    <SteadyState Duration="240" Power="0.50" Cadence="90">
+      <textevent timeoffset="0" message="Fast descent! Let gravity do the work."/>
+      <textevent timeoffset="120" message="Final flat section coming up."/>
+    </SteadyState>
+
+    <!-- Final flat -->
+    <SteadyState Duration="480" Power="0.70" Cadence="88">
+      <textevent timeoffset="0" message="Final flat road home. Eight minutes of steady riding."/>
+      <textevent timeoffset="240" message="You have conquered varied terrain today."/>
+      <textevent timeoffset="420" message="Almost home!"/>
+    </SteadyState>
+
+    <Cooldown Duration="420" PowerHigh="0.55" PowerLow="0.35" Cadence="80">
+      <textevent timeoffset="0" message="Expedition complete! Time to rest."/>
+      <textevent timeoffset="180" message="Varied terrain riding builds adaptable fitness."/>
+      <textevent timeoffset="360" message="What an adventure! Well done."/>
+    </Cooldown>
+  </workout>
+</workout_file>

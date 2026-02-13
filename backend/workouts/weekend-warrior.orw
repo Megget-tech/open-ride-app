@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workout_file>
+  <name>Weekend Warrior</name>
+  <author>Open Ride</author>
+  <description>A playful mix of efforts for your weekend ride. Varied intervals simulate the surges and recoveries of a spirited group ride.</description>
+  <sportType>bike</sportType>
+  <category>Daily Training</category>
+  <subcategory>Mixed</subcategory>
+  <tags>
+    <tag name="Daily"/>
+    <tag name="Fun"/>
+    <tag name="Weekend"/>
+  </tags>
+
+  <workout>
+    <Warmup Duration="300" PowerLow="0.40" PowerHigh="0.65" Cadence="85">
+      <textevent timeoffset="0" message="Weekend Warrior! Time for a fun group ride simulation."/>
+      <textevent timeoffset="120" message="Surges, chases, climbs, and sprint points ahead!"/>
+      <textevent timeoffset="240" message="Just like riding with friends. Unpredictable and fun!"/>
+    </Warmup>
+
+    <SteadyState Duration="120" Power="0.70" Cadence="88">
+      <textevent timeoffset="0" message="Neutral start. Rolling out with the group."/>
+    </SteadyState>
+
+    <SteadyState Duration="120" Power="0.90" Cadence="95">
+      <textevent timeoffset="0" message="Someone attacks! Cover the move!"/>
+      <textevent timeoffset="60" message="Stay with them! Match the effort!"/>
+    </SteadyState>
+
+    <SteadyState Duration="180" Power="0.70" Cadence="88">
+      <textevent timeoffset="0" message="Back in the pack. Settle down."/>
+    </SteadyState>
+
+    <SteadyState Duration="60" Power="1.15" Cadence="100">
+      <textevent timeoffset="0" message="Bridge to the breakaway! Hard effort!"/>
+    </SteadyState>
+
+    <SteadyState Duration="180" Power="0.70" Cadence="88">
+      <textevent timeoffset="0" message="Regrouping. The pack comes back together."/>
+    </SteadyState>
+
+    <SteadyState Duration="120" Power="0.95" Cadence="75">
+      <textevent timeoffset="0" message="Hill! The group climbs together."/>
+      <textevent timeoffset="60" message="Low cadence grind up the rise."/>
+    </SteadyState>
+
+    <SteadyState Duration="180" Power="0.55" Cadence="90">
+      <textevent timeoffset="0" message="Descent! Free speed on the way down."/>
+    </SteadyState>
+
+    <SteadyState Duration="180" Power="0.80" Cadence="90">
+      <textevent timeoffset="0" message="Pace line on the flat. Working together."/>
+    </SteadyState>
+
+    <!-- Sprint points -->
+    <IntervalsT Repeat="4" OnDuration="20" OffDuration="40" OnPower="1.30" OffPower="0.50" Cadence="110" CadenceResting="80">
+      <textevent timeoffset="0" message="SPRINT POINT! Contest the intermediate sprint!"/>
+      <textevent timeoffset="20" message="Recovery before the next one!"/>
+    </IntervalsT>
+
+    <SteadyState Duration="180" Power="0.65" Cadence="88">
+      <textevent timeoffset="0" message="Regrouping after the sprints."/>
+    </SteadyState>
+
+    <SteadyState Duration="120" Power="1.05" Cadence="95">
+      <textevent timeoffset="0" message="Final kick! Sprint for the town sign!"/>
+      <textevent timeoffset="60" message="Hold it! The finish is right there!"/>
+    </SteadyState>
+
+    <Cooldown Duration="300" PowerHigh="0.55" PowerLow="0.35" Cadence="80">
+      <textevent timeoffset="0" message="Great ride! Coffee stop time."/>
+      <textevent timeoffset="120" message="Group ride simulation keeps training fun."/>
+      <textevent timeoffset="240" message="Weekend Warrior complete!"/>
+    </Cooldown>
+  </workout>
+</workout_file>

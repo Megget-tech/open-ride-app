@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workout_file>
+  <name>Seated Climber</name>
+  <author>Open Ride</author>
+  <description>Train the seated climbing position with sustained efforts at low RPM. Building strength while seated improves efficiency on long mountain roads.</description>
+  <sportType>bike</sportType>
+  <category>Climbing</category>
+  <subcategory>Hill Power</subcategory>
+  <tags>
+    <tag name="Climbing"/>
+    <tag name="Threshold"/>
+    <tag name="Seated"/>
+  </tags>
+
+  <workout>
+    <Warmup Duration="360" PowerLow="0.40" PowerHigh="0.65" Cadence="85">
+      <textevent timeoffset="0" message="Seated Climber! Low cadence power building today."/>
+      <textevent timeoffset="120" message="Climbing seated is more efficient than standing."/>
+      <textevent timeoffset="240" message="We will build torque at low RPM. Stay in the saddle."/>
+    </Warmup>
+
+    <SteadyState Duration="120" Power="0.70" Cadence="85">
+      <textevent timeoffset="0" message="Quick tempo check before the climbing starts."/>
+    </SteadyState>
+
+    <SteadyState Duration="480" Power="0.90" Cadence="70">
+      <textevent timeoffset="0" message="Climb 1! Eight minutes seated at low cadence."/>
+      <textevent timeoffset="120" message="Push through the full pedal stroke. Feel the torque."/>
+      <textevent timeoffset="240" message="Halfway up! Relax your upper body, power from your legs."/>
+      <textevent timeoffset="360" message="Two minutes left. Keep grinding!"/>
+    </SteadyState>
+
+    <SteadyState Duration="180" Power="0.55" Cadence="90">
+      <textevent timeoffset="0" message="Recovery descent. Spin freely to flush the legs."/>
+    </SteadyState>
+
+    <SteadyState Duration="480" Power="0.92" Cadence="68">
+      <textevent timeoffset="0" message="Climb 2! Slightly harder, lower cadence."/>
+      <textevent timeoffset="120" message="Imagine a steeper gradient. More torque needed."/>
+      <textevent timeoffset="240" message="Halfway! Your muscles are adapting to this stress."/>
+      <textevent timeoffset="360" message="Final two minutes! Stay seated!"/>
+    </SteadyState>
+
+    <SteadyState Duration="180" Power="0.55" Cadence="90">
+      <textevent timeoffset="0" message="Descent recovery. The final climb is the hardest."/>
+      <textevent timeoffset="120" message="Last climb at threshold. You are ready."/>
+    </SteadyState>
+
+    <SteadyState Duration="360" Power="0.95" Cadence="65">
+      <textevent timeoffset="0" message="Climb 3! Six minutes at near-threshold, very low cadence."/>
+      <textevent timeoffset="90" message="This is the steepest gradient. Pure leg strength!"/>
+      <textevent timeoffset="180" message="Halfway! You are a climbing machine!"/>
+      <textevent timeoffset="270" message="Ninety seconds! Summit is close!"/>
+    </SteadyState>
+
+    <SteadyState Duration="180" Power="0.55" Cadence="90">
+      <textevent timeoffset="0" message="Over the top! Great climbing."/>
+    </SteadyState>
+
+    <SteadyState Duration="300" Power="0.65" Cadence="88">
+      <textevent timeoffset="0" message="Easy tempo on the flat to finish off."/>
+      <textevent timeoffset="180" message="Your climbing muscles just got stronger."/>
+    </SteadyState>
+
+    <Cooldown Duration="360" PowerHigh="0.55" PowerLow="0.35" Cadence="80">
+      <textevent timeoffset="0" message="Cooling down from a great climbing session."/>
+      <textevent timeoffset="120" message="Seated climbing builds efficient power."/>
+      <textevent timeoffset="300" message="Seated Climber complete!"/>
+    </Cooldown>
+  </workout>
+</workout_file>

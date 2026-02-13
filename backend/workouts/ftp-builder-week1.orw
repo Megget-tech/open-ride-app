@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workout_file>
+  <name>FTP Builder - Week 1</name>
+  <author>Open Ride</author>
+  <description>Build your FTP with this progressive workout. Perfect for beginners looking to increase their threshold power. Focus on maintaining a steady cadence throughout each interval.</description>
+  <sportType>bike</sportType>
+  <category>FTP Builder</category>
+  <subcategory>Week 1</subcategory>
+  <tags>
+    <tag name="FTP"/>
+    <tag name="Endurance"/>
+    <tag name="Beginner"/>
+  </tags>
+  
+  <workout>
+    <!-- Warmup: 5 minutes from 45% to 70% FTP -->
+    <Warmup Duration="300" PowerLow="0.45" PowerHigh="0.70" Cadence="85">
+      <textevent timeoffset="0" message="Welcome to FTP Builder Week 1! Let's start with an easy warmup."/>
+      <textevent timeoffset="60" message="Focus on smooth pedal strokes. Keep your upper body relaxed."/>
+      <textevent timeoffset="180" message="Gradually increasing the intensity. You should feel warm but comfortable."/>
+    </Warmup>
+    
+    <!-- Steady state at 75% FTP for 3 minutes -->
+    <SteadyState Duration="180" Power="0.75" Cadence="90">
+      <textevent timeoffset="0" message="Now we'll hold 75% FTP. This should feel moderate."/>
+      <textevent timeoffset="60" message="Check your form - shoulders down, elbows slightly bent."/>
+    </SteadyState>
+    
+    <!-- First interval block: 4x2min at 90% with 2min recovery -->
+    <IntervalsT Repeat="4" OnDuration="120" OffDuration="120" OnPower="0.90" OffPower="0.55" Cadence="95" CadenceResting="85">
+      <textevent timeoffset="0" message="First interval! Push to 90% FTP. You've got this!"/>
+      <textevent timeoffset="60" message="Halfway through! Stay strong and keep your cadence up."/>
+      <textevent timeoffset="120" message="Great work! Now recover. Keep the legs spinning."/>
+    </IntervalsT>
+    
+    <!-- Recovery at 50% FTP for 3 minutes -->
+    <SteadyState Duration="180" Power="0.50" Cadence="80">
+      <textevent timeoffset="0" message="Nice job on those intervals! Take a breather."/>
+      <textevent timeoffset="60" message="Shake out your legs. Hydrate if you need to."/>
+    </SteadyState>
+    
+    <!-- Second block: 3x3min at 85% with 2min recovery -->
+    <IntervalsT Repeat="3" OnDuration="180" OffDuration="120" OnPower="0.85" OffPower="0.55" Cadence="90" CadenceResting="85">
+      <textevent timeoffset="0" message="Second set of intervals at 85% FTP. Longer but slightly easier."/>
+      <textevent timeoffset="90" message="You're doing great! Focus on your breathing."/>
+      <textevent timeoffset="180" message="Recover now. Two more to go!"/>
+    </IntervalsT>
+    
+    <!-- Cooldown: 5 minutes from 65% to 40% FTP -->
+    <Cooldown Duration="300" PowerHigh="0.65" PowerLow="0.40" Cadence="80">
+      <textevent timeoffset="0" message="Excellent work today! Time to cool down."/>
+      <textevent timeoffset="120" message="Let your heart rate come down gradually."/>
+      <textevent timeoffset="240" message="Great session! You're building a stronger engine. See you next time!"/>
+    </Cooldown>
+  </workout>
+</workout_file>

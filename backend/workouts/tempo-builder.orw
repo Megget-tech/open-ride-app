@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workout_file>
+  <name>Tempo Builder</name>
+  <author>Open Ride</author>
+  <description>Two solid tempo blocks with progressive ramps to build sustained power. The backbone of any training program targeting muscular endurance.</description>
+  <sportType>bike</sportType>
+  <category>Medium Sessions</category>
+  <subcategory>Standard</subcategory>
+  <tags>
+    <tag name="Tempo"/>
+    <tag name="Endurance"/>
+    <tag name="Base"/>
+  </tags>
+
+  <workout>
+    <Warmup Duration="360" PowerLow="0.40" PowerHigh="0.65" Cadence="85">
+      <textevent timeoffset="0" message="Tempo Builder! Long sustained blocks at tempo power."/>
+      <textevent timeoffset="120" message="Tempo training builds the muscular endurance you need."/>
+      <textevent timeoffset="240" message="Two big blocks ahead. Pace yourself."/>
+    </Warmup>
+
+    <Ramp Duration="120" PowerLow="0.65" PowerHigh="0.76" Cadence="88">
+      <textevent timeoffset="0" message="Ramping up to tempo. Let the power build gradually."/>
+    </Ramp>
+
+    <SteadyState Duration="720" Power="0.76" Cadence="88">
+      <textevent timeoffset="0" message="Block 1 - twelve minutes at tempo. Find your rhythm."/>
+      <textevent timeoffset="180" message="Breathe deeply. Shoulders relaxed, core engaged."/>
+      <textevent timeoffset="360" message="Halfway! You are building incredible endurance."/>
+      <textevent timeoffset="540" message="Three minutes to go. Stay locked in."/>
+      <textevent timeoffset="660" message="One minute! Strong finish to this block!"/>
+    </SteadyState>
+
+    <SteadyState Duration="180" Power="0.55" Cadence="85">
+      <textevent timeoffset="0" message="Three minutes easy. Hydrate and reset mentally."/>
+      <textevent timeoffset="120" message="Block 2 is slightly harder. You are prepared!"/>
+    </SteadyState>
+
+    <Ramp Duration="120" PowerLow="0.65" PowerHigh="0.80" Cadence="90">
+      <textevent timeoffset="0" message="Ramping into the second block. Higher target this time."/>
+    </Ramp>
+
+    <SteadyState Duration="720" Power="0.80" Cadence="90">
+      <textevent timeoffset="0" message="Block 2 - twelve minutes at upper tempo!"/>
+      <textevent timeoffset="180" message="This is the intensity that transforms your fitness."/>
+      <textevent timeoffset="360" message="Halfway through block 2! Strong work!"/>
+      <textevent timeoffset="540" message="Dig in! Three more minutes of quality training."/>
+      <textevent timeoffset="660" message="Final minute! You earned every second of this!"/>
+    </SteadyState>
+
+    <SteadyState Duration="180" Power="0.55" Cadence="85">
+      <textevent timeoffset="0" message="Main work is done! Easy spinning."/>
+    </SteadyState>
+
+    <SteadyState Duration="240" Power="0.70" Cadence="85">
+      <textevent timeoffset="0" message="Four minutes light tempo to flush the legs."/>
+      <textevent timeoffset="120" message="Almost done. Excellent session today."/>
+    </SteadyState>
+
+    <Cooldown Duration="240" PowerHigh="0.55" PowerLow="0.35" Cadence="80">
+      <textevent timeoffset="0" message="Cooling down. Tempo work is the bread and butter of training."/>
+      <textevent timeoffset="120" message="Consistent tempo blocks build unshakeable endurance."/>
+      <textevent timeoffset="200" message="Tempo Builder complete!"/>
+    </Cooldown>
+  </workout>
+</workout_file>

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workout_file>
+  <name>Grand Tour Stage</name>
+  <author>Open Ride</author>
+  <description>A long day in the saddle simulating a grand tour stage. Extended sweet spot work with climbing intervals to build the endurance needed for big events.</description>
+  <sportType>bike</sportType>
+  <category>Epic Sessions</category>
+  <subcategory>Marathon</subcategory>
+  <tags>
+    <tag name="Endurance"/>
+    <tag name="Sweet Spot"/>
+    <tag name="Climbing"/>
+  </tags>
+
+  <workout>
+    <Warmup Duration="600" PowerLow="0.40" PowerHigh="0.60" Cadence="85">
+      <textevent timeoffset="0" message="Grand Tour Stage! A long and rewarding session ahead."/>
+      <textevent timeoffset="180" message="Pace yourself. This is about endurance and smart riding."/>
+      <textevent timeoffset="360" message="Hydration is key for long sessions. Take a sip now."/>
+      <textevent timeoffset="540" message="Warmup finishing. Easy endurance first."/>
+    </Warmup>
+
+    <SteadyState Duration="900" Power="0.65" Cadence="88">
+      <textevent timeoffset="0" message="Fifteen minutes of endurance riding. Like the flat before the mountains."/>
+      <textevent timeoffset="300" message="Smooth pedaling. Relax your upper body."/>
+      <textevent timeoffset="600" message="The sweet spot block is coming. Time to race the stage."/>
+    </SteadyState>
+
+    <SteadyState Duration="900" Power="0.88" Cadence="88">
+      <textevent timeoffset="0" message="Sweet spot! Fifteen minutes at a strong pace."/>
+      <textevent timeoffset="300" message="This is the pace of the peloton on a hard day."/>
+      <textevent timeoffset="600" message="Ten minutes in. Stay mentally present."/>
+      <textevent timeoffset="780" message="Two minutes left in this block!"/>
+    </SteadyState>
+
+    <SteadyState Duration="300" Power="0.55" Cadence="85">
+      <textevent timeoffset="0" message="Recovery valley. The first climb is ahead."/>
+      <textevent timeoffset="180" message="Climbing effort coming. Lower your cadence."/>
+    </SteadyState>
+
+    <SteadyState Duration="480" Power="0.95" Cadence="75">
+      <textevent timeoffset="0" message="CLIMBING! Eight minutes at threshold, low cadence."/>
+      <textevent timeoffset="120" message="Imagine the mountain road ahead. Grind it out."/>
+      <textevent timeoffset="240" message="Halfway up! Keep that torque steady."/>
+      <textevent timeoffset="360" message="Two minutes to the summit! Push!"/>
+    </SteadyState>
+
+    <SteadyState Duration="300" Power="0.60" Cadence="90">
+      <textevent timeoffset="0" message="Descent! Easy spinning. Enjoy the recovery."/>
+      <textevent timeoffset="180" message="Refuel. Second sweet spot block coming."/>
+    </SteadyState>
+
+    <SteadyState Duration="900" Power="0.86" Cadence="88">
+      <textevent timeoffset="0" message="Back to sweet spot for the valley road."/>
+      <textevent timeoffset="300" message="Your legs are seasoned now. Use that experience."/>
+      <textevent timeoffset="600" message="Five minutes left. The final climb awaits!"/>
+    </SteadyState>
+
+    <SteadyState Duration="300" Power="0.55" Cadence="85">
+      <textevent timeoffset="0" message="Brief recovery before the final ascent."/>
+      <textevent timeoffset="180" message="Last climb! Make it a summit finish!"/>
+    </SteadyState>
+
+    <SteadyState Duration="360" Power="0.98" Cadence="72">
+      <textevent timeoffset="0" message="FINAL CLIMB! Six minutes to the summit!"/>
+      <textevent timeoffset="120" message="Dig into your reserves. You trained for this!"/>
+      <textevent timeoffset="240" message="Two minutes! The finish line is in sight!"/>
+      <textevent timeoffset="300" message="Sprint for the summit!"/>
+    </SteadyState>
+
+    <SteadyState Duration="300" Power="0.60" Cadence="85">
+      <textevent timeoffset="0" message="You summited! Easy spinning to recover."/>
+    </SteadyState>
+
+    <SteadyState Duration="480" Power="0.70" Cadence="85">
+      <textevent timeoffset="0" message="Gentle ride back. Reflecting on a great stage."/>
+      <textevent timeoffset="240" message="Your endurance just leveled up."/>
+    </SteadyState>
+
+    <Cooldown Duration="480" PowerHigh="0.55" PowerLow="0.35" Cadence="80">
+      <textevent timeoffset="0" message="Stage complete! Extended cooldown for a long session."/>
+      <textevent timeoffset="180" message="You just completed a grand tour effort."/>
+      <textevent timeoffset="360" message="Refuel within 30 minutes for optimal recovery."/>
+      <textevent timeoffset="440" message="Grand Tour Stage complete!"/>
+    </Cooldown>
+  </workout>
+</workout_file>

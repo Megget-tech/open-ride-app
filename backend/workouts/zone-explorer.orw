@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workout_file>
+  <name>Zone Explorer</name>
+  <author>Open Ride</author>
+  <description>A tour through all training zones from recovery to VO2max. Experience every intensity level in a single session to calibrate your effort.</description>
+  <sportType>bike</sportType>
+  <category>Medium Sessions</category>
+  <subcategory>Standard</subcategory>
+  <tags>
+    <tag name="Progressive"/>
+    <tag name="All Zones"/>
+    <tag name="Training"/>
+  </tags>
+
+  <workout>
+    <Warmup Duration="300" PowerLow="0.40" PowerHigh="0.60" Cadence="85">
+      <textevent timeoffset="0" message="Zone Explorer! Today we visit every training zone."/>
+      <textevent timeoffset="120" message="Each zone has a purpose. Pay attention to how they feel."/>
+      <textevent timeoffset="240" message="Warmup almost done. Zone 1 is first - nice and easy."/>
+    </Warmup>
+
+    <SteadyState Duration="300" Power="0.50" Cadence="85">
+      <textevent timeoffset="0" message="Zone 1 - Active Recovery. This should feel effortless."/>
+      <textevent timeoffset="120" message="This zone promotes blood flow without adding stress."/>
+      <textevent timeoffset="240" message="Moving up to Zone 2 next."/>
+    </SteadyState>
+
+    <SteadyState Duration="300" Power="0.65" Cadence="88">
+      <textevent timeoffset="0" message="Zone 2 - Endurance. The foundation of all fitness."/>
+      <textevent timeoffset="120" message="You should be able to hold a conversation here."/>
+      <textevent timeoffset="240" message="Zone 3 approaching. Things start to get real."/>
+    </SteadyState>
+
+    <SteadyState Duration="300" Power="0.76" Cadence="90">
+      <textevent timeoffset="0" message="Zone 3 - Tempo. Comfortably hard. A solid training zone."/>
+      <textevent timeoffset="120" message="Breathing is deeper but controlled. Good rhythm."/>
+      <textevent timeoffset="240" message="Zone 4 next. This is where the work begins!"/>
+    </SteadyState>
+
+    <SteadyState Duration="300" Power="0.95" Cadence="92">
+      <textevent timeoffset="0" message="Zone 4 - Threshold. Right at your limit!"/>
+      <textevent timeoffset="120" message="This is the intensity that defines your FTP."/>
+      <textevent timeoffset="240" message="Hold it! Zone 5 coming for a shorter burst!"/>
+    </SteadyState>
+
+    <SteadyState Duration="180" Power="1.10" Cadence="100">
+      <textevent timeoffset="0" message="Zone 5 - VO2max! Breathing hard, legs burning!"/>
+      <textevent timeoffset="60" message="This zone expands your aerobic ceiling!"/>
+      <textevent timeoffset="120" message="30 seconds left! Incredible effort!"/>
+    </SteadyState>
+
+    <SteadyState Duration="120" Power="0.50" Cadence="80">
+      <textevent timeoffset="0" message="Recovery! Catch your breath. One more VO2 effort."/>
+    </SteadyState>
+
+    <SteadyState Duration="180" Power="1.12" Cadence="100">
+      <textevent timeoffset="0" message="Second VO2 effort! You know what this feels like now!"/>
+      <textevent timeoffset="60" message="Push through! Your body is adapting right now!"/>
+      <textevent timeoffset="120" message="Final minute! Empty the tank!"/>
+    </SteadyState>
+
+    <SteadyState Duration="120" Power="0.50" Cadence="80">
+      <textevent timeoffset="0" message="Great effort! Bringing it back down now."/>
+    </SteadyState>
+
+    <SteadyState Duration="300" Power="0.76" Cadence="88">
+      <textevent timeoffset="0" message="Back to Zone 3 to flush the legs."/>
+      <textevent timeoffset="120" message="Notice how this feels easier after Zone 5!"/>
+      <textevent timeoffset="240" message="Cooling down soon. Great tour of the zones!"/>
+    </SteadyState>
+
+    <Cooldown Duration="300" PowerHigh="0.55" PowerLow="0.35" Cadence="80">
+      <textevent timeoffset="0" message="Excellent exploration! Time to cool down."/>
+      <textevent timeoffset="120" message="Now you know exactly how each zone feels."/>
+      <textevent timeoffset="240" message="Zone Explorer complete! Full spectrum covered."/>
+    </Cooldown>
+  </workout>
+</workout_file>

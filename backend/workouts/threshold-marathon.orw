@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workout_file>
+  <name>Threshold Marathon</name>
+  <author>Open Ride</author>
+  <description>Two sustained 20-minute threshold blocks form the core of this demanding session. The gold standard for building time at FTP.</description>
+  <sportType>bike</sportType>
+  <category>Long Sessions</category>
+  <subcategory>Extended</subcategory>
+  <tags>
+    <tag name="Threshold"/>
+    <tag name="FTP"/>
+    <tag name="Advanced"/>
+  </tags>
+
+  <workout>
+    <!-- Warmup: 8 minutes -->
+    <Warmup Duration="480" PowerLow="0.40" PowerHigh="0.65" Cadence="85">
+      <textevent timeoffset="0" message="Welcome to Threshold Marathon. Eight minutes to get the legs turning."/>
+      <textevent timeoffset="120" message="Gradually building power. Stay relaxed in the upper body."/>
+      <textevent timeoffset="300" message="Two big 20-minute threshold blocks ahead. Pace yourself and stay focused."/>
+      <textevent timeoffset="420" message="Almost through the warmup. Get ready to ramp into threshold territory."/>
+    </Warmup>
+
+    <!-- Ramp to threshold: 3 minutes -->
+    <Ramp Duration="180" PowerLow="0.65" PowerHigh="0.95" Cadence="88">
+      <textevent timeoffset="0" message="Ramping up toward threshold. Let the power build smoothly."/>
+      <textevent timeoffset="90" message="Breathing should be getting heavier now. Find your rhythm."/>
+      <textevent timeoffset="150" message="Almost at threshold power. Lock in your cadence."/>
+    </Ramp>
+
+    <!-- Threshold Block 1: 20 minutes at 0.95-1.00 -->
+    <Ramp Duration="1200" PowerLow="0.95" PowerHigh="1.00" Cadence="90">
+      <textevent timeoffset="0" message="Block one begins. Twenty minutes at threshold—settle in and commit."/>
+      <textevent timeoffset="300" message="Five minutes done. Keep your breathing controlled and rhythmic."/>
+      <textevent timeoffset="600" message="Halfway through block one! You are right on the edge of your limit. Hold it."/>
+      <textevent timeoffset="900" message="Fifteen minutes in. Five to go. This is where champions are made."/>
+      <textevent timeoffset="1100" message="Final stretch of block one! Almost there—do not back off now."/>
+    </Ramp>
+
+    <!-- Recovery 1: 5 minutes -->
+    <SteadyState Duration="300" Power="0.55" Cadence="80">
+      <textevent timeoffset="0" message="Excellent work! Five minutes of recovery. Spin easy and bring the heart rate down."/>
+      <textevent timeoffset="120" message="Drink some water. Breathe deeply. You have another 20-minute block coming."/>
+      <textevent timeoffset="240" message="Get mentally prepared. Block two starts in one minute."/>
+    </SteadyState>
+
+    <!-- Threshold Block 2: 20 minutes at 0.95-1.00 -->
+    <Ramp Duration="1200" PowerLow="0.95" PowerHigh="1.00" Cadence="90">
+      <textevent timeoffset="0" message="Block two is on. You know what this feels like now. Stay disciplined."/>
+      <textevent timeoffset="300" message="Five minutes in. Match the effort from block one—no harder, no easier."/>
+      <textevent timeoffset="600" message="Halfway! Your legs are heavy but your mind is strong. Keep pushing."/>
+      <textevent timeoffset="900" message="Fifteen down, five to go. This is the hardest part of the whole workout. Dig deep."/>
+      <textevent timeoffset="1100" message="Almost done with the hard work! Give these final seconds everything you have."/>
+    </Ramp>
+
+    <!-- Recovery 2: 5 minutes -->
+    <SteadyState Duration="300" Power="0.55" Cadence="80">
+      <textevent timeoffset="0" message="Both threshold blocks are DONE! Incredible effort. Spin it out."/>
+      <textevent timeoffset="150" message="Let the heart rate settle. The hardest work is behind you."/>
+      <textevent timeoffset="270" message="Moving into a moderate tempo block to flush the legs."/>
+    </SteadyState>
+
+    <!-- Tempo: 8 minutes -->
+    <SteadyState Duration="480" Power="0.70" Cadence="85">
+      <textevent timeoffset="0" message="Tempo effort now. Comfortable but purposeful—keep the pedals turning."/>
+      <textevent timeoffset="180" message="This is active recovery at a moderate pace. Stay smooth."/>
+      <textevent timeoffset="360" message="Two minutes left at tempo, then we cool down. Great session today."/>
+    </SteadyState>
+
+    <!-- Cooldown: 6 minutes -->
+    <Cooldown Duration="360" PowerHigh="0.55" PowerLow="0.35" Cadence="80">
+      <textevent timeoffset="0" message="Cooldown time. Let the power fade gradually."/>
+      <textevent timeoffset="120" message="Forty minutes at threshold is a massive training stimulus. Be proud."/>
+      <textevent timeoffset="300" message="Workout complete. Make sure to refuel and recover well. You earned it."/>
+    </Cooldown>
+  </workout>
+</workout_file>

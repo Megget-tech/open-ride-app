@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workout_file>
+  <name>Mountain Goat</name>
+  <author>Open Ride</author>
+  <description>Progressive climbing efforts that build in intensity like ascending a mountain pass. Each block simulates a steeper gradient requiring more power.</description>
+  <sportType>bike</sportType>
+  <category>Climbing</category>
+  <subcategory>Hill Power</subcategory>
+  <tags>
+    <tag name="Climbing"/>
+    <tag name="Progressive"/>
+    <tag name="Advanced"/>
+  </tags>
+
+  <workout>
+    <Warmup Duration="480" PowerLow="0.40" PowerHigh="0.65" Cadence="85">
+      <textevent timeoffset="0" message="Mountain Goat! Progressive climbs getting steeper each time."/>
+      <textevent timeoffset="120" message="Each block represents a higher altitude on the mountain."/>
+      <textevent timeoffset="300" message="The summit effort will be the hardest. Pace yourself."/>
+      <textevent timeoffset="420" message="Ready to start climbing!"/>
+    </Warmup>
+
+    <SteadyState Duration="180" Power="0.70" Cadence="85">
+      <textevent timeoffset="0" message="Approach road. Easy tempo before the foothills."/>
+    </SteadyState>
+
+    <!-- Foothills -->
+    <SteadyState Duration="360" Power="0.80" Cadence="75">
+      <textevent timeoffset="0" message="FOOTHILLS! Six minutes at moderate climbing effort."/>
+      <textevent timeoffset="120" message="Gentle gradient. Build your climbing rhythm."/>
+      <textevent timeoffset="240" message="Two minutes to go. Find your pace."/>
+    </SteadyState>
+
+    <SteadyState Duration="180" Power="0.55" Cadence="90">
+      <textevent timeoffset="0" message="Brief valley between climbs."/>
+    </SteadyState>
+
+    <!-- Lower slopes -->
+    <SteadyState Duration="360" Power="0.88" Cadence="72">
+      <textevent timeoffset="0" message="LOWER SLOPES! Steeper now. Six minutes at sweet spot."/>
+      <textevent timeoffset="120" message="The road tilts upward. Drop your cadence."/>
+      <textevent timeoffset="240" message="You are climbing well! Two minutes left."/>
+    </SteadyState>
+
+    <SteadyState Duration="180" Power="0.55" Cadence="90">
+      <textevent timeoffset="0" message="Short descent. The upper slopes are next."/>
+    </SteadyState>
+
+    <!-- Upper slopes -->
+    <SteadyState Duration="300" Power="0.95" Cadence="68">
+      <textevent timeoffset="0" message="UPPER SLOPES! Five minutes near threshold!"/>
+      <textevent timeoffset="100" message="The air is thinner, the gradient steeper."/>
+      <textevent timeoffset="200" message="Two minutes to the summit push! Hang on!"/>
+    </SteadyState>
+
+    <SteadyState Duration="180" Power="0.55" Cadence="90">
+      <textevent timeoffset="0" message="False flat before the summit. Catch your breath!"/>
+      <textevent timeoffset="120" message="The summit push is the hardest. Give everything!"/>
+    </SteadyState>
+
+    <!-- Summit push -->
+    <Ramp Duration="240" PowerLow="0.95" PowerHigh="1.05" Cadence="65">
+      <textevent timeoffset="0" message="SUMMIT PUSH! Power building to the top!"/>
+      <textevent timeoffset="60" message="The gradient keeps increasing! Dig deep!"/>
+      <textevent timeoffset="120" message="Halfway to the summit! Do not quit!"/>
+      <textevent timeoffset="180" message="Final minute! The summit is RIGHT THERE!"/>
+    </Ramp>
+
+    <SteadyState Duration="300" Power="0.55" Cadence="90">
+      <textevent timeoffset="0" message="YOU SUMMITED! Incredible climbing effort!"/>
+      <textevent timeoffset="180" message="Enjoy the long descent home."/>
+    </SteadyState>
+
+    <SteadyState Duration="360" Power="0.60" Cadence="85">
+      <textevent timeoffset="0" message="Easy riding on the descent back."/>
+      <textevent timeoffset="180" message="Your climbing just improved significantly."/>
+    </SteadyState>
+
+    <Cooldown Duration="420" PowerHigh="0.55" PowerLow="0.35" Cadence="80">
+      <textevent timeoffset="0" message="Cooling down from a mountain conquest."/>
+      <textevent timeoffset="180" message="Progressive climbing teaches perfect pacing."/>
+      <textevent timeoffset="360" message="Mountain Goat complete!"/>
+    </Cooldown>
+  </workout>
+</workout_file>

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workout_file>
+  <name>Sweet Spot Century</name>
+  <author>Open Ride</author>
+  <description>Three extended sweet spot blocks with tempo recovery between them. Accumulate quality time at the intensity that builds real fitness.</description>
+  <sportType>bike</sportType>
+  <category>Long Sessions</category>
+  <subcategory>Extended</subcategory>
+  <tags>
+    <tag name="Sweet Spot"/>
+    <tag name="Endurance"/>
+    <tag name="Sustained"/>
+  </tags>
+
+  <workout>
+    <!-- Warmup: 8 minutes -->
+    <Warmup Duration="480" PowerLow="0.40" PowerHigh="0.65" Cadence="85">
+      <textevent timeoffset="0" message="Sweet Spot Century begins. Eight minutes to ease into the session."/>
+      <textevent timeoffset="120" message="Three sweet spot blocks ahead. The power will increase slightly each time."/>
+      <textevent timeoffset="300" message="Keep your pedal stroke smooth. Focus on relaxing your grip and shoulders."/>
+      <textevent timeoffset="420" message="Warmup almost done. Stepping up to moderate power next."/>
+    </Warmup>
+
+    <!-- Prep: 3 minutes at 0.70 -->
+    <SteadyState Duration="180" Power="0.70" Cadence="85">
+      <textevent timeoffset="0" message="Moderate effort to bridge into the first sweet spot block."/>
+      <textevent timeoffset="90" message="Find your comfortable cadence. The first block starts shortly."/>
+      <textevent timeoffset="150" message="Get ready—fifteen minutes at sweet spot coming up."/>
+    </SteadyState>
+
+    <!-- Sweet Spot Block 1: 15 minutes at 0.88 -->
+    <SteadyState Duration="900" Power="0.88" Cadence="88">
+      <textevent timeoffset="0" message="Block one: fifteen minutes at 88% FTP. Strong but sustainable."/>
+      <textevent timeoffset="240" message="Four minutes in. This should feel like a hard conversation pace."/>
+      <textevent timeoffset="480" message="Halfway through block one. Stay on top of your cadence—88 rpm target."/>
+      <textevent timeoffset="720" message="Three minutes to go in this block. You are handling it well."/>
+      <textevent timeoffset="840" message="Final minute! Hold your form and power steady to the end."/>
+    </SteadyState>
+
+    <!-- Recovery 1: 5 minutes at 0.65 -->
+    <SteadyState Duration="300" Power="0.65" Cadence="80">
+      <textevent timeoffset="0" message="Recovery spin. Let the legs flush out and catch your breath."/>
+      <textevent timeoffset="150" message="Block two will be slightly harder at 90% FTP. Mentally prepare."/>
+      <textevent timeoffset="270" message="Thirty seconds until block two. Settle in."/>
+    </SteadyState>
+
+    <!-- Sweet Spot Block 2: 15 minutes at 0.90 -->
+    <SteadyState Duration="900" Power="0.90" Cadence="90">
+      <textevent timeoffset="0" message="Block two: fifteen minutes at 90% FTP. Two percent harder—you can handle it."/>
+      <textevent timeoffset="240" message="Cadence up slightly to 90 rpm. Let the legs spin through the effort."/>
+      <textevent timeoffset="480" message="Halfway! This is the bread and butter of fitness building. Embrace it."/>
+      <textevent timeoffset="720" message="Three minutes left. Your body is adapting right now. Keep going."/>
+      <textevent timeoffset="840" message="One more minute. Hold strong—do not fade at the finish."/>
+    </SteadyState>
+
+    <!-- Recovery 2: 5 minutes at 0.65 -->
+    <SteadyState Duration="300" Power="0.65" Cadence="80">
+      <textevent timeoffset="0" message="Two blocks down, one to go! Easy spinning to recover."/>
+      <textevent timeoffset="150" message="Final block is 12 minutes at 92% FTP—the hardest yet but also the shortest."/>
+      <textevent timeoffset="270" message="Almost time. Take a deep breath and commit."/>
+    </SteadyState>
+
+    <!-- Sweet Spot Block 3: 12 minutes at 0.92 -->
+    <SteadyState Duration="720" Power="0.92" Cadence="90">
+      <textevent timeoffset="0" message="Final block: twelve minutes at 92% FTP. The peak of today's session."/>
+      <textevent timeoffset="180" message="Three minutes done. Breathing hard is normal—you are right at the top of sweet spot."/>
+      <textevent timeoffset="360" message="Halfway through the final block! Keep your upper body still and relaxed."/>
+      <textevent timeoffset="540" message="Three minutes to go. This is where the real adaptation happens."/>
+      <textevent timeoffset="660" message="Final minute! Empty the tank and finish strong."/>
+    </SteadyState>
+
+    <!-- Easy spin: 5 minutes at 0.60 -->
+    <SteadyState Duration="300" Power="0.60" Cadence="80">
+      <textevent timeoffset="0" message="All three sweet spot blocks are done! Outstanding work. Easy spin now."/>
+      <textevent timeoffset="150" message="Over 40 minutes of quality sweet spot training today. That is serious volume."/>
+      <textevent timeoffset="270" message="Heading into the cooldown shortly."/>
+    </SteadyState>
+
+    <!-- Cooldown: 7 minutes -->
+    <Cooldown Duration="420" PowerHigh="0.55" PowerLow="0.35" Cadence="80">
+      <textevent timeoffset="0" message="Cooldown. Gradually let the power drop and the legs recover."/>
+      <textevent timeoffset="180" message="Great consistency today. Sweet spot work pays enormous dividends over time."/>
+      <textevent timeoffset="360" message="Session complete. Hydrate, refuel, and enjoy the rest of your day."/>
+    </Cooldown>
+  </workout>
+</workout_file>

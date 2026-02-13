@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workout_file>
+  <name>Progressive Overload</name>
+  <author>Open Ride</author>
+  <description>Each working block increases in intensity while decreasing in duration. Teaches your body to handle progressively harder efforts.</description>
+  <sportType>bike</sportType>
+  <category>Long Sessions</category>
+  <subcategory>Extended</subcategory>
+  <tags>
+    <tag name="Progressive"/>
+    <tag name="Threshold"/>
+    <tag name="Building"/>
+  </tags>
+
+  <workout>
+    <!-- Warmup: 8 minutes -->
+    <Warmup Duration="480" PowerLow="0.40" PowerHigh="0.65" Cadence="85">
+      <textevent timeoffset="0" message="Progressive Overload. Five blocks, each harder and shorter than the last."/>
+      <textevent timeoffset="120" message="Easy warmup to start. Your body needs time to prepare for what is ahead."/>
+      <textevent timeoffset="300" message="The first block is moderate. The final block will be well above threshold."/>
+      <textevent timeoffset="420" message="Warmup finishing. Short bridge effort, then block one begins."/>
+    </Warmup>
+
+    <!-- Bridge: 2 minutes at 0.70 -->
+    <SteadyState Duration="120" Power="0.70" Cadence="85">
+      <textevent timeoffset="0" message="Short bridge effort at moderate power. Finding your rhythm."/>
+      <textevent timeoffset="90" message="Block one starts in thirty seconds. Eight minutes at 80% FTP."/>
+    </SteadyState>
+
+    <!-- Block 1: 8 minutes at 0.80 -->
+    <SteadyState Duration="480" Power="0.80" Cadence="85">
+      <textevent timeoffset="0" message="Block one: eight minutes at 80% FTP. The longest and easiest block of five."/>
+      <textevent timeoffset="120" message="Two minutes in. This should feel like a strong tempo effort. Sustainable and steady."/>
+      <textevent timeoffset="300" message="Five minutes done. Keep your cadence at 85 rpm and stay relaxed."/>
+      <textevent timeoffset="420" message="One minute left in block one. Good foundation work. Recovery coming next."/>
+    </SteadyState>
+
+    <!-- Recovery 1: 3 minutes at 0.55 -->
+    <SteadyState Duration="180" Power="0.55" Cadence="80">
+      <textevent timeoffset="0" message="Three minutes recovery. Spin easy and let the legs refresh."/>
+      <textevent timeoffset="90" message="Block two is six minutes at 88% FTP. Shorter but harder."/>
+      <textevent timeoffset="150" message="Get ready. Cadence target moves up to 88 rpm."/>
+    </SteadyState>
+
+    <!-- Block 2: 6 minutes at 0.88 -->
+    <SteadyState Duration="360" Power="0.88" Cadence="88">
+      <textevent timeoffset="0" message="Block two: six minutes at 88% FTP. Sweet spot territory—strong and controlled."/>
+      <textevent timeoffset="120" message="Two minutes in. Breathing is heavier now. That is exactly right."/>
+      <textevent timeoffset="240" message="Four minutes. Two to go. You are managing the progressive load well."/>
+      <textevent timeoffset="330" message="Thirty seconds! Hold the power to the end."/>
+    </SteadyState>
+
+    <!-- Recovery 2: 3 minutes at 0.55 -->
+    <SteadyState Duration="180" Power="0.55" Cadence="80">
+      <textevent timeoffset="0" message="Recovery. Two blocks done, three to go. Each one gets harder."/>
+      <textevent timeoffset="90" message="Block three: five minutes at 95% FTP. Near threshold. Prepare mentally."/>
+      <textevent timeoffset="150" message="Thirty seconds. Find your focus."/>
+    </SteadyState>
+
+    <!-- Block 3: 5 minutes at 0.95 -->
+    <SteadyState Duration="300" Power="0.95" Cadence="90">
+      <textevent timeoffset="0" message="Block three: five minutes at 95% FTP. Knocking on the threshold door."/>
+      <textevent timeoffset="90" message="Ninety seconds in. Controlled breathing—in through the nose, out through the mouth."/>
+      <textevent timeoffset="180" message="Three minutes. Halfway. This is real work now. Stay committed."/>
+      <textevent timeoffset="270" message="Thirty seconds left! Hold your form. Do not let the power drop."/>
+    </SteadyState>
+
+    <!-- Recovery 3: 3 minutes at 0.55 -->
+    <SteadyState Duration="180" Power="0.55" Cadence="80">
+      <textevent timeoffset="0" message="Recovery. Three blocks done. The next one crosses the threshold line."/>
+      <textevent timeoffset="90" message="Block four: four minutes at 102% FTP. Above threshold—it will hurt. Embrace it."/>
+      <textevent timeoffset="150" message="Deep breaths. Here we go."/>
+    </SteadyState>
+
+    <!-- Block 4: 4 minutes at 1.02 -->
+    <SteadyState Duration="240" Power="1.02" Cadence="92">
+      <textevent timeoffset="0" message="Block four: four minutes above threshold! Cadence up to 92. Dig in!"/>
+      <textevent timeoffset="60" message="One minute down. Breathing is labored and that is expected. Stay strong."/>
+      <textevent timeoffset="150" message="Halfway! Two minutes to go. Your legs are screaming but you are tougher."/>
+      <textevent timeoffset="210" message="Thirty seconds! Grit your teeth and hold on!"/>
+    </SteadyState>
+
+    <!-- Recovery 4: 3 minutes at 0.55 -->
+    <SteadyState Duration="180" Power="0.55" Cadence="80">
+      <textevent timeoffset="0" message="Recovery! Four blocks done. One final block remains—the hardest of all."/>
+      <textevent timeoffset="90" message="Block five: three minutes at 110% FTP. Short and brutal. You can do anything for three minutes."/>
+      <textevent timeoffset="150" message="Final effort coming. Give everything you have left."/>
+    </SteadyState>
+
+    <!-- Block 5: 3 minutes at 1.10 -->
+    <SteadyState Duration="180" Power="1.10" Cadence="95">
+      <textevent timeoffset="0" message="BLOCK FIVE! Three minutes at 110% FTP. The summit of the session! GO!"/>
+      <textevent timeoffset="60" message="One minute done! Two to go. Cadence high at 95 rpm. Keep driving!"/>
+      <textevent timeoffset="120" message="Final minute! This is what you trained for. Do NOT back down!"/>
+      <textevent timeoffset="160" message="Twenty seconds! Sprint to the finish line! EVERYTHING!"/>
+    </SteadyState>
+
+    <!-- Extended recovery: 5 minutes at 0.55 -->
+    <SteadyState Duration="300" Power="0.55" Cadence="80">
+      <textevent timeoffset="0" message="ALL FIVE BLOCKS COMPLETE! Phenomenal effort. Breathe and recover."/>
+      <textevent timeoffset="120" message="You just progressively overloaded from tempo to VO2max. That is serious training."/>
+      <textevent timeoffset="270" message="Easy spinning into the final stretch of the workout."/>
+    </SteadyState>
+
+    <!-- Easy spin: 8 minutes at 0.65 -->
+    <SteadyState Duration="480" Power="0.65" Cadence="85">
+      <textevent timeoffset="0" message="Gentle riding to help the body begin its recovery process."/>
+      <textevent timeoffset="240" message="Four more minutes of easy spinning before the cooldown. Excellent session."/>
+      <textevent timeoffset="420" message="Cooldown ahead. You should feel accomplished."/>
+    </SteadyState>
+
+    <!-- Cooldown: 7 minutes -->
+    <Cooldown Duration="420" PowerHigh="0.55" PowerLow="0.35" Cadence="80">
+      <textevent timeoffset="0" message="Cooldown. Let the power drop away and the breathing normalize."/>
+      <textevent timeoffset="180" message="Progressive overload is one of the most effective training principles. Well executed today."/>
+      <textevent timeoffset="360" message="Session complete. Rest, refuel, and come back stronger next time."/>
+    </Cooldown>
+  </workout>
+</workout_file>

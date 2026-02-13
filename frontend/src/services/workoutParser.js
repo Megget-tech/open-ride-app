@@ -1,0 +1,255 @@
+/**
+ * Client-side .orw XML parser.
+ *
+ * Parses a workout XML string using the browser's built-in DOMParser and
+ * returns an object with the same shape as the backend's
+ * GET /api/workouts/:id response so WorkoutPage can use it directly.
+ *
+ * Custom workouts no longer go through the backend at all — this module
+ * gives the frontend full self-sufficiency for AI-generated workouts.
+ */
+
+// ─── Internal helpers ─────────────────────────────────────────────────────────
+
+function getAttr(el, name) {
+  const v = el.getAttribute(name);
+  return v !== null ? parseFloat(v) : undefined;
+}
+
+function getIntAttr(el, name) {
+  const v = el.getAttribute(name);
+  return v !== null ? parseInt(v, 10) : undefined;
+}
+
+function parseTextEvents(el) {
+  return Array.from(el.querySelectorAll('textevent')).map(te => ({
+    timeoffset: parseInt(te.getAttribute('timeoffset') || '0', 10),
+    message: te.getAttribute('message') || '',
+  }));
+}
+
+function elementDuration(el) {
+  if (el.type === 'IntervalsT') {
+    return el.repeat * (el.onDuration + el.offDuration);
+  }
+  return el.duration || 0;
+}
+
+function generateChartProfile(elements, numBars = 20) {
+  const total = elements.reduce((s, el) => s + elementDuration(el), 0);
+  if (total === 0) return Array(numBars).fill(0.5);
+
+  const bars = [];
+  for (let i = 0; i < numBars; i++) {
+    const t = ((i + 0.5) / numBars) * total;
+    let elapsed = 0;
+    let power = 0.5;
+
+    for (const el of elements) {
+      const dur = elementDuration(el);
+      if (t >= elapsed && t < elapsed + dur) {
+        const pos = t - elapsed;
+        if (el.type === 'IntervalsT') {
+          const cycle = el.onDuration + el.offDuration;
+          power = (pos % cycle) < el.onDuration ? el.onPower : el.offPower;
+        } else if (el.type === 'SteadyState') {
+          power = el.power;
+        } else if (el.type === 'Warmup' || el.type === 'Cooldown' || el.type === 'Ramp') {
+          const frac = dur > 0 ? pos / dur : 0;
+          power = el.powerLow + frac * (el.powerHigh - el.powerLow);
+        } else if (el.type === 'MaxEffort') {
+          power = 1.4;
+        } else {
+          power = 0.5;
+        }
+        break;
+      }
+      elapsed += dur;
+    }
+    bars.push(power);
+  }
+  return bars;
+}
+
+function estimateTSS(elements, totalDuration) {
+  if (totalDuration === 0) return 0;
+
+  const sumPowerSqTime = elements.reduce((acc, el) => {
+    if (el.type === 'IntervalsT') {
+      return acc
+        + el.repeat * el.onDuration * el.onPower * el.onPower
+        + el.repeat * el.offDuration * el.offPower * el.offPower;
+    }
+    if (el.type === 'SteadyState') {
+      return acc + el.duration * el.power * el.power;
+    }
+    const avg = ((el.powerLow || 0) + (el.powerHigh || 0)) / 2 || 0.5;
+    return acc + (el.duration || 0) * avg * avg;
+  }, 0);
+
+  const np = Math.sqrt(Math.sqrt(sumPowerSqTime / totalDuration));
+  return Math.round((totalDuration / 3600) * np * np * 100);
+}
+
+function formatDuration(seconds) {
+  const h = Math.floor(seconds / 3600);
+  const m = Math.floor((seconds % 3600) / 60);
+  if (h > 0) return `${h}h ${m}m`;
+  return `${m}m`;
+}
+
+// ─── ID generation ────────────────────────────────────────────────────────────
+
+/**
+ * Generate a stable, URL-safe workout id from a display name.
+ * Format: custom-<slug>-<timestamp>
+ */
+export function generateCustomId(name) {
+  const slug = (name || 'workout')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .substring(0, 60);
+  return `custom-${slug}-${Date.now()}`;
+}
+
+// ─── Main parser ──────────────────────────────────────────────────────────────
+
+/**
+ * Parse an .orw XML string and return a full workout object.
+ *
+ * The returned shape matches the backend's /api/workouts/:id response so
+ * WorkoutPage can consume it without modification.
+ *
+ * @param {string} xml  Raw .orw XML
+ * @param {string} [id] Pre-assigned id (generated if omitted)
+ * @returns {{ id, name, author, description, sportType, category, subcategory,
+ *             tags, totalDuration, durationFormatted, elements, chartProfile,
+ *             estimatedTSS }}
+ */
+export function parseOrwXml(xml, id) {
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(xml, 'application/xml');
+
+  const parseError = doc.querySelector('parsererror');
+  if (parseError) {
+    throw new Error('Invalid workout XML: ' + (parseError.textContent || 'parse error'));
+  }
+
+  const getText = (selector) =>
+    doc.querySelector(selector)?.textContent?.trim() || '';
+
+  const name = getText('name') || 'Custom Workout';
+  const author = getText('author') || 'AI Generated';
+  const description = getText('description') || '';
+  const sportType = getText('sportType') || 'bike';
+  const category = getText('category') || 'My Workouts';
+  const subcategory = getText('subcategory') || '';
+  const tags = Array.from(doc.querySelectorAll('tags tag'))
+    .map(t => t.getAttribute('name') || '')
+    .filter(Boolean);
+
+  const workoutEl = doc.querySelector('workout');
+  const elements = [];
+
+  if (workoutEl) {
+    for (const node of workoutEl.children) {
+      const type = node.tagName;
+      const textEvents = parseTextEvents(node);
+      const optCadence = getAttr(node, 'Cadence');
+
+      switch (type) {
+        case 'Warmup':
+        case 'Cooldown':
+          elements.push({
+            type,
+            duration: getAttr(node, 'Duration') || 0,
+            powerLow: getAttr(node, 'PowerLow') || 0,
+            powerHigh: getAttr(node, 'PowerHigh') || 0,
+            ...(optCadence !== undefined && { cadence: optCadence }),
+            textEvents,
+          });
+          break;
+
+        case 'SteadyState':
+          elements.push({
+            type: 'SteadyState',
+            duration: getAttr(node, 'Duration') || 0,
+            power: getAttr(node, 'Power') || 0,
+            ...(optCadence !== undefined && { cadence: optCadence }),
+            textEvents,
+          });
+          break;
+
+        case 'Ramp':
+          elements.push({
+            type: 'Ramp',
+            duration: getAttr(node, 'Duration') || 0,
+            powerLow: getAttr(node, 'PowerLow') || 0,
+            powerHigh: getAttr(node, 'PowerHigh') || 0,
+            ...(optCadence !== undefined && { cadence: optCadence }),
+            textEvents,
+          });
+          break;
+
+        case 'IntervalsT': {
+          const cadenceResting = getAttr(node, 'CadenceResting');
+          elements.push({
+            type: 'IntervalsT',
+            repeat: getIntAttr(node, 'Repeat') || 1,
+            onDuration: getAttr(node, 'OnDuration') || 0,
+            offDuration: getAttr(node, 'OffDuration') || 0,
+            onPower: getAttr(node, 'OnPower') || 0,
+            offPower: getAttr(node, 'OffPower') || 0,
+            ...(optCadence !== undefined && { cadence: optCadence }),
+            ...(cadenceResting !== undefined && { cadenceResting }),
+            textEvents,
+          });
+          break;
+        }
+
+        case 'FreeRide':
+          elements.push({
+            type: 'FreeRide',
+            duration: getAttr(node, 'Duration') || 0,
+            ...(optCadence !== undefined && { cadence: optCadence }),
+            textEvents,
+          });
+          break;
+
+        case 'MaxEffort':
+          elements.push({
+            type: 'MaxEffort',
+            duration: getAttr(node, 'Duration') || 0,
+            ...(optCadence !== undefined && { cadence: optCadence }),
+            textEvents,
+          });
+          break;
+
+        default:
+          break;
+      }
+    }
+  }
+
+  const totalDuration = elements.reduce((s, el) => s + elementDuration(el), 0);
+  const chartProfile = generateChartProfile(elements);
+  const estimatedTSS = estimateTSS(elements, totalDuration);
+  const resolvedId = id || generateCustomId(name);
+
+  return {
+    id: resolvedId,
+    name,
+    author,
+    description,
+    sportType,
+    category,
+    subcategory,
+    tags,
+    totalDuration,
+    durationFormatted: formatDuration(totalDuration),
+    elements,
+    chartProfile,
+    estimatedTSS,
+  };
+}

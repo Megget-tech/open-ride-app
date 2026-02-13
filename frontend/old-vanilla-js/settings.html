@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Settings - Open Ride</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="settings.css">
+  <link rel="stylesheet" href="notifications.css">
+</head>
+<body>
+  <!-- Top nav injected by top-bar.js -->
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <div class="content-wrapper settings-wrapper">
+      <!-- Header -->
+      <section class="settings-header">
+        <h1>Settings</h1>
+        <p class="settings-subtitle">Configure your training profile and preferences</p>
+      </section>
+
+      <!-- Settings Form -->
+      <div class="settings-container">
+        <!-- Athlete Profile Section -->
+        <section class="settings-section">
+          <div class="section-title">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+            </svg>
+            <h2>Athlete Profile</h2>
+          </div>
+
+          <div class="settings-card">
+            <div class="setting-row">
+              <div class="setting-info">
+                <label for="ftp">Functional Threshold Power (FTP)</label>
+                <p class="setting-description">Your maximum sustainable power for one hour. Used to calculate workout intensities.</p>
+              </div>
+              <div class="setting-input">
+                <input type="number" id="ftp" min="50" max="500" step="1" value="200">
+                <span class="input-unit">watts</span>
+              </div>
+            </div>
+
+            <div class="setting-row">
+              <div class="setting-info">
+                <label for="max-hr">Maximum Heart Rate</label>
+                <p class="setting-description">Your maximum heart rate for HR zone calculations.</p>
+              </div>
+              <div class="setting-input">
+                <input type="number" id="max-hr" min="100" max="220" step="1" value="185">
+                <span class="input-unit">bpm</span>
+              </div>
+            </div>
+
+            <div class="setting-row">
+              <div class="setting-info">
+                <label for="weight">Body Weight</label>
+                <p class="setting-description">Used for power-to-weight calculations and calorie estimates.</p>
+              </div>
+              <div class="setting-input">
+                <input type="number" id="weight" min="30" max="200" step="0.1" value="70">
+                <span class="input-unit" id="weight-unit">kg</span>
+              </div>
+            </div>
+
+            <div class="setting-row">
+              <div class="setting-info">
+                <label for="resting-hr">Resting Heart Rate</label>
+                <p class="setting-description">Your heart rate at complete rest. Used for HR reserve calculations.</p>
+              </div>
+              <div class="setting-input">
+                <input type="number" id="resting-hr" min="30" max="100" step="1" value="60">
+                <span class="input-unit">bpm</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Equipment Section -->
+        <section class="settings-section">
+          <div class="section-title">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M15.5 5.5c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zM5 12c-2.8 0-5 2.2-5 5s2.2 5 5 5 5-2.2 5-5-2.2-5-5-5zm0 8.5c-1.9 0-3.5-1.6-3.5-3.5s1.6-3.5 3.5-3.5 3.5 1.6 3.5 3.5-1.6 3.5-3.5 3.5zm5.8-10l2.4-2.4.8.8c1.3 1.3 3 2.1 5.1 2.1V9c-1.5 0-2.7-.6-3.6-1.5l-1.9-1.9c-.5-.4-1-.6-1.6-.6s-1.1.2-1.4.6L7.8 8.4c-.4.4-.6.9-.6 1.4 0 .6.2 1.1.6 1.4L11 14v5h2v-6.2l-2.2-2.3zM19 12c-2.8 0-5 2.2-5 5s2.2 5 5 5 5-2.2 5-5-2.2-5-5-5zm0 8.5c-1.9 0-3.5-1.6-3.5-3.5s1.6-3.5 3.5-3.5 3.5 1.6 3.5 3.5-1.6 3.5-3.5 3.5z"/>
+            </svg>
+            <h2>Equipment</h2>
+          </div>
+
+          <div class="settings-card">
+            <div class="setting-row">
+              <div class="setting-info">
+                <label for="bike-weight">Bike Weight</label>
+                <p class="setting-description">Weight of your bike for more accurate simulations.</p>
+              </div>
+              <div class="setting-input">
+                <input type="number" id="bike-weight" min="5" max="20" step="0.1" value="8">
+                <span class="input-unit" id="bike-weight-unit">kg</span>
+              </div>
+            </div>
+
+            <div class="setting-row">
+              <div class="setting-info">
+                <label for="wheel-circumference">Wheel Circumference</label>
+                <p class="setting-description">For accurate speed and distance calculations. Common: 700x25c = 2105mm</p>
+              </div>
+              <div class="setting-input">
+                <input type="number" id="wheel-circumference" min="1500" max="2500" step="1" value="2105">
+                <span class="input-unit">mm</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Preferences Section -->
+        <section class="settings-section">
+          <div class="section-title">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16c2.76 0 5-2.24 5-5 0-4.42-4.03-8-9-8zm-5.5 9c-.83 0-1.5-.67-1.5-1.5S5.67 9 6.5 9 8 9.67 8 10.5 7.33 12 6.5 12zm3-4C8.67 8 8 7.33 8 6.5S8.67 5 9.5 5s1.5.67 1.5 1.5S10.33 8 9.5 8zm5 0c-.83 0-1.5-.67-1.5-1.5S13.67 5 14.5 5s1.5.67 1.5 1.5S15.33 8 14.5 8zm3 4c-.83 0-1.5-.67-1.5-1.5S16.67 9 17.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>
+            </svg>
+            <h2>Preferences</h2>
+          </div>
+
+          <div class="settings-card">
+            <div class="setting-row">
+              <div class="setting-info">
+                <label for="units">Unit System</label>
+                <p class="setting-description">Choose between metric and imperial units.</p>
+              </div>
+              <div class="setting-input">
+                <select id="units">
+                  <option value="metric">Metric (kg, km)</option>
+                  <option value="imperial">Imperial (lb, mi)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="setting-row">
+              <div class="setting-info">
+                <label for="auto-connect">Auto-connect to Last Device</label>
+                <p class="setting-description">Automatically connect to the last used trainer on startup.</p>
+              </div>
+              <div class="setting-input">
+                <label class="toggle">
+                  <input type="checkbox" id="auto-connect">
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+            </div>
+
+            <div class="setting-row">
+              <div class="setting-info">
+                <label for="sound-effects">Sound Effects</label>
+                <p class="setting-description">Play audio cues during workouts (intervals, achievements).</p>
+              </div>
+              <div class="setting-input">
+                <label class="toggle">
+                  <input type="checkbox" id="sound-effects" checked>
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+            </div>
+
+            <div class="setting-row">
+              <div class="setting-info">
+                <label for="countdown-duration">Workout Countdown</label>
+                <p class="setting-description">Duration of countdown before workout starts.</p>
+              </div>
+              <div class="setting-input">
+                <select id="countdown-duration">
+                  <option value="3">3 seconds</option>
+                  <option value="5">5 seconds</option>
+                  <option value="10">10 seconds</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Power Zones Section -->
+        <section class="settings-section">
+          <div class="section-title">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M11 21h-1l1-7H7.5c-.88 0-.33-.75-.31-.78C8.48 10.94 10.42 7.54 13.01 3h1l-1 7h3.51c.4 0 .62.19.4.66C12.97 17.55 11 21 11 21z"/>
+            </svg>
+            <h2>Power Zones</h2>
+            <span class="zone-info">(Based on your FTP of <span id="ftp-display">200</span>W)</span>
+          </div>
+
+          <div class="settings-card zones-card">
+            <div class="zones-grid">
+              <div class="zone-row zone-1">
+                <div class="zone-label">Zone 1 - Recovery</div>
+                <div class="zone-range" id="zone1-range">&lt; 120W</div>
+                <div class="zone-percent">&lt; 60%</div>
+              </div>
+              <div class="zone-row zone-2">
+                <div class="zone-label">Zone 2 - Endurance</div>
+                <div class="zone-range" id="zone2-range">120 - 150W</div>
+                <div class="zone-percent">60 - 75%</div>
+              </div>
+              <div class="zone-row zone-3">
+                <div class="zone-label">Zone 3 - Tempo</div>
+                <div class="zone-range" id="zone3-range">152 - 178W</div>
+                <div class="zone-percent">76 - 89%</div>
+              </div>
+              <div class="zone-row zone-4">
+                <div class="zone-label">Zone 4 - Threshold</div>
+                <div class="zone-range" id="zone4-range">180 - 208W</div>
+                <div class="zone-percent">90 - 104%</div>
+              </div>
+              <div class="zone-row zone-5">
+                <div class="zone-label">Zone 5 - VO2max</div>
+                <div class="zone-range" id="zone5-range">210 - 236W</div>
+                <div class="zone-percent">105 - 118%</div>
+              </div>
+              <div class="zone-row zone-6">
+                <div class="zone-label">Zone 6 - Anaerobic</div>
+                <div class="zone-range" id="zone6-range">&gt; 236W</div>
+                <div class="zone-percent">&gt; 118%</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Action Buttons -->
+        <div class="settings-actions">
+          <button class="btn-secondary" onclick="resetToDefaults()">Reset to Defaults</button>
+          <button class="btn-primary" onclick="saveSettings()">Save Settings</button>
+        </div>
+
+        <!-- Save Confirmation Toast -->
+        <div id="save-toast" class="save-toast">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+          </svg>
+          Settings saved successfully
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="top-bar.js"></script>
+  <script src="notifications.js"></script>
+  <script src="settings.js"></script>
+</body>
+</html>

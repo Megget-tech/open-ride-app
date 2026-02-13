@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workout_file>
+  <name>Torque and Cadence</name>
+  <author>Open Ride</author>
+  <description>Alternate between low-cadence torque work and high-cadence spinning. Rebuild muscular endurance and pedaling efficiency in one session.</description>
+  <sportType>bike</sportType>
+  <category>Fitness Refresh</category>
+  <subcategory>Tune Up</subcategory>
+  <tags>
+    <tag name="Tune Up"/>
+    <tag name="Strength"/>
+    <tag name="Cadence"/>
+  </tags>
+
+  <workout>
+    <Warmup Duration="360" PowerLow="0.40" PowerHigh="0.60" Cadence="85">
+      <textevent timeoffset="0" message="Torque and Cadence! Two skills in one workout."/>
+      <textevent timeoffset="120" message="Low cadence builds leg strength. High cadence builds efficiency."/>
+      <textevent timeoffset="240" message="Alternating between them refreshes your pedaling."/>
+    </Warmup>
+
+    <SteadyState Duration="180" Power="0.65" Cadence="88">
+      <textevent timeoffset="0" message="Three minutes at normal cadence to settle in."/>
+    </SteadyState>
+
+    <!-- Block 1: Low cadence torque -->
+    <SteadyState Duration="300" Power="0.75" Cadence="65">
+      <textevent timeoffset="0" message="LOW CADENCE! Five minutes grinding at 65 RPM."/>
+      <textevent timeoffset="120" message="Push through the full pedal stroke. Feel your muscles work."/>
+      <textevent timeoffset="240" message="One minute left at low cadence!"/>
+    </SteadyState>
+
+    <SteadyState Duration="120" Power="0.55" Cadence="90">
+      <textevent timeoffset="0" message="Recovery at normal cadence. Let the legs spin."/>
+    </SteadyState>
+
+    <!-- Block 2: High cadence spin -->
+    <SteadyState Duration="300" Power="0.70" Cadence="100">
+      <textevent timeoffset="0" message="HIGH CADENCE! Five minutes spinning at 100 RPM."/>
+      <textevent timeoffset="120" message="Smooth and fast. No bouncing in the saddle!"/>
+      <textevent timeoffset="240" message="One minute of fast legs left!"/>
+    </SteadyState>
+
+    <SteadyState Duration="120" Power="0.55" Cadence="85">
+      <textevent timeoffset="0" message="Back to normal. Feel the contrast?"/>
+    </SteadyState>
+
+    <!-- Block 3: Low cadence (harder) -->
+    <SteadyState Duration="300" Power="0.78" Cadence="65">
+      <textevent timeoffset="0" message="LOW CADENCE again! Slightly higher power."/>
+      <textevent timeoffset="120" message="Building real climbing strength here."/>
+      <textevent timeoffset="240" message="Last minute of torque work!"/>
+    </SteadyState>
+
+    <SteadyState Duration="120" Power="0.55" Cadence="90">
+      <textevent timeoffset="0" message="Spin it out. One more high cadence block."/>
+    </SteadyState>
+
+    <!-- Block 4: High cadence spin -->
+    <SteadyState Duration="300" Power="0.72" Cadence="100">
+      <textevent timeoffset="0" message="HIGH CADENCE! Last spinning block."/>
+      <textevent timeoffset="120" message="Quick legs, smooth stroke. Efficiency in action!"/>
+      <textevent timeoffset="240" message="One more minute of fast pedaling!"/>
+    </SteadyState>
+
+    <SteadyState Duration="180" Power="0.55" Cadence="85">
+      <textevent timeoffset="0" message="Back to normal cadence. Great contrast work!"/>
+    </SteadyState>
+
+    <SteadyState Duration="300" Power="0.65" Cadence="88">
+      <textevent timeoffset="0" message="Five minutes at endurance to close out."/>
+      <textevent timeoffset="180" message="Your pedaling just got more versatile."/>
+    </SteadyState>
+
+    <Cooldown Duration="420" PowerHigh="0.55" PowerLow="0.35" Cadence="80">
+      <textevent timeoffset="0" message="Cooling down from a versatile session."/>
+      <textevent timeoffset="180" message="Torque and cadence work improves overall efficiency."/>
+      <textevent timeoffset="360" message="Torque and Cadence complete!"/>
+    </Cooldown>
+  </workout>
+</workout_file>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workout_file>
+  <name>Tempo Touch</name>
+  <author>Open Ride</author>
+  <description>An endurance ride with brief tempo segments woven in. Just enough intensity to stimulate adaptation without compromising recovery.</description>
+  <sportType>bike</sportType>
+  <category>Endurance</category>
+  <subcategory>Aerobic Base</subcategory>
+  <tags>
+    <tag name="Endurance"/>
+    <tag name="Tempo"/>
+    <tag name="Zone 3"/>
+  </tags>
+  <workout>
+    <Warmup Duration="360" PowerLow="0.40" PowerHigh="0.58" Cadence="85">
+      <textevent timeoffset="10" message="Welcome to Tempo Touch. Today we mix endurance riding with brief forays into tempo territory."/>
+      <textevent timeoffset="120" message="Easy spinning to start. Let the muscles warm and the joints loosen up."/>
+      <textevent timeoffset="270" message="The tempo efforts today are short — just enough to add a stimulus without digging a recovery hole."/>
+    </Warmup>
+    <SteadyState Duration="480" Power="0.60" Cadence="88">
+      <textevent timeoffset="30" message="Zone 2 cruising at 60%. Settle in and find a comfortable, sustainable rhythm."/>
+      <textevent timeoffset="180" message="Use these endurance blocks to focus on your pedaling technique. Smooth circles, not stomping squares."/>
+      <textevent timeoffset="360" message="Tempo effort coming up. It will feel noticeably harder but still very manageable."/>
+    </SteadyState>
+    <SteadyState Duration="240" Power="0.74" Cadence="90">
+      <textevent timeoffset="10" message="First tempo touch — 74% FTP. This is zone 3. Breathing picks up but you can still talk in short phrases."/>
+      <textevent timeoffset="60" message="Tempo work teaches your body to clear lactate more efficiently at moderate intensities."/>
+      <textevent timeoffset="150" message="Hold the effort steady. Resist the urge to push harder — save that for another day."/>
+      <textevent timeoffset="210" message="Almost through. Prepare to drop back to endurance pace."/>
+    </SteadyState>
+    <SteadyState Duration="480" Power="0.60" Cadence="88">
+      <textevent timeoffset="30" message="Back to zone 2. Let the heart rate settle and the breathing calm down."/>
+      <textevent timeoffset="180" message="Notice how quickly you recover from that tempo effort. That recovery speed improves with aerobic fitness."/>
+      <textevent timeoffset="360" message="Enjoy the easier effort. Next tempo touch coming in about two minutes."/>
+    </SteadyState>
+    <SteadyState Duration="240" Power="0.76" Cadence="90">
+      <textevent timeoffset="10" message="Second tempo touch — 76% FTP. Slightly higher than the first. Stay relaxed and let the legs do the work."/>
+      <textevent timeoffset="60" message="Keep your core engaged to stabilize the pelvis. This creates a solid platform for power transfer."/>
+      <textevent timeoffset="150" message="Maintain your cadence around 90. Higher cadence at tempo shifts more load to your cardiovascular system."/>
+      <textevent timeoffset="210" message="Final seconds. Controlled effort all the way through."/>
+    </SteadyState>
+    <SteadyState Duration="480" Power="0.60" Cadence="88">
+      <textevent timeoffset="30" message="Zone 2 recovery. These endurance blocks between tempo efforts are where the aerobic adaptation happens."/>
+      <textevent timeoffset="180" message="Relax your hands and wiggle your fingers. Good blood flow to the extremities matters on longer rides."/>
+      <textevent timeoffset="360" message="One more tempo effort ahead, then we wind it down. You are doing great."/>
+    </SteadyState>
+    <SteadyState Duration="240" Power="0.74" Cadence="90">
+      <textevent timeoffset="10" message="Final tempo touch — 74% FTP. Same as the first. Prove you can finish as strong as you started."/>
+      <textevent timeoffset="60" message="Pacing discipline is a skill. Holding back early pays off with consistency late in a ride or race."/>
+      <textevent timeoffset="150" message="Stay smooth and composed. This is controlled effort, not an all-out push."/>
+      <textevent timeoffset="210" message="Last few seconds of tempo. Well executed!"/>
+    </SteadyState>
+    <SteadyState Duration="240" Power="0.55" Cadence="85">
+      <textevent timeoffset="10" message="Easing down to 55%. Let the body start transitioning toward recovery."/>
+      <textevent timeoffset="120" message="Three tempo touches done. That is enough stimulus to drive adaptation without excessive fatigue."/>
+    </SteadyState>
+    <Cooldown Duration="240" PowerHigh="0.50" PowerLow="0.35" Cadence="80">
+      <textevent timeoffset="10" message="Cooldown. Spin the legs easy and let the heart rate come all the way down."/>
+      <textevent timeoffset="120" message="Tempo Touch sessions bridge the gap between pure endurance and harder threshold work."/>
+      <textevent timeoffset="200" message="Nice work today. Hydrate, eat well, and let the body absorb the training. See you next time!"/>
+    </Cooldown>
+  </workout>
+</workout_file>

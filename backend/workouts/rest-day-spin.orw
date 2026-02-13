@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workout_file>
+  <name>Rest Day Spin</name>
+  <author>Open Ride</author>
+  <description>The shortest recovery option. Just enough pedaling to get blood moving without dipping into your recovery reserves.</description>
+  <sportType>bike</sportType>
+  <category>Recovery</category>
+  <subcategory>Active Recovery</subcategory>
+  <tags>
+    <tag name="Recovery"/>
+    <tag name="Short"/>
+    <tag name="Easy"/>
+  </tags>
+  <workout>
+    <Warmup Duration="180" PowerLow="0.30" PowerHigh="0.40" Cadence="78">
+      <textevent timeoffset="10" message="Welcome to the Rest Day Spin. Short, sweet, and genuinely easy."/>
+      <textevent timeoffset="60" message="Let your legs turn at whatever pace feels natural. No rushing."/>
+      <textevent timeoffset="140" message="Drop your shoulders and soften your grip. This is relaxation on a bike."/>
+    </Warmup>
+    <SteadyState Duration="360" Power="0.40" Cadence="82">
+      <textevent timeoffset="30" message="Easy cruising. This power level should feel like you could do it forever."/>
+      <textevent timeoffset="120" message="Rest days are not wasted days. Your body is rebuilding and strengthening right now."/>
+      <textevent timeoffset="240" message="Keep breathing deeply and steadily. Fill your lungs completely with each breath."/>
+      <textevent timeoffset="330" message="Relax your face. Unclench your jaw. Let your cheeks go soft."/>
+    </SteadyState>
+    <SteadyState Duration="300" Power="0.45" Cadence="85">
+      <textevent timeoffset="30" message="A small increase. Still very easy. You should feel no strain at all."/>
+      <textevent timeoffset="120" message="This is the peak power for today. It is barely above idle and that is perfect."/>
+      <textevent timeoffset="200" message="Think about something you enjoy. Let your mind wander. No stress."/>
+      <textevent timeoffset="270" message="Halfway through the ride already. See how quick recovery sessions can be."/>
+    </SteadyState>
+    <SteadyState Duration="300" Power="0.42" Cadence="85">
+      <textevent timeoffset="30" message="Easing down slightly. Coasting through the back half of this session."/>
+      <textevent timeoffset="150" message="Consistency in recovery is what separates good athletes from great ones."/>
+      <textevent timeoffset="260" message="Almost there. Just one more easy block and a short cooldown."/>
+    </SteadyState>
+    <SteadyState Duration="180" Power="0.38" Cadence="80">
+      <textevent timeoffset="10" message="Winding down now. The lightest effort of the session."/>
+      <textevent timeoffset="60" message="Let your pedaling become softer and softer. Almost weightless."/>
+      <textevent timeoffset="150" message="Preparing to cool down. You are nearly done."/>
+    </SteadyState>
+    <Cooldown Duration="180" PowerHigh="0.38" PowerLow="0.28" Cadence="75">
+      <textevent timeoffset="10" message="Final cooldown. Let everything wind down to a gentle stop."/>
+      <textevent timeoffset="60" message="Stretch your arms overhead briefly. Roll your wrists. Loosen up."/>
+      <textevent timeoffset="150" message="Done. A perfect rest day spin. Hydrate, refuel, and enjoy your recovery."/>
+    </Cooldown>
+  </workout>
+</workout_file>

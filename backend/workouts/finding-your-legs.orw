@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workout_file>
+  <name>Finding Your Legs</name>
+  <author>Open Ride</author>
+  <description>Build on your first ride with slightly longer efforts. Discover your natural rhythm and start understanding how different efforts feel.</description>
+  <sportType>bike</sportType>
+  <category>Fitness Kickstart</category>
+  <subcategory>Getting Started</subcategory>
+  <tags>
+    <tag name="Beginner"/>
+    <tag name="Foundation"/>
+    <tag name="Easy"/>
+  </tags>
+
+  <workout>
+    <Warmup Duration="300" PowerLow="0.35" PowerHigh="0.55" Cadence="82">
+      <textevent timeoffset="0" message="Finding Your Legs! Building on your first workout."/>
+      <textevent timeoffset="120" message="Today we explore slightly higher efforts."/>
+      <textevent timeoffset="240" message="Everything is still comfortable. Trust the process!"/>
+    </Warmup>
+
+    <SteadyState Duration="360" Power="0.55" Cadence="82">
+      <textevent timeoffset="0" message="Six minutes at a comfortable pace."/>
+      <textevent timeoffset="120" message="Find a cadence that feels natural to you."/>
+      <textevent timeoffset="240" message="Two minutes left. How are the legs feeling?"/>
+    </SteadyState>
+
+    <SteadyState Duration="120" Power="0.60" Cadence="85">
+      <textevent timeoffset="0" message="A small step up. You can handle this!"/>
+      <textevent timeoffset="60" message="One more minute at this effort."/>
+    </SteadyState>
+
+    <SteadyState Duration="180" Power="0.50" Cadence="80">
+      <textevent timeoffset="0" message="Back to easy. Recovery is your friend!"/>
+    </SteadyState>
+
+    <SteadyState Duration="360" Power="0.58" Cadence="85">
+      <textevent timeoffset="0" message="Six minutes at a slightly higher pace."/>
+      <textevent timeoffset="120" message="Your body is adapting already!"/>
+      <textevent timeoffset="240" message="Two minutes to go. You are doing wonderfully."/>
+    </SteadyState>
+
+    <SteadyState Duration="120" Power="0.65" Cadence="88">
+      <textevent timeoffset="0" message="Two minutes at a new level! This is progress!"/>
+      <textevent timeoffset="60" message="Breathing a bit harder? That means it is working!"/>
+    </SteadyState>
+
+    <SteadyState Duration="180" Power="0.50" Cadence="80">
+      <textevent timeoffset="0" message="Easy again. You explored a new level today!"/>
+    </SteadyState>
+
+    <SteadyState Duration="180" Power="0.55" Cadence="82">
+      <textevent timeoffset="0" message="Gentle riding to finish off."/>
+      <textevent timeoffset="120" message="You are finding your legs!"/>
+    </SteadyState>
+
+    <Cooldown Duration="300" PowerHigh="0.45" PowerLow="0.30" Cadence="78">
+      <textevent timeoffset="0" message="Cooling down. Another workout in the books!"/>
+      <textevent timeoffset="120" message="Each ride builds on the last. Keep coming back!"/>
+      <textevent timeoffset="240" message="Finding Your Legs complete!"/>
+    </Cooldown>
+  </workout>
+</workout_file>

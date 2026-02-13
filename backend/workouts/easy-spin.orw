@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workout_file>
+  <name>Easy Spin</name>
+  <author>Open Ride</author>
+  <description>A gentle spin to promote blood flow and recovery. Keep the effort truly easy and resist the urge to push harder.</description>
+  <sportType>bike</sportType>
+  <category>Recovery</category>
+  <subcategory>Active Recovery</subcategory>
+  <tags>
+    <tag name="Recovery"/>
+    <tag name="Easy"/>
+    <tag name="Zone 1"/>
+  </tags>
+  <workout>
+    <Warmup Duration="240" PowerLow="0.30" PowerHigh="0.42" Cadence="80">
+      <textevent timeoffset="10" message="Welcome to the Easy Spin. Today is all about recovery."/>
+      <textevent timeoffset="60" message="Keep your breathing relaxed and your shoulders loose."/>
+      <textevent timeoffset="150" message="Let the legs spin freely. No force, no pressure, just easy movement."/>
+    </Warmup>
+    <SteadyState Duration="600" Power="0.42" Cadence="85">
+      <textevent timeoffset="30" message="Settle in at an easy pace. This should feel almost too easy."/>
+      <textevent timeoffset="180" message="Recovery rides are where your body actually adapts and gets stronger. Respect the process."/>
+      <textevent timeoffset="360" message="Check in: Are you gripping the bars too tight? Relax your hands and jaw."/>
+      <textevent timeoffset="540" message="If you feel the urge to push harder, resist it. Easy means easy."/>
+    </SteadyState>
+    <SteadyState Duration="300" Power="0.45" Cadence="88">
+      <textevent timeoffset="30" message="A tiny bump in power here but it should still feel very comfortable."/>
+      <textevent timeoffset="120" message="Focus on smooth, round pedal strokes. Let your ankles stay relaxed."/>
+      <textevent timeoffset="240" message="Breathe deeply through your nose. If you cannot nose-breathe, you are going too hard."/>
+    </SteadyState>
+    <SteadyState Duration="480" Power="0.42" Cadence="85">
+      <textevent timeoffset="30" message="Back to our easy cruising power. Settle in and enjoy the ride."/>
+      <textevent timeoffset="180" message="Your muscles are getting fresh blood flow right now, clearing out yesterday's fatigue."/>
+      <textevent timeoffset="300" message="Drop your shoulders away from your ears. Unclench your jaw. Relax."/>
+      <textevent timeoffset="420" message="This is the kind of ride that makes your hard days possible. It matters."/>
+    </SteadyState>
+    <SteadyState Duration="240" Power="0.40" Cadence="82">
+      <textevent timeoffset="30" message="Easing down just a touch as we begin winding down."/>
+      <textevent timeoffset="90" message="Take a few deep breaths. In through the nose, out through the mouth."/>
+      <textevent timeoffset="180" message="Almost done. You should feel better now than when you started."/>
+    </SteadyState>
+    <Cooldown Duration="240" PowerHigh="0.40" PowerLow="0.30" Cadence="78">
+      <textevent timeoffset="10" message="Time to cool down. Let the power fade away naturally."/>
+      <textevent timeoffset="60" message="Shake out your hands, roll your neck gently. Release any remaining tension."/>
+      <textevent timeoffset="180" message="Great recovery session. Rest well and come back stronger next time."/>
+    </Cooldown>
+  </workout>
+</workout_file>

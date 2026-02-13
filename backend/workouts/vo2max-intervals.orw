@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workout_file>
+  <name>VO2Max Crusher</name>
+  <author>Open Ride</author>
+  <description>Push your aerobic ceiling with these VO2max intervals. Hard efforts at 105-120% FTP will expand your cardiovascular capacity. Not for the faint of heart!</description>
+  <sportType>bike</sportType>
+  <category>VO2Max</category>
+  <subcategory>High Intensity</subcategory>
+  <tags>
+    <tag name="VO2Max"/>
+    <tag name="Advanced"/>
+    <tag name="Intervals"/>
+  </tags>
+  
+  <workout>
+    <!-- Warmup with primers -->
+    <Warmup Duration="360" PowerLow="0.45" PowerHigh="0.65" Cadence="90">
+      <textevent timeoffset="0" message="VO2Max Crusher! This one is going to hurt - but you'll get faster!"/>
+      <textevent timeoffset="120" message="VO2max training expands your aerobic ceiling. Worth the suffering!"/>
+      <textevent timeoffset="240" message="Let's do some primers to wake up the legs."/>
+    </Warmup>
+    
+    <!-- Primers: 3x20sec pickups -->
+    <IntervalsT Repeat="3" OnDuration="20" OffDuration="40" OnPower="1.10" OffPower="0.55" Cadence="100" CadenceResting="85">
+      <textevent timeoffset="0" message="Quick pickup! Open up the legs."/>
+      <textevent timeoffset="20" message="Easy spin. Two more primers."/>
+    </IntervalsT>
+    
+    <!-- Rest before main set -->
+    <SteadyState Duration="180" Power="0.55" Cadence="85">
+      <textevent timeoffset="0" message="Three minutes easy. Prepare mentally for the main set."/>
+      <textevent timeoffset="120" message="Coming up: 5x3min at 105-110% FTP. Dig deep!"/>
+    </SteadyState>
+    
+    <!-- Main VO2max set: 5x3min -->
+    <SteadyState Duration="180" Power="1.05" Cadence="95">
+      <textevent timeoffset="0" message="Interval 1 of 5. Find your rhythm at high power!"/>
+      <textevent timeoffset="60" message="Breathe! Big exhales push out the CO2."/>
+      <textevent timeoffset="120" message="One minute left! You can do anything for 60 seconds!"/>
+    </SteadyState>
+    
+    <SteadyState Duration="180" Power="0.50" Cadence="80">
+      <textevent timeoffset="0" message="Recovery! Keep the legs spinning. Don't stop."/>
+      <textevent timeoffset="120" message="Next interval in 60 seconds."/>
+    </SteadyState>
+    
+    <SteadyState Duration="180" Power="1.08" Cadence="95">
+      <textevent timeoffset="0" message="Interval 2! Slightly higher power. Attack it!"/>
+      <textevent timeoffset="90" message="Halfway! This is where fitness is built!"/>
+      <textevent timeoffset="150" message="30 seconds! Empty the tank!"/>
+    </SteadyState>
+    
+    <SteadyState Duration="180" Power="0.50" Cadence="80">
+      <textevent timeoffset="0" message="Recover. You're doing incredible!"/>
+      <textevent timeoffset="120" message="Three more intervals. You've got this!"/>
+    </SteadyState>
+    
+    <SteadyState Duration="180" Power="1.10" Cadence="100">
+      <textevent timeoffset="0" message="Interval 3 - the middle one! Push through!"/>
+      <textevent timeoffset="60" message="Your lungs are burning but your body is adapting!"/>
+      <textevent timeoffset="120" message="Last minute! Mental strength time!"/>
+    </SteadyState>
+    
+    <SteadyState Duration="180" Power="0.50" Cadence="80">
+      <textevent timeoffset="0" message="You're past halfway! Incredible effort!"/>
+      <textevent timeoffset="120" message="Two more. Dig deeper than ever!"/>
+    </SteadyState>
+    
+    <SteadyState Duration="180" Power="1.10" Cadence="100">
+      <textevent timeoffset="0" message="Interval 4! Second to last - make it count!"/>
+      <textevent timeoffset="60" message="Pain is temporary, fitness is forever!"/>
+      <textevent timeoffset="150" message="30 more seconds of pure effort!"/>
+    </SteadyState>
+    
+    <SteadyState Duration="180" Power="0.50" Cadence="80">
+      <textevent timeoffset="0" message="Last recovery! One more interval to glory!"/>
+      <textevent timeoffset="120" message="Final interval coming. Leave NOTHING behind!"/>
+    </SteadyState>
+    
+    <SteadyState Duration="180" Power="1.15" Cadence="105">
+      <textevent timeoffset="0" message="FINAL INTERVAL! Everything you've got! 🔥"/>
+      <textevent timeoffset="60" message="Two minutes left! You are a MACHINE!"/>
+      <textevent timeoffset="120" message="LAST MINUTE! DIG DIG DIG!"/>
+      <textevent timeoffset="150" message="30 SECONDS! FINISH STRONG!"/>
+    </SteadyState>
+    
+    <!-- Cooldown -->
+    <Cooldown Duration="420" PowerHigh="0.55" PowerLow="0.35" Cadence="80">
+      <textevent timeoffset="0" message="YOU DID IT! Incredible work! Time to cool down."/>
+      <textevent timeoffset="120" message="Your VO2max just got a boost. Feel proud!"/>
+      <textevent timeoffset="300" message="Spin easy. Let your body begin recovery."/>
+      <textevent timeoffset="390" message="Workout complete! You crushed those intervals! 🏆"/>
+    </Cooldown>
+  </workout>
+</workout_file>
