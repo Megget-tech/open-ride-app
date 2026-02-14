@@ -117,7 +117,22 @@ export default function TopBar({
     <>
     <nav className="top-nav">
       <div className="nav-left">
-        <Link to="/" className="logo">🚴 Open Ride</Link>
+        <Link to="/" className="logo">
+          <svg className="logo-icon" width="28" height="28" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="16" cy="16" r="14" stroke="currentColor" strokeWidth="2.2"/>
+            <circle cx="16" cy="16" r="5" stroke="currentColor" strokeWidth="2"/>
+            <line x1="16" y1="2" x2="16" y2="8" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+            <line x1="16" y1="24" x2="16" y2="30" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+            <line x1="2" y1="16" x2="8" y2="16" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+            <line x1="24" y1="16" x2="30" y2="16" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+            <line x1="5.1" y1="5.1" x2="9.3" y2="9.3" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+            <line x1="22.7" y1="22.7" x2="26.9" y2="26.9" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+            <line x1="26.9" y1="5.1" x2="22.7" y2="9.3" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+            <line x1="9.3" y1="22.7" x2="5.1" y2="26.9" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+            <path d="M16 11 L19.5 16 L16 21 L12.5 16 Z" fill="currentColor" opacity="0.9"/>
+          </svg>
+          <span>Open Ride</span>
+        </Link>
         <div className="nav-tabs">
           <Link to="/" className={`nav-tab ${isActive('/') ? 'active' : ''}`}>
             <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">

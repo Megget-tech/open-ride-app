@@ -47,6 +47,15 @@
   --conn-tabs-bg: rgba(0, 0, 0, 0.2);
   --conn-tab-color: rgba(255, 255, 255, 0.55);
   --debug-bg: rgba(0, 0, 0, 0.3);
+  --card-bg: rgba(20, 20, 40, 0.8);
+  --card-border: rgba(255, 255, 255, 0.1);
+  --section-bg: rgba(255, 255, 255, 0.03);
+  --section-border: rgba(255, 255, 255, 0.07);
+  --inset-bg: rgba(0, 0, 0, 0.2);
+  --modal-bg: linear-gradient(180deg, #1a1a2e 0%, #0f0f1e 100%);
+  --page-gradient: linear-gradient(180deg, #0a0a1a 0%, #1a1a2e 100%);
+  --modal-overlay-bg: rgba(0, 0, 0, 0.8);
+  --toast-bg: rgba(20, 20, 40, 0.98);
 }
 
 [data-theme="light"] {
@@ -77,6 +86,15 @@
   --conn-tabs-bg: rgba(0, 0, 0, 0.04);
   --conn-tab-color: rgba(0, 30, 60, 0.55);
   --debug-bg: rgba(0, 0, 0, 0.05);
+  --card-bg: #ffffff;
+  --card-border: rgba(0, 30, 60, 0.1);
+  --section-bg: rgba(0, 0, 0, 0.02);
+  --section-border: rgba(0, 30, 60, 0.08);
+  --inset-bg: rgba(0, 0, 0, 0.04);
+  --modal-bg: linear-gradient(180deg, #f2f5f9 0%, #e4ecf5 100%);
+  --page-gradient: linear-gradient(180deg, #f2f5f9 0%, #e4ecf5 100%);
+  --modal-overlay-bg: rgba(0, 0, 0, 0.5);
+  --toast-bg: rgba(255, 255, 255, 0.98);
 }
 
 body {
@@ -139,6 +157,13 @@ h1, h2, h3, h4 {
   font-weight: 700;
   color: var(--primary-blue);
   text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.logo-icon {
+  flex-shrink: 0;
 }
 
 .nav-tabs {
@@ -232,7 +257,7 @@ h1, h2, h3, h4 {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  color: #fff;
+  color: var(--text-primary);
   text-decoration: none;
   font-size: 0.9rem;
   opacity: 0.8;
@@ -246,7 +271,7 @@ h1, h2, h3, h4 {
 .nav-title {
   font-size: 1.1rem;
   font-weight: 600;
-  color: #fff;
+  color: var(--text-primary);
 }
 
 /* Main Content */
@@ -278,29 +303,6 @@ h1, h2, h3, h4 {
   font-size: 1.1rem;
 }
 
-.free-ride-btn {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 1rem 1.5rem;
-  background: linear-gradient(135deg, #00d200, #00a000);
-  color: #fff;
-  text-decoration: none;
-  border-radius: 12px;
-  font-weight: 600;
-  font-size: 1rem;
-  transition: all 0.2s;
-  box-shadow: 0 4px 15px rgba(0, 210, 0, 0.3);
-}
-
-.free-ride-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(0, 210, 0, 0.4);
-}
-
-.free-ride-btn svg {
-  flex-shrink: 0;
-}
 
 /* Workout Filters */
 .workout-filters {
@@ -445,7 +447,7 @@ h1, h2, h3, h4 {
 .filter-category-chip.active {
   background: rgba(0, 153, 255, 0.15);
   border-color: var(--primary-blue);
-  color: #fff;
+  color: var(--text-primary);
 }
 
 .filter-category-name {
@@ -454,10 +456,10 @@ h1, h2, h3, h4 {
 
 .filter-category-count {
   font-size: 0.7rem;
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--overlay-lg);
   padding: 0.1rem 0.4rem;
   border-radius: 10px;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--muted-50);
   line-height: 1.2;
 }
 
@@ -513,7 +515,7 @@ h1, h2, h3, h4 {
 .filter-pill.active {
   background: rgba(0, 153, 255, 0.2);
   border-color: var(--primary-blue);
-  color: #fff;
+  color: var(--text-primary);
 }
 
 .filter-pill-count {
@@ -744,7 +746,7 @@ h1, h2, h3, h4 {
 
 .workout-tag {
   padding: 0.25rem 0.6rem;
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--overlay-lg);
   border-radius: 12px;
   font-size: 0.7rem;
   font-weight: 500;
@@ -757,7 +759,7 @@ h1, h2, h3, h4 {
 .start-workout-section {
   text-align: center;
   padding: 1.5rem 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid var(--border);
   margin-bottom: 1.5rem;
 }
 
@@ -785,7 +787,7 @@ h1, h2, h3, h4 {
 .start-hint {
   margin-top: 0.75rem;
   font-size: 0.85rem;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--muted-50);
 }
 
 /* Modal Styles */
@@ -796,7 +798,7 @@ h1, h2, h3, h4 {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.8);
+  background: var(--modal-overlay-bg);
   backdrop-filter: blur(4px);
   z-index: 1000;
   animation: fadeIn 0.2s;
@@ -839,7 +841,7 @@ h1, h2, h3, h4 {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid var(--border);
 }
 
 .modal-header h2 {
@@ -850,9 +852,9 @@ h1, h2, h3, h4 {
 }
 
 .back-button {
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--overlay-lg);
   border: none;
-  color: white;
+  color: var(--text-primary);
   width: 40px;
   height: 40px;
   border-radius: 50%;
@@ -864,7 +866,7 @@ h1, h2, h3, h4 {
 }
 
 .back-button:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: var(--overlay-xl);
   transform: scale(1.1);
 }
 
@@ -882,7 +884,7 @@ h1, h2, h3, h4 {
 }
 
 .status-chip {
-  background: rgba(0, 0, 0, 0.3);
+  background: var(--overlay-md);
   padding: 0.6rem 1rem;
   border-radius: 8px;
   display: flex;
@@ -892,7 +894,7 @@ h1, h2, h3, h4 {
 }
 
 .status-label {
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--text-secondary);
 }
 
 .status-value {
@@ -915,8 +917,8 @@ h1, h2, h3, h4 {
 
 .status-value.disconnected,
 .status-value.idle {
-  background: rgba(255, 255, 255, 0.1);
-  color: rgba(255, 255, 255, 0.7);
+  background: var(--overlay-lg);
+  color: var(--text-secondary);
 }
 
 .status-value.scanning {
@@ -925,7 +927,7 @@ h1, h2, h3, h4 {
 }
 
 .devices-found-section {
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--overlay-sm);
   border-radius: 12px;
   padding: 1.5rem;
 }
@@ -950,7 +952,7 @@ h1, h2, h3, h4 {
 .btn-text {
   background: none;
   border: none;
-  color: white;
+  color: var(--text-primary);
   font-weight: 600;
   cursor: pointer;
   text-decoration: underline;
@@ -1095,7 +1097,7 @@ h1, h2, h3, h4 {
 }
 
 .conn-type-tab.active {
-  color: #fff;
+  color: var(--text-primary);
   border-bottom-color: var(--primary-blue);
   background: rgba(0, 153, 255, 0.08);
 }
@@ -1115,7 +1117,7 @@ h1, h2, h3, h4 {
   border: 1px solid rgba(0, 153, 255, 0.25);
   border-radius: 8px;
   font-size: 0.875rem;
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--text-secondary);
   line-height: 1.45;
 }
 
@@ -1206,7 +1208,7 @@ h1, h2, h3, h4 {
   align-items: center;
   gap: 0.5rem;
   font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.85);
+  color: var(--text-primary);
 }
 
 .connected-device-info svg {
@@ -1517,7 +1519,7 @@ h1, h2, h3, h4 {
 }
 
 .history-item:hover {
-  border-color: rgba(255, 255, 255, 0.2);
+  border-color: var(--overlay-xl);
 }
 
 .history-item-left {
@@ -1553,7 +1555,7 @@ h1, h2, h3, h4 {
 .history-stat-value {
   font-size: 1.05rem;
   font-weight: 700;
-  color: #fff;
+  color: var(--text-primary);
   line-height: 1.2;
 }
 
@@ -1774,31 +1776,6 @@ h1, h2, h3, h4 {
   color: rgba(0, 0, 0, 0.5);
 }
 
-[data-theme="light"] .nav-back {
-  color: var(--text-primary);
-}
-
-[data-theme="light"] .nav-title {
-  color: var(--text-primary);
-}
-
-[data-theme="light"] .start-hint {
-  color: var(--muted-50);
-}
-
-[data-theme="light"] .btn-text {
-  color: var(--text-primary);
-}
-
-[data-theme="light"] .history-stat-value {
-  color: var(--text-primary);
-}
-
-[data-theme="light"] .filter-category-count {
-  background: rgba(0, 0, 0, 0.07);
-  color: var(--text-secondary);
-}
-
 [data-theme="light"] .device-status-btn {
   background: var(--overlay-sm);
   border-color: var(--border);
@@ -1807,4 +1784,43 @@ h1, h2, h3, h4 {
 
 [data-theme="light"] .device-status-btn:hover {
   background: var(--overlay-lg);
+}
+
+/* Connection modal light mode */
+[data-theme="light"] .modal-content {
+  background: linear-gradient(180deg, #ffffff 0%, #e4ecf5 100%);
+}
+
+[data-theme="light"] .modal-header h2 {
+  color: var(--text-primary);
+}
+
+[data-theme="light"] .device-item {
+  background: var(--surface-light);
+  color: var(--text-primary);
+  border-color: var(--border);
+}
+
+[data-theme="light"] .device-item:hover {
+  box-shadow: 0 4px 12px rgba(0, 30, 60, 0.1);
+}
+
+[data-theme="light"] .device-item.selected {
+  background: #e8f5e9;
+}
+
+[data-theme="light"] .device-name {
+  color: var(--text-primary);
+}
+
+[data-theme="light"] .device-meta {
+  color: var(--text-secondary);
+}
+
+[data-theme="light"] .section-header h3 {
+  color: var(--text-primary);
+}
+
+[data-theme="light"] .connection-badge {
+  color: var(--text-primary);
 }
