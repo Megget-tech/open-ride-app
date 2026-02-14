@@ -33,7 +33,7 @@
 }
 
 .ai-header-sub {
-  color: rgba(255, 255, 255, 0.55);
+  color: var(--text-secondary);
   font-size: 0.95rem;
   margin: 0;
 }
@@ -53,7 +53,7 @@
 .ai-no-key-banner {
   background: rgba(0, 212, 255, 0.08);
   border: 1px solid rgba(0, 212, 255, 0.25);
-  color: rgba(255, 255, 255, 0.85);
+  color: var(--text-primary);
 }
 
 .ai-no-key-banner svg {
@@ -90,10 +90,10 @@
 }
 
 .ai-section {
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--section-bg);
   border-radius: 14px;
   padding: 1.25rem 1.5rem;
-  border: 1px solid rgba(255, 255, 255, 0.07);
+  border: 1px solid var(--section-border);
 }
 
 .ai-section-title {
@@ -101,7 +101,7 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: rgba(255, 255, 255, 0.55);
+  color: var(--text-secondary);
   margin: 0 0 1rem;
 }
 
@@ -109,7 +109,7 @@
   font-weight: 400;
   text-transform: none;
   letter-spacing: 0;
-  color: rgba(255, 255, 255, 0.35);
+  color: var(--input-placeholder);
 }
 
 /* Duration grid */
@@ -122,9 +122,9 @@
 .ai-duration-btn {
   padding: 0.5rem 1.25rem;
   border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  background: rgba(255, 255, 255, 0.05);
-  color: rgba(255, 255, 255, 0.75);
+  border: 1px solid var(--chip-border);
+  background: var(--overlay-sm);
+  color: var(--chip-color);
   font-size: 0.9rem;
   font-weight: 500;
   cursor: pointer;
@@ -133,7 +133,7 @@
 
 .ai-duration-btn:hover {
   border-color: rgba(0, 212, 255, 0.5);
-  color: #fff;
+  color: var(--text-primary);
 }
 
 .ai-duration-btn.active {
@@ -152,8 +152,8 @@
 .ai-option-card {
   padding: 0.875rem 1rem;
   border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--card-border);
+  background: var(--overlay-xs);
   text-align: left;
   cursor: pointer;
   transition: all 0.15s ease;
@@ -172,7 +172,7 @@
 .ai-option-label {
   font-size: 0.9rem;
   font-weight: 600;
-  color: #fff;
+  color: var(--text-primary);
   margin-bottom: 0.25rem;
 }
 
@@ -182,7 +182,7 @@
 
 .ai-option-desc {
   font-size: 0.78rem;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--muted-50);
   line-height: 1.35;
 }
 
@@ -196,8 +196,8 @@
 .ai-intensity-btn {
   padding: 0.75rem 1rem;
   border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--card-border);
+  background: var(--overlay-xs);
   text-align: left;
   cursor: pointer;
   transition: all 0.15s ease;
@@ -215,7 +215,7 @@
 .ai-intensity-label {
   font-size: 0.9rem;
   font-weight: 600;
-  color: #fff;
+  color: var(--text-primary);
   margin-bottom: 0.2rem;
 }
 
@@ -225,7 +225,7 @@
 
 .ai-intensity-desc {
   font-size: 0.78rem;
-  color: rgba(255, 255, 255, 0.45);
+  color: var(--muted-45);
 }
 
 /* Fitness grid */
@@ -238,8 +238,8 @@
 .ai-fitness-btn {
   padding: 0.75rem 1rem;
   border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--card-border);
+  background: var(--overlay-xs);
   text-align: center;
   cursor: pointer;
   transition: all 0.15s ease;
@@ -257,7 +257,7 @@
 .ai-fitness-label {
   font-size: 0.9rem;
   font-weight: 600;
-  color: #fff;
+  color: var(--text-primary);
   margin-bottom: 0.2rem;
 }
 
@@ -267,16 +267,16 @@
 
 .ai-fitness-desc {
   font-size: 0.75rem;
-  color: rgba(255, 255, 255, 0.45);
+  color: var(--muted-45);
 }
 
 /* Notes textarea */
 .ai-notes-input {
   width: 100%;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
   border-radius: 8px;
-  color: #fff;
+  color: var(--text-primary);
   font-size: 0.9rem;
   padding: 0.75rem;
   resize: vertical;
@@ -291,13 +291,13 @@
 }
 
 .ai-notes-input::placeholder {
-  color: rgba(255, 255, 255, 0.3);
+  color: var(--input-placeholder);
 }
 
 .ai-notes-count {
   text-align: right;
   font-size: 0.75rem;
-  color: rgba(255, 255, 255, 0.3);
+  color: var(--input-placeholder);
   margin-top: 0.375rem;
 }
 
@@ -342,7 +342,7 @@
 
 .ai-key-hint {
   font-size: 0.85rem;
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--icon-muted);
   margin: 0;
 }
 
@@ -397,14 +397,14 @@
 .ai-loading-msg {
   font-size: 1.05rem;
   font-weight: 600;
-  color: #fff;
+  color: var(--text-primary);
   margin: 0;
   transition: opacity 0.4s ease;
 }
 
 .ai-loading-sub {
   font-size: 0.875rem;
-  color: rgba(255, 255, 255, 0.45);
+  color: var(--muted-45);
   margin: 0;
 }
 
@@ -416,9 +416,9 @@
 }
 
 .ai-preview-card {
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--overlay-xs);
   border-radius: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--card-border);
   overflow: hidden;
 }
 
@@ -428,7 +428,7 @@
   gap: 2px;
   height: 120px;
   padding: 1rem 1rem 0;
-  background: rgba(0, 0, 0, 0.2);
+  background: var(--inset-bg);
 }
 
 .ai-chart-bar {
@@ -451,7 +451,7 @@
 
 .ai-preview-category {
   font-size: 0.8rem;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--muted-50);
   text-transform: uppercase;
   letter-spacing: 0.06em;
 }
@@ -480,13 +480,13 @@
   align-items: center;
   gap: 0.375rem;
   font-size: 0.875rem;
-  color: rgba(255, 255, 255, 0.55);
+  color: var(--text-secondary);
   margin-bottom: 0.75rem;
 }
 
 .ai-preview-desc {
   font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-secondary);
   line-height: 1.5;
   margin: 0;
 }
@@ -515,14 +515,14 @@
 }
 
 .ai-btn-secondary {
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  color: rgba(255, 255, 255, 0.8);
+  background: var(--overlay-md);
+  border: 1px solid var(--chip-border);
+  color: var(--text-primary);
 }
 
 .ai-btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.12);
-  color: #fff;
+  background: var(--overlay-lg);
+  color: var(--text-primary);
 }
 
 .ai-btn-save {
@@ -563,7 +563,7 @@
   border-radius: 10px;
   padding: 0.875rem 1rem;
   font-size: 0.875rem;
-  color: rgba(255, 255, 255, 0.75);
+  color: var(--text-secondary);
   text-align: center;
 }
 

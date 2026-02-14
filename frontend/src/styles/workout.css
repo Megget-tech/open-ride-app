@@ -1,7 +1,7 @@
 /* Workout Page Styles */
 
 body.workout-page {
-  background: linear-gradient(180deg, #0a0a1a 0%, #1a1a2e 100%);
+  background: var(--page-gradient);
   min-height: 100vh;
   overflow-x: hidden;
 }
@@ -24,7 +24,7 @@ body.workout-page {
 .preview-content h1 {
   font-size: 2.5rem;
   margin-bottom: 1rem;
-  color: #fff;
+  color: var(--text-primary);
 }
 
 .workout-stats {
@@ -33,7 +33,7 @@ body.workout-page {
   gap: 2rem;
   margin: 2rem 0;
   padding: 1.5rem;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--overlay-sm);
   border-radius: 12px;
 }
 
@@ -44,7 +44,7 @@ body.workout-page {
 .stat-label {
   display: block;
   font-size: 0.85rem;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--muted-50);
   text-transform: uppercase;
   letter-spacing: 0.5px;
   margin-bottom: 0.5rem;
@@ -54,12 +54,12 @@ body.workout-page {
   display: block;
   font-size: 1.8rem;
   font-weight: 700;
-  color: #fff;
+  color: var(--text-primary);
 }
 
 .hint-text {
   margin-top: 1rem;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--muted-50);
   font-size: 0.9rem;
 }
 
@@ -79,10 +79,10 @@ body.workout-page {
 .workout-graph-container {
   position: relative;
   height: 200px;
-  background: rgba(20, 20, 40, 0.8);
+  background: var(--card-bg);
   border-radius: 12px;
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--card-border);
 }
 
 #workout-graph {
@@ -107,9 +107,9 @@ body.workout-page {
   justify-content: space-between;
   align-items: center;
   padding: 1rem 1.5rem;
-  background: rgba(20, 20, 40, 0.6);
+  background: var(--card-bg);
   border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--card-border);
 }
 
 .segment-current {
@@ -121,11 +121,11 @@ body.workout-page {
 .segment-timing {
   font-size: 1.25rem;
   font-weight: 600;
-  color: #fff;
+  color: var(--text-primary);
 }
 
 .segment-separator {
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--muted-45);
   margin: 0 0.25rem;
 }
 
@@ -134,7 +134,7 @@ body.workout-page {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--overlay-sm);
   border-radius: 8px;
   padding: 0.25rem 0.5rem;
 }
@@ -147,8 +147,8 @@ body.workout-page {
   height: 32px;
   border: none;
   border-radius: 6px;
-  background: rgba(255, 255, 255, 0.1);
-  color: rgba(255, 255, 255, 0.7);
+  background: var(--overlay-lg);
+  color: var(--text-secondary);
   cursor: pointer;
   transition: all 0.15s;
 }
@@ -173,7 +173,7 @@ body.workout-page {
 .effort-label {
   font-size: 0.6rem;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--icon-muted);
   text-transform: uppercase;
   letter-spacing: 0.05em;
   line-height: 1;
@@ -182,7 +182,7 @@ body.workout-page {
 .effort-value {
   font-size: 1.1rem;
   font-weight: 700;
-  color: #fff;
+  color: var(--text-primary);
   line-height: 1.2;
 }
 
@@ -203,10 +203,10 @@ body.workout-page {
 }
 
 .metric-card {
-  background: rgba(20, 20, 40, 0.8);
+  background: var(--card-bg);
   border-radius: 12px;
   padding: 1.25rem;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--card-border);
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
@@ -221,7 +221,7 @@ body.workout-page {
 .metric-label {
   font-size: 0.75rem;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--muted-50);
   letter-spacing: 0.05em;
   text-transform: uppercase;
 }
@@ -229,7 +229,7 @@ body.workout-page {
 .metric-value {
   font-size: 2.5rem;
   font-weight: 700;
-  color: #fff;
+  color: var(--text-primary);
   line-height: 1;
 }
 
@@ -241,13 +241,13 @@ body.workout-page {
 .metric-unit {
   font-size: 0.9rem;
   font-weight: 500;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--muted-50);
   margin-left: 0.25rem;
 }
 
 .metric-target, .metric-secondary {
   font-size: 0.85rem;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--muted-50);
 }
 
 .metric-zone {
@@ -278,12 +278,12 @@ body.workout-page {
 }
 
 .control-btn.secondary {
-  background: rgba(255, 255, 255, 0.1);
-  color: #fff;
+  background: var(--overlay-lg);
+  color: var(--text-primary);
 }
 
 .control-btn.secondary:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: var(--overlay-xl);
 }
 
 .control-btn.danger {
@@ -302,8 +302,8 @@ body.workout-page {
   top: 60px;
   bottom: 0;
   width: 280px;
-  background: rgba(15, 15, 30, 0.95);
-  border-left: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--activity-nav-bg);
+  border-left: 1px solid var(--border);
   padding: 1.5rem;
   overflow-y: auto;
 }
@@ -311,7 +311,7 @@ body.workout-page {
 .upcoming-segments h3 {
   font-size: 0.85rem;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--muted-50);
   text-transform: uppercase;
   letter-spacing: 0.05em;
   margin-bottom: 1rem;
@@ -324,10 +324,10 @@ body.workout-page {
 }
 
 .upcoming-item {
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--overlay-sm);
   border-radius: 8px;
   padding: 0.75rem;
-  border-left: 3px solid rgba(255, 255, 255, 0.2);
+  border-left: 3px solid var(--overlay-xl);
   transition: all 0.2s;
 }
 
@@ -349,13 +349,13 @@ body.workout-page {
 .upcoming-name {
   font-size: 0.9rem;
   font-weight: 600;
-  color: #fff;
+  color: var(--text-primary);
   margin-bottom: 0.25rem;
 }
 
 .upcoming-details {
   font-size: 0.8rem;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--muted-50);
   display: flex;
   gap: 1rem;
 }
@@ -405,7 +405,7 @@ body.workout-page {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.9);
+  background: var(--modal-overlay-bg);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -422,7 +422,7 @@ body.workout-page {
 
 .countdown-text {
   font-size: 1.5rem;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--text-secondary);
   margin-top: 1rem;
 }
 
@@ -433,7 +433,7 @@ body.workout-page {
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(135deg, rgba(10, 10, 30, 0.98), rgba(20, 20, 50, 0.98));
+  background: var(--modal-overlay-bg);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -473,13 +473,13 @@ body.workout-page {
 .complete-title {
   font-size: 2rem;
   font-weight: 700;
-  color: #fff;
+  color: var(--text-primary);
   margin-bottom: 0.5rem;
 }
 
 .complete-workout-name {
   font-size: 1.1rem;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-secondary);
 }
 
 .complete-stats {
@@ -487,7 +487,7 @@ body.workout-page {
   grid-template-columns: repeat(3, 1fr);
   gap: 1rem;
   margin: 2rem 0;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--overlay-sm);
   border-radius: 16px;
   padding: 1.5rem;
 }
@@ -506,19 +506,19 @@ body.workout-page {
 .complete-stat-value {
   font-size: 1.8rem;
   font-weight: 700;
-  color: #fff;
+  color: var(--text-primary);
 }
 
 .complete-stat-value .stat-unit {
   font-size: 0.9rem;
   font-weight: 400;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--muted-50);
   margin-left: 2px;
 }
 
 .complete-stat-label {
   font-size: 0.8rem;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--muted-50);
   margin-top: 0.25rem;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -530,7 +530,7 @@ body.workout-page {
   gap: 2rem;
   margin-bottom: 2rem;
   padding: 1rem;
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--overlay-xs);
   border-radius: 8px;
 }
 
@@ -540,11 +540,11 @@ body.workout-page {
 }
 
 .secondary-label {
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--muted-50);
 }
 
 .secondary-value {
-  color: #fff;
+  color: var(--text-primary);
   font-weight: 600;
 }
 
@@ -575,12 +575,12 @@ body.workout-page {
 }
 
 .complete-btn.secondary {
-  background: rgba(255, 255, 255, 0.1);
-  color: #fff;
+  background: var(--overlay-lg);
+  color: var(--text-primary);
 }
 
 .complete-btn.secondary:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: var(--overlay-xl);
 }
 
 /* In-Workout Settings Panel */
@@ -608,8 +608,8 @@ body.workout-page {
 
 .workout-settings-panel {
   position: relative;
-  background: linear-gradient(180deg, #1a1a35 0%, #0f0f25 100%);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: var(--modal-bg);
+  border: 1px solid var(--border);
   border-radius: 16px;
   width: 360px;
   max-width: 90vw;
@@ -627,17 +627,17 @@ body.workout-page {
   justify-content: space-between;
   align-items: center;
   padding: 1.25rem 1.5rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid var(--border);
 }
 
 .settings-panel-header h3 {
   font-size: 1.1rem;
   font-weight: 700;
-  color: #fff;
+  color: var(--text-primary);
 }
 
 .settings-panel-close {
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--overlay-lg);
   border: none;
   border-radius: 6px;
   width: 32px;
@@ -645,14 +645,14 @@ body.workout-page {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--text-secondary);
   cursor: pointer;
   transition: all 0.15s;
 }
 
 .settings-panel-close:hover {
-  background: rgba(255, 255, 255, 0.2);
-  color: #fff;
+  background: var(--overlay-xl);
+  color: var(--text-primary);
 }
 
 .settings-panel-body {
@@ -671,7 +671,7 @@ body.workout-page {
 .settings-panel-row label {
   font-size: 0.9rem;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--text-primary);
 }
 
 .settings-panel-input {
@@ -683,10 +683,10 @@ body.workout-page {
 .settings-panel-input input {
   width: 80px;
   padding: 0.5rem 0.6rem;
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  border: 1px solid var(--input-border);
   border-radius: 6px;
-  background: rgba(255, 255, 255, 0.06);
-  color: #fff;
+  background: var(--input-bg);
+  color: var(--text-primary);
   font-size: 0.95rem;
   font-weight: 600;
   text-align: right;
@@ -699,13 +699,13 @@ body.workout-page {
 
 .settings-panel-input span {
   font-size: 0.8rem;
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--icon-muted);
   min-width: 28px;
 }
 
 .settings-panel-hint {
   font-size: 0.78rem;
-  color: rgba(255, 255, 255, 0.35);
+  color: var(--muted-45);
   line-height: 1.4;
   margin-top: 0.25rem;
 }
@@ -714,7 +714,7 @@ body.workout-page {
   display: flex;
   gap: 0.75rem;
   padding: 1rem 1.5rem 1.25rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid var(--border);
 }
 
 .settings-panel-actions .control-btn {
@@ -724,7 +724,7 @@ body.workout-page {
 
 .control-btn.primary {
   background: linear-gradient(135deg, #ff6b00, #ff8c00);
-  color: #fff;
+  color: white;
 }
 
 .control-btn.primary:hover {

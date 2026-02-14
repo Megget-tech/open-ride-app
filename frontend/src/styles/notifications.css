@@ -5,14 +5,14 @@
   right: 20px;
   min-width: 300px;
   max-width: 500px;
-  background: rgba(20, 20, 40, 0.98);
+  background: var(--toast-bg);
   border-radius: 12px;
   padding: 1rem 1.25rem;
   display: flex;
   align-items: center;
   gap: 1rem;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--border);
   z-index: 10000;
   opacity: 0;
   transform: translateX(400px);
@@ -37,7 +37,7 @@
 }
 
 .notification-message {
-  color: #fff;
+  color: var(--text-primary);
   font-size: 0.95rem;
   line-height: 1.5;
   word-wrap: break-word;
@@ -46,7 +46,7 @@
 .notification-close {
   background: none;
   border: none;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--muted-50);
   font-size: 1.25rem;
   cursor: pointer;
   padding: 0;
@@ -61,8 +61,8 @@
 }
 
 .notification-close:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: #fff;
+  background: var(--overlay-lg);
+  color: var(--text-primary);
 }
 
 /* Notification types */
@@ -112,19 +112,19 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.7);
+  background: var(--modal-overlay-bg);
   backdrop-filter: blur(4px);
 }
 
 .notification-modal-content {
   position: relative;
-  background: linear-gradient(180deg, #1a1a2e 0%, #0f0f1e 100%);
+  background: var(--modal-bg);
   border-radius: 16px;
   padding: 2rem;
   max-width: 400px;
   width: 90%;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--border);
   transform: scale(0.9);
   opacity: 0;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -137,7 +137,7 @@
 }
 
 .notification-modal-message {
-  color: #fff;
+  color: var(--text-primary);
   font-size: 1.1rem;
   line-height: 1.6;
   text-align: center;
@@ -173,13 +173,13 @@
 }
 
 .notification-btn-secondary {
-  background: rgba(255, 255, 255, 0.1);
-  color: #fff;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: var(--overlay-lg);
+  color: var(--text-primary);
+  border: 1px solid var(--overlay-xl);
 }
 
 .notification-btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: var(--overlay-xl);
   transform: translateY(-1px);
 }
 
