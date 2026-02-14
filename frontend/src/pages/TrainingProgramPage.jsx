@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import TopBar from '../components/TopBar';
 import DeviceModal from '../components/DeviceModal';
-import { loadCustomWorkouts } from '../services/dataManager';
+import { loadCachedWorkouts, loadCustomWorkouts, saveCachedWorkouts } from '../services/dataManager';
 import '../styles/training.css';
 
 const DAYS = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
@@ -87,8 +87,10 @@ export default function TrainingProgramPage() {
   const fetchWorkouts = async () => {
     try {
       const response = await fetch(`${apiBaseUrl}/api/workouts`);
+      if (!response.ok) throw new Error(`API error ${response.status}`);
       const data = await response.json();
       const backendWorkouts = data.workouts || [];
+      saveCachedWorkouts(backendWorkouts);
       const customWorkouts = loadCustomWorkouts();
       // Merge: backend first, then custom (dedup by id just in case)
       const backendIds = new Set(backendWorkouts.map(w => w.id));
@@ -98,9 +100,14 @@ export default function TrainingProgramPage() {
       ];
       setAllWorkouts(merged);
     } catch (error) {
-      console.error('Failed to fetch workouts:', error);
-      // Still show custom workouts even if backend is unreachable
-      setAllWorkouts(loadCustomWorkouts());
+      const cached = loadCachedWorkouts();
+      const customWorkouts = loadCustomWorkouts();
+      const backendIds = new Set(cached.map(w => w.id));
+      const merged = [
+        ...cached,
+        ...customWorkouts.filter(w => !backendIds.has(w.id)),
+      ];
+      setAllWorkouts(merged);
     }
   };
 
@@ -126,7 +133,6 @@ export default function TrainingProgramPage() {
           category: workout.category || '',
           subcategory: workout.subcategory || '',
           chartProfile: workout.chartProfile || [],
-          estimatedTSS: workout.estimatedTSS || null,
         }
       ];
       return updated;
@@ -170,16 +176,14 @@ export default function TrainingProgramPage() {
 
   const weeklyStats = useMemo(() => {
     let totalDuration = 0;
-    let totalTSS = 0;
     let workoutCount = 0;
     DAYS.forEach(d => {
       (program[d] || []).forEach(w => {
         totalDuration += w.duration || 0;
-        totalTSS += w.estimatedTSS || 0;
         workoutCount++;
       });
     });
-    return { totalDuration, totalTSS, workoutCount };
+    return { totalDuration, workoutCount };
   }, [program]);
 
   // Drag & Drop state
@@ -238,12 +242,6 @@ export default function TrainingProgramPage() {
                     <span className="tp-stat-value">{formatDuration(weeklyStats.totalDuration)}</span>
                     <span className="tp-stat-label">Total Time</span>
                   </div>
-                  {weeklyStats.totalTSS > 0 && (
-                    <div className="tp-stat">
-                      <span className="tp-stat-value">{weeklyStats.totalTSS}</span>
-                      <span className="tp-stat-label">TSS</span>
-                    </div>
-                  )}
                 </div>
                 <button className="tp-clear-all-btn" onClick={clearAllDays}>
                   Clear All
@@ -286,9 +284,6 @@ export default function TrainingProgramPage() {
                             </svg>
                             {formatDuration(workout.duration)}
                           </span>
-                          {workout.estimatedTSS && (
-                            <span className="tp-today-tss">TSS {workout.estimatedTSS}</span>
-                          )}
                         </div>
                         <h2 className="tp-today-name">{workout.name}</h2>
                         <Link to={`/workout/${workout.id}`} className="tp-start-btn">
@@ -383,7 +378,6 @@ export default function TrainingProgramPage() {
                             <div className="tp-workout-card-name">{workout.name}</div>
                             <div className="tp-workout-card-meta">
                               <span>{formatDuration(workout.duration)}</span>
-                              {workout.estimatedTSS && <span>TSS {workout.estimatedTSS}</span>}
                             </div>
                           </div>
                           <div className="tp-workout-card-actions">
@@ -494,7 +488,6 @@ export default function TrainingProgramPage() {
                       <span className="tp-picker-item-name">{workout.name}</span>
                       <span className="tp-picker-item-meta">
                         {formatDuration(workout.totalDuration)}
-                        {workout.estimatedTSS ? ` · TSS ${workout.estimatedTSS}` : ''}
                       </span>
                     </div>
                     <div className="tp-picker-item-add">
@@ -566,7 +559,6 @@ function MobileDayView({ day, dayLabel, workouts, isToday, onAdd, onRemove, onCl
                     <span className="tp-mobile-workout-name">{workout.name}</span>
                     <span className="tp-mobile-workout-meta">
                       {formatDuration(workout.duration)}
-                      {workout.estimatedTSS ? ` · TSS ${workout.estimatedTSS}` : ''}
                     </span>
                   </div>
                   <div className="tp-mobile-workout-actions">

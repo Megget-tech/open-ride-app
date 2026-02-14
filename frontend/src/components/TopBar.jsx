@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAnt } from '../contexts/AntContext';
+import logoSvg from '../assets/open-ride-logo.svg';
 
 export default function TopBar({
   variant = 'main',
@@ -11,6 +12,7 @@ export default function TopBar({
 }) {
   const location = useLocation();
   const { status, connectedDevice, connectionType } = useAnt();
+  const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || '';
   const [showEmulator, setShowEmulator] = useState(false);
   const [theme, setTheme] = useState(() => {
     return localStorage.getItem('openride_theme') || 'dark';
@@ -29,7 +31,9 @@ export default function TopBar({
 
     const loadEmulator = async () => {
       try {
-        const response = await fetch('/api/status');
+        if (!navigator.onLine) throw new Error('Offline');
+        const response = await fetch(`${apiBaseUrl}/api/status`);
+        if (!response.ok) throw new Error(`Status ${response.status}`);
         const data = await response.json();
         if (isActive) setShowEmulator(Boolean(data.emulator));
       } catch (error) {
@@ -116,22 +120,10 @@ export default function TopBar({
   return (
     <>
     <nav className="top-nav">
+      <div className="top-nav-inner">
       <div className="nav-left">
-        <Link to="/" className="logo">
-          <svg className="logo-icon" width="28" height="28" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="16" cy="16" r="14" stroke="currentColor" strokeWidth="2.2"/>
-            <circle cx="16" cy="16" r="5" stroke="currentColor" strokeWidth="2"/>
-            <line x1="16" y1="2" x2="16" y2="8" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-            <line x1="16" y1="24" x2="16" y2="30" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-            <line x1="2" y1="16" x2="8" y2="16" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-            <line x1="24" y1="16" x2="30" y2="16" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-            <line x1="5.1" y1="5.1" x2="9.3" y2="9.3" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-            <line x1="22.7" y1="22.7" x2="26.9" y2="26.9" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-            <line x1="26.9" y1="5.1" x2="22.7" y2="9.3" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-            <line x1="9.3" y1="22.7" x2="5.1" y2="26.9" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-            <path d="M16 11 L19.5 16 L16 21 L12.5 16 Z" fill="currentColor" opacity="0.9"/>
-          </svg>
-          <span>Open Ride</span>
+        <Link to="/" className="logo" aria-label="Open Ride" title="Open Ride">
+          <img className="logo-image" src={logoSvg} alt="" />
         </Link>
         <div className="nav-tabs">
           <Link to="/" className={`nav-tab ${isActive('/') ? 'active' : ''}`}>
@@ -189,6 +181,7 @@ export default function TopBar({
             <span>{connectionText}</span>
           </button>
         )}
+      </div>
       </div>
     </nav>
 

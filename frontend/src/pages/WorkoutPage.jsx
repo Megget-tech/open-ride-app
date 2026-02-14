@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import TopBar from '../components/TopBar';
 import DeviceModal from '../components/DeviceModal';
 import { useAnt } from '../contexts/AntContext';
-import { loadCustomWorkouts } from '../services/dataManager';
+import { loadCachedWorkout, loadCustomWorkouts, saveCachedWorkout } from '../services/dataManager';
 import '../styles/workout.css';
 import '../styles/notifications.css';
 
@@ -87,6 +87,7 @@ export default function WorkoutPage() {
   const [showComplete, setShowComplete] = useState(false);
   const [completeStats, setCompleteStats] = useState(null);
   const [hasEnded, setHasEnded] = useState(false);
+  const [loadError, setLoadError] = useState(null);
   const [showSettings, setShowSettings] = useState(false);
   const [settingsForm, setSettingsForm] = useState(() => {
     try {
@@ -205,32 +206,47 @@ export default function WorkoutPage() {
     return () => document.removeEventListener('keydown', handleEsc);
   }, [showEndConfirm]);
 
-  const fetchWorkout = async (ftpValue) => {
-    try {
-      const response = await fetch(`${apiBaseUrl}/api/workouts/${id}`);
+  const applyWorkoutData = (data, ftpValue) => {
+    if (!data || !Array.isArray(data.elements)) {
+      setLoadError('Workout data is unavailable.');
+      return;
+    }
+    setWorkout(data);
+    workoutElementsRef.current = data.elements;
 
-      let data;
-      if (response.status === 404) {
-        // Custom workout — load from localStorage
-        const custom = loadCustomWorkouts().find(w => w.id === id);
-        if (custom) {
-          data = custom;
-        } else {
-          console.error('Workout not found in backend or localStorage:', id);
-          return;
-        }
-      } else {
-        data = await response.json();
+    // Build execution plan using the FTP value passed directly
+    const plan = buildExecutionPlan(data.elements, ftpValue);
+    setExecutionPlan(plan);
+  };
+
+  const fetchWorkout = async (ftpValue) => {
+    setLoadError(null);
+    setWorkout(null);
+    setExecutionPlan([]);
+    try {
+      const custom = loadCustomWorkouts().find(w => w.id === id);
+      if (custom) {
+        applyWorkoutData(custom, ftpValue);
+        return;
       }
 
-      setWorkout(data);
-      workoutElementsRef.current = data.elements;
+      const response = await fetch(`${apiBaseUrl}/api/workouts/${id}`);
+      if (response.status === 404) {
+        setLoadError('Workout not found.');
+        return;
+      }
+      if (!response.ok) throw new Error(`API error ${response.status}`);
 
-      // Build execution plan using the FTP value passed directly
-      const plan = buildExecutionPlan(data.elements, ftpValue);
-      setExecutionPlan(plan);
+      const data = await response.json();
+      saveCachedWorkout(data);
+      applyWorkoutData(data, ftpValue);
     } catch (error) {
-      console.error('Failed to fetch workout:', error);
+      const cached = loadCachedWorkout(id);
+      if (cached) {
+        applyWorkoutData(cached, ftpValue);
+        return;
+      }
+      setLoadError('Workout library is offline. You can still use My Workouts or try again later.');
     }
   };
 
@@ -500,6 +516,22 @@ export default function WorkoutPage() {
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
+  if (loadError) {
+    return (
+      <div>
+        <TopBar onDeviceScanClick={() => setIsDeviceModalOpen(true)} />
+        <div className="workout-error">
+          <h2>Workout unavailable</h2>
+          <p>{loadError}</p>
+          <button className="btn btn-secondary" onClick={() => navigate('/')}>
+            Back to Home
+          </button>
+        </div>
+        <DeviceModal isOpen={isDeviceModalOpen} onClose={() => setIsDeviceModalOpen(false)} />
+      </div>
+    );
+  }
+
   if (!workout || !executionPlan.length) {
     return (
       <div>
@@ -515,6 +547,52 @@ export default function WorkoutPage() {
   const remainingTime = totalDuration - elapsedSeconds;
   const upcomingSegments = executionPlan.slice(currentSegmentIndex, currentSegmentIndex + 6);
   const showPreview = !isRunning && !showComplete && countdownValue === null;
+  const targetPower = Math.max(0, applyBias(currentSegment.targetPower || 0));
+  const currentPower = Math.round(telemetry.power || 0);
+  const targetCadence = Math.max(0, Math.round(currentSegment.targetCadence || 0));
+  const currentCadence = Math.round(telemetry.cadence || 0);
+
+  const buildGaugeState = ({ current, target, tolerancePct, minTolerance, underText, overText }) => {
+    if (!target) {
+      return {
+        status: 'free',
+        statusText: 'FREE RIDE',
+        gaugePosition: 50,
+        okWidth: 0,
+      };
+    }
+    const tolerance = Math.max(minTolerance, Math.round(target * tolerancePct));
+    const delta = current - target;
+    const isOn = Math.abs(delta) <= tolerance;
+    const status = isOn ? 'on' : (delta > 0 ? 'over' : 'under');
+    const statusText = isOn ? 'ON TARGET' : (delta > 0 ? overText : underText);
+    const ratio = current / target;
+    const clampedRatio = Math.max(0, Math.min(2, ratio));
+    const gaugePosition = (clampedRatio / 2) * 100;
+    const okWidth = Math.min(32, Math.max(12, (tolerance / target) * 280));
+    return { status, statusText, gaugePosition, okWidth };
+  };
+
+  const powerGauge = buildGaugeState({
+    current: currentPower,
+    target: targetPower,
+    tolerancePct: 0.03,
+    minTolerance: 2,
+    underText: 'MORE POWER',
+    overText: 'LESS POWER',
+  });
+
+  const cadenceGauge = buildGaugeState({
+    current: currentCadence,
+    target: targetCadence,
+    tolerancePct: 0.04,
+    minTolerance: 3,
+    underText: 'SPIN FASTER',
+    overText: 'SPIN SLOWER',
+  });
+
+  const powerCardClass = `metric-card gauge-card status-${powerGauge.status}`;
+  const cadenceCardClass = `metric-card gauge-card status-${cadenceGauge.status}`;
 
   const getZoneClass = (targetPower) => {
     if (!targetPower || !ftp) return 2;
@@ -547,12 +625,6 @@ export default function WorkoutPage() {
                 <span className="stat-label">Duration</span>
                 <span className="stat-value">{formatTime(totalDuration)}</span>
               </div>
-              {workout.estimatedTSS && (
-                <div className="stat-item">
-                  <span className="stat-label">TSS</span>
-                  <span className="stat-value">{workout.estimatedTSS}</span>
-                </div>
-              )}
               <div className="stat-item">
                 <span className="stat-label">Segments</span>
                 <span className="stat-value">{executionPlan.length}</span>
@@ -619,31 +691,58 @@ export default function WorkoutPage() {
         </div>
 
         <div className="workout-metrics">
-          <div className="metric-card power">
-            <div className="metric-label">POWER</div>
-            <div className="metric-value">
-              <span>{Math.round(telemetry.power)}</span>
-              <span className="metric-unit">W</span>
+          <div className="metrics-top">
+            <div className={powerCardClass} style={{ '--gauge-position': `${powerGauge.gaugePosition}%`, '--ok-width': `${powerGauge.okWidth}%` }}>
+              <div className="gauge-header">
+                <div className="metric-label">POWER</div>
+                <div className="gauge-status">{powerGauge.statusText}</div>
+              </div>
+              <div className="gauge-body">
+                <div className="gauge-value">
+                  {currentPower}
+                  <span>W</span>
+                </div>
+              </div>
+              <div className="gauge-line" aria-hidden="true">
+                <div className="gauge-track"></div>
+                <div className="gauge-ok"></div>
+                <div className="gauge-needle"></div>
+              </div>
+              <div className="gauge-footer">
+                <span className="gauge-target">
+                  Target <strong>{targetPower || '--'}</strong>W
+                  {intensityBias !== 100 && (
+                    <span className="metric-bias"> ({intensityBias}%)</span>
+                  )}
+                </span>
+              </div>
             </div>
-            <div className="metric-target">
-              <span>Target:</span> {applyBias(currentSegment.targetPower)}W
-              {intensityBias !== 100 && (
-                <span className="metric-bias"> ({intensityBias}%)</span>
-              )}
+
+            <div className={cadenceCardClass} style={{ '--gauge-position': `${cadenceGauge.gaugePosition}%`, '--ok-width': `${cadenceGauge.okWidth}%` }}>
+              <div className="gauge-header">
+                <div className="metric-label">CADENCE</div>
+                <div className="gauge-status">{cadenceGauge.statusText}</div>
+              </div>
+              <div className="gauge-body">
+                <div className="gauge-value">
+                  {currentCadence}
+                  <span>rpm</span>
+                </div>
+              </div>
+              <div className="gauge-line" aria-hidden="true">
+                <div className="gauge-track"></div>
+                <div className="gauge-ok"></div>
+                <div className="gauge-needle"></div>
+              </div>
+              <div className="gauge-footer">
+                <span className="gauge-target">
+                  Target <strong>{targetCadence || '--'}</strong> rpm
+                </span>
+              </div>
             </div>
           </div>
 
-          <div className="metric-card cadence">
-            <div className="metric-label">CADENCE</div>
-            <div className="metric-value">
-              <span>{Math.round(telemetry.cadence)}</span>
-              <span className="metric-unit">rpm</span>
-            </div>
-            <div className="metric-target">
-              <span>Target:</span> {currentSegment.targetCadence} rpm
-            </div>
-          </div>
-
+          <div className="metrics-bottom">
           <div className="metric-card time">
             <div className="metric-label">TIME</div>
             <div className="metric-value">{formatTime(elapsedSeconds)}</div>
@@ -658,7 +757,6 @@ export default function WorkoutPage() {
               <span>{telemetry.heartRate || '--'}</span>
               <span className="metric-unit">bpm</span>
             </div>
-            <div className="metric-zone">--</div>
           </div>
 
           <div className="metric-card speed">
@@ -675,6 +773,7 @@ export default function WorkoutPage() {
               <span>{(telemetry.distance / 1000).toFixed(2)}</span>
               <span className="metric-unit">km</span>
             </div>
+          </div>
           </div>
         </div>
 

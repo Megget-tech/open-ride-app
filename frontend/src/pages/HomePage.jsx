@@ -3,7 +3,12 @@ import { Link } from 'react-router-dom';
 import TopBar from '../components/TopBar';
 import DeviceModal from '../components/DeviceModal';
 import { deleteCustomWorkout } from '../services/aiWorkoutGenerator';
-import { loadCustomWorkouts } from '../services/dataManager';
+import {
+  loadCachedWorkouts,
+  loadCachedWorkoutsTimestamp,
+  loadCustomWorkouts,
+  saveCachedWorkouts
+} from '../services/dataManager';
 import '../styles/index.css';
 
 export default function HomePage() {
@@ -19,6 +24,8 @@ export default function HomePage() {
   const [rideHistory, setRideHistory] = useState([]);
   const [deletingId, setDeletingId] = useState(null);
   const [myWorkouts, setMyWorkouts] = useState(() => loadCustomWorkouts());
+  const [apiStatus, setApiStatus] = useState('loading'); // 'loading' | 'ok' | 'cached' | 'offline'
+  const [cachedAt, setCachedAt] = useState(null);
   const categoryScrollRef = useRef(null);
 
   useEffect(() => {
@@ -55,14 +62,32 @@ export default function HomePage() {
   const fetchWorkouts = async () => {
     try {
       const response = await fetch(`${apiBaseUrl}/api/workouts`);
+      if (!response.ok) throw new Error(`API error ${response.status}`);
       const data = await response.json();
       const workoutsList = data.workouts || [];
       setWorkouts(workoutsList);
       setFilteredWorkouts(workoutsList);
-
-
+      saveCachedWorkouts(workoutsList);
+      setCachedAt(loadCachedWorkoutsTimestamp());
+      setApiStatus('ok');
     } catch (error) {
-      console.error('Failed to fetch workouts:', error);
+      const cached = loadCachedWorkouts();
+      if (cached.length > 0) {
+        setWorkouts(cached);
+        setFilteredWorkouts(cached);
+        setApiStatus('cached');
+      } else {
+        const local = loadCustomWorkouts();
+        if (local.length > 0) {
+          setWorkouts(local);
+          setFilteredWorkouts(local);
+        } else {
+          setWorkouts([]);
+          setFilteredWorkouts([]);
+        }
+        setApiStatus('offline');
+      }
+      setCachedAt(loadCachedWorkoutsTimestamp());
     }
   };
 
@@ -201,6 +226,12 @@ export default function HomePage() {
   }, []);
 
   const durationLabels = { short: '0\u201330 min', medium: '31\u201360 min', long: '60+ min' };
+  const isApiUnavailable = apiStatus === 'cached' || apiStatus === 'offline';
+  const cachedDate = cachedAt ? new Date(cachedAt) : null;
+  const cachedLabel = cachedDate && !Number.isNaN(cachedDate.getTime())
+    ? cachedDate.toLocaleString(undefined, { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' })
+    : null;
+  const showingLocalFallback = apiStatus === 'offline' && workouts.length > 0;
 
   return (
     <div>
@@ -320,6 +351,71 @@ export default function HomePage() {
 
           {/* Search & Filters (only shown in All tab) */}
           {activeTab === 'all' && (<>
+          {isApiUnavailable && (
+            <div className="offline-banner">
+              <div className="offline-banner-content">
+                <div className="offline-banner-title">Workout library unavailable</div>
+                <div className="offline-banner-text">
+                  {cachedLabel
+                    ? `Showing cached workouts from ${cachedLabel}.`
+                    : (showingLocalFallback
+                      ? 'No connection to the workout library. Showing your local workouts only.'
+                      : 'No connection to the workout library. You can still use My Workouts offline.')}
+                </div>
+              </div>
+              <button className="btn-text" onClick={() => setActiveTab('mine')}>
+                My Workouts
+              </button>
+            </div>
+          )}
+
+          {/* Ride History */}
+          {rideHistory.length > 0 && (
+            <section className="history-section history-section--top">
+              <div className="history-header">
+                <h2>Finished Workouts</h2>
+                <button className="btn-text" onClick={clearHistory}>Clear</button>
+              </div>
+
+              <div className="history-list">
+                {rideHistory.map(ride => (
+                  <div key={ride.id} className="history-item">
+                    <div className="history-item-left">
+                      <div className="history-name">{ride.workoutName}</div>
+                      <div className="history-date">{formatHistoryDate(ride.date)}</div>
+                    </div>
+                    <div className="history-stats">
+                      <div className="history-stat">
+                        <span className="history-stat-value">{formatHistoryTime(ride.duration)}</span>
+                        <span className="history-stat-label">Time</span>
+                      </div>
+                      <div className="history-stat">
+                        <span className="history-stat-value">{ride.avgPower}<small>W</small></span>
+                        <span className="history-stat-label">Avg Power</span>
+                      </div>
+                      <div className="history-stat">
+                        <span className="history-stat-value">{ride.maxPower}<small>W</small></span>
+                        <span className="history-stat-label">Max Power</span>
+                      </div>
+                      <div className="history-stat">
+                        <span className="history-stat-value">{(ride.distance / 1000).toFixed(1)}<small>km</small></span>
+                        <span className="history-stat-label">Distance</span>
+                      </div>
+                      <div className="history-stat">
+                        <span className="history-stat-value">{ride.calories}<small>kcal</small></span>
+                        <span className="history-stat-label">Calories</span>
+                      </div>
+                      <div className="history-stat">
+                        <span className="history-stat-value">{ride.intensityFactor}</span>
+                        <span className="history-stat-label">IF</span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
+
           <section className="workout-filters">
             {/* Search Bar */}
             <div className="filter-search">
@@ -485,14 +581,6 @@ export default function HomePage() {
                           </svg>
                           {formatDuration(workout.totalDuration)}
                         </div>
-                        {workout.estimatedTSS && (
-                          <div className="workout-meta-item">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                              <path d="M13 2.05v2.02c3.95.49 7 3.85 7 7.93 0 3.21-1.92 6-4.72 7.28L13 17v5h5l-1.22-1.22C19.91 19.07 22 15.76 22 12c0-5.18-3.95-9.45-9-9.95zM11 2.05C5.94 2.55 2 6.81 2 12c0 3.76 2.09 7.07 5.22 8.78L6 22h5v-5l-2.28 2.28C6.92 18 5 15.21 5 12c0-4.08 3.05-7.44 7-7.93V2.05z"/>
-                            </svg>
-                            TSS {workout.estimatedTSS}
-                          </div>
-                        )}
                       </div>
                       {workout.description && (
                         <p className="workout-description">
@@ -516,59 +604,24 @@ export default function HomePage() {
                   <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor" style={{ opacity: 0.3, marginBottom: '1rem' }}>
                     <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
                   </svg>
-                  <p>No workouts match your filters</p>
-                  <button className="empty-state-clear" onClick={clearAllFilters}>Clear all filters</button>
+                  {isApiUnavailable ? (
+                    <>
+                      <p>Workout library is offline right now.</p>
+                      <button className="empty-state-clear" onClick={() => setActiveTab('mine')}>
+                        Go to My Workouts
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <p>No workouts match your filters</p>
+                      <button className="empty-state-clear" onClick={clearAllFilters}>Clear all filters</button>
+                    </>
+                  )}
                 </div>
               )}
             </div>
           </section>
 
-          {/* Ride History */}
-          {rideHistory.length > 0 && (
-            <section className="history-section">
-              <div className="history-header">
-                <h2>Recent Rides</h2>
-                <button className="btn-text" onClick={clearHistory}>Clear</button>
-              </div>
-
-              <div className="history-list">
-                {rideHistory.map(ride => (
-                  <div key={ride.id} className="history-item">
-                    <div className="history-item-left">
-                      <div className="history-name">{ride.workoutName}</div>
-                      <div className="history-date">{formatHistoryDate(ride.date)}</div>
-                    </div>
-                    <div className="history-stats">
-                      <div className="history-stat">
-                        <span className="history-stat-value">{formatHistoryTime(ride.duration)}</span>
-                        <span className="history-stat-label">Time</span>
-                      </div>
-                      <div className="history-stat">
-                        <span className="history-stat-value">{ride.avgPower}<small>W</small></span>
-                        <span className="history-stat-label">Avg Power</span>
-                      </div>
-                      <div className="history-stat">
-                        <span className="history-stat-value">{ride.maxPower}<small>W</small></span>
-                        <span className="history-stat-label">Max Power</span>
-                      </div>
-                      <div className="history-stat">
-                        <span className="history-stat-value">{(ride.distance / 1000).toFixed(1)}<small>km</small></span>
-                        <span className="history-stat-label">Distance</span>
-                      </div>
-                      <div className="history-stat">
-                        <span className="history-stat-value">{ride.calories}<small>kcal</small></span>
-                        <span className="history-stat-label">Calories</span>
-                      </div>
-                      <div className="history-stat">
-                        <span className="history-stat-value">{ride.intensityFactor}</span>
-                        <span className="history-stat-label">IF</span>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </section>
-          )}
           </>)}
         </div>
       </main>

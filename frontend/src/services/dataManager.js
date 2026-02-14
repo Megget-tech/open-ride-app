@@ -15,6 +15,9 @@
  */
 
 export const CUSTOM_WORKOUTS_KEY = 'openride_custom_workouts';
+const WORKOUTS_CACHE_KEY = 'openride_cached_workouts';
+const WORKOUTS_CACHE_TS_KEY = 'openride_cached_workouts_at';
+const WORKOUT_CACHE_PREFIX = 'openride_cached_workout_';
 
 // All keys that belong to Open Ride (used for export/import)
 const ALL_KEYS = [
@@ -66,6 +69,43 @@ export function saveCustomWorkoutLocally(workoutData) {
 export function removeCustomWorkoutLocally(id) {
   const list = loadCustomWorkouts().filter(w => w.id !== id);
   persistCustomWorkouts(list);
+}
+
+// ─── Cached backend workouts (for offline use) ──────────────────────────────
+
+export function loadCachedWorkouts() {
+  try {
+    const raw = localStorage.getItem(WORKOUTS_CACHE_KEY);
+    if (raw) return JSON.parse(raw);
+  } catch (_) {}
+  return [];
+}
+
+export function loadCachedWorkoutsTimestamp() {
+  return localStorage.getItem(WORKOUTS_CACHE_TS_KEY);
+}
+
+export function saveCachedWorkouts(list) {
+  try {
+    localStorage.setItem(WORKOUTS_CACHE_KEY, JSON.stringify(list || []));
+    localStorage.setItem(WORKOUTS_CACHE_TS_KEY, new Date().toISOString());
+  } catch (_) {}
+}
+
+export function loadCachedWorkout(id) {
+  if (!id) return null;
+  try {
+    const raw = localStorage.getItem(`${WORKOUT_CACHE_PREFIX}${id}`);
+    if (raw) return JSON.parse(raw);
+  } catch (_) {}
+  return null;
+}
+
+export function saveCachedWorkout(workout) {
+  if (!workout || !workout.id) return;
+  try {
+    localStorage.setItem(`${WORKOUT_CACHE_PREFIX}${workout.id}`, JSON.stringify(workout));
+  } catch (_) {}
 }
 
 // ─── Export / Import ──────────────────────────────────────────────────────────
