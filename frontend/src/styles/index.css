@@ -7,26 +7,110 @@
 }
 
 :root {
+  /* Brand fonts */
+  --font-headline: 'Teko', 'Arial Narrow', sans-serif;
+  --font-body: 'Ubuntu', 'Segoe UI', sans-serif;
+
+  /* Brand colors */
   --primary-blue: #0099FF;
   --dark-blue: #0077CC;
   --light-blue: #33AAFF;
+  --success: #00C853;
+  --warning: #FF9800;
+  --error: #F44336;
+
+  /* Dark theme (default) */
   --background: #0A1929;
   --surface: #132F4C;
   --surface-light: #1E4976;
   --text-primary: #FFFFFF;
   --text-secondary: #B2BAC2;
-  --success: #00C853;
-  --warning: #FF9800;
-  --error: #F44336;
   --border: rgba(255, 255, 255, 0.1);
+  --body-gradient: linear-gradient(180deg, #0A1929 0%, #001E3C 100%);
+  --overlay-xs: rgba(255, 255, 255, 0.03);
+  --overlay-sm: rgba(255, 255, 255, 0.05);
+  --overlay-md: rgba(255, 255, 255, 0.08);
+  --overlay-lg: rgba(255, 255, 255, 0.1);
+  --overlay-xl: rgba(255, 255, 255, 0.2);
+  --chip-bg: rgba(255, 255, 255, 0.06);
+  --chip-border: rgba(255, 255, 255, 0.12);
+  --chip-color: rgba(255, 255, 255, 0.7);
+  --input-bg: rgba(255, 255, 255, 0.06);
+  --input-border: rgba(255, 255, 255, 0.12);
+  --input-placeholder: rgba(255, 255, 255, 0.35);
+  --icon-muted: rgba(255, 255, 255, 0.4);
+  --tab-inactive: rgba(255, 255, 255, 0.5);
+  --tab-border: rgba(255, 255, 255, 0.08);
+  --muted-45: rgba(255, 255, 255, 0.45);
+  --muted-50: rgba(255, 255, 255, 0.5);
+  --activity-nav-bg: rgba(15, 15, 30, 0.9);
+  --conn-tabs-bg: rgba(0, 0, 0, 0.2);
+  --conn-tab-color: rgba(255, 255, 255, 0.55);
+  --debug-bg: rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="light"] {
+  --background: #f2f5f9;
+  --surface: #ffffff;
+  --surface-light: #e4edf7;
+  --text-primary: #1a2332;
+  --text-secondary: #5a7085;
+  --border: rgba(0, 30, 60, 0.12);
+  --body-gradient: linear-gradient(180deg, #f2f5f9 0%, #e4ecf5 100%);
+  --overlay-xs: rgba(0, 0, 0, 0.02);
+  --overlay-sm: rgba(0, 0, 0, 0.03);
+  --overlay-md: rgba(0, 0, 0, 0.05);
+  --overlay-lg: rgba(0, 0, 0, 0.08);
+  --overlay-xl: rgba(0, 0, 0, 0.12);
+  --chip-bg: rgba(0, 0, 0, 0.04);
+  --chip-border: rgba(0, 30, 60, 0.12);
+  --chip-color: rgba(0, 30, 60, 0.65);
+  --input-bg: rgba(0, 0, 0, 0.04);
+  --input-border: rgba(0, 30, 60, 0.15);
+  --input-placeholder: rgba(0, 30, 60, 0.35);
+  --icon-muted: rgba(0, 30, 60, 0.4);
+  --tab-inactive: rgba(0, 30, 60, 0.45);
+  --tab-border: rgba(0, 30, 60, 0.1);
+  --muted-45: rgba(0, 30, 60, 0.45);
+  --muted-50: rgba(0, 30, 60, 0.5);
+  --activity-nav-bg: rgba(242, 245, 249, 0.95);
+  --conn-tabs-bg: rgba(0, 0, 0, 0.04);
+  --conn-tab-color: rgba(0, 30, 60, 0.55);
+  --debug-bg: rgba(0, 0, 0, 0.05);
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif;
-  background: linear-gradient(180deg, #0A1929 0%, #001E3C 100%);
+  font-family: var(--font-body);
+  background: var(--body-gradient);
   color: var(--text-primary);
   min-height: 100vh;
   line-height: 1.6;
+}
+
+/* ── Headlines use Teko ─────────────────────────────────────────────── */
+h1, h2, h3, h4 {
+  font-family: var(--font-headline);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.logo {
+  font-family: var(--font-headline);
+  letter-spacing: 1.5px;
+  font-size: 1.4rem;
+}
+
+.nav-title {
+  font-family: var(--font-headline);
+  letter-spacing: 1px;
+}
+
+.modal-header h2 {
+  font-family: var(--font-headline);
+}
+
+.btn {
+  font-family: var(--font-body);
 }
 
 /* Top Navigation */
@@ -74,7 +158,7 @@ body {
 }
 
 .nav-tab:hover {
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--overlay-sm);
   color: var(--text-primary);
 }
 
@@ -125,8 +209,8 @@ body {
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   height: 60px;
-  background: rgba(15, 15, 30, 0.9);
-  border-bottom-color: rgba(255, 255, 255, 0.1);
+  background: var(--activity-nav-bg);
+  border-bottom-color: var(--border);
   position: fixed;
   top: 0;
   left: 0;
@@ -236,29 +320,30 @@ body {
 .filter-search-icon {
   position: absolute;
   left: 0.875rem;
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--icon-muted);
   pointer-events: none;
 }
 
 .filter-search-input {
   width: 100%;
   padding: 0.65rem 2.5rem 0.65rem 2.75rem;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
   border-radius: 10px;
   color: var(--text-primary);
   font-size: 0.9rem;
+  font-family: var(--font-body);
   transition: all 0.2s;
 }
 
 .filter-search-input::placeholder {
-  color: rgba(255, 255, 255, 0.35);
+  color: var(--input-placeholder);
 }
 
 .filter-search-input:focus {
   outline: none;
   border-color: var(--primary-blue);
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--overlay-md);
 }
 
 .filter-search-clear {
@@ -266,7 +351,7 @@ body {
   right: 0.625rem;
   background: none;
   border: none;
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--icon-muted);
   cursor: pointer;
   padding: 0.25rem;
   display: flex;
@@ -276,8 +361,8 @@ body {
 }
 
 .filter-search-clear:hover {
-  color: #fff;
-  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-primary);
+  background: var(--overlay-lg);
 }
 
 /* Filter Sections */
@@ -296,7 +381,7 @@ body {
 
 .filter-label {
   font-size: 0.75rem;
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--icon-muted);
   text-transform: uppercase;
   letter-spacing: 0.8px;
   flex-shrink: 0;
@@ -339,10 +424,10 @@ body {
   align-items: center;
   gap: 0.5rem;
   padding: 0.4rem 0.85rem;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: var(--chip-bg);
+  border: 1px solid var(--chip-border);
   border-radius: 20px;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--chip-color);
   font-size: 0.8rem;
   font-weight: 500;
   cursor: pointer;
@@ -352,9 +437,9 @@ body {
 }
 
 .filter-category-chip:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.2);
-  color: #fff;
+  background: var(--overlay-lg);
+  border-color: var(--overlay-xl);
+  color: var(--text-primary);
 }
 
 .filter-category-chip.active {
@@ -413,16 +498,16 @@ body {
   border-radius: 20px;
   font-size: 0.85rem;
   font-weight: 500;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  background: rgba(255, 255, 255, 0.06);
-  color: rgba(255, 255, 255, 0.7);
+  border: 1px solid var(--chip-border);
+  background: var(--chip-bg);
+  color: var(--chip-color);
   cursor: pointer;
   transition: all 0.15s;
 }
 
 .filter-pill:hover {
-  background: rgba(255, 255, 255, 0.12);
-  color: #fff;
+  background: var(--overlay-md);
+  color: var(--text-primary);
 }
 
 .filter-pill.active {
@@ -489,7 +574,7 @@ body {
 .active-filters-clear {
   background: none;
   border: none;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--muted-50);
   font-size: 0.78rem;
   cursor: pointer;
   white-space: nowrap;
@@ -498,13 +583,13 @@ body {
 }
 
 .active-filters-clear:hover {
-  color: #fff;
+  color: var(--text-primary);
 }
 
 /* Results Count */
 .results-count {
   font-size: 0.85rem;
-  color: rgba(255, 255, 255, 0.45);
+  color: var(--muted-45);
   margin-bottom: 1rem;
   font-weight: 500;
 }
@@ -512,10 +597,10 @@ body {
 /* Empty State Clear */
 .empty-state-clear {
   margin-top: 0.75rem;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: var(--overlay-md);
+  border: 1px solid var(--chip-border);
   border-radius: 8px;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--chip-color);
   padding: 0.5rem 1.25rem;
   font-size: 0.85rem;
   cursor: pointer;
@@ -523,8 +608,8 @@ body {
 }
 
 .empty-state-clear:hover {
-  background: rgba(255, 255, 255, 0.12);
-  color: #fff;
+  background: var(--overlay-lg);
+  color: var(--text-primary);
 }
 
 /* Workouts Grid */
@@ -889,7 +974,7 @@ body {
   align-items: center;
   justify-content: center;
   padding: 3rem 1rem;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--muted-50);
   text-align: center;
 }
 
@@ -980,8 +1065,8 @@ body {
 /* ── Connection-type tabs (ANT+ / Bluetooth) ────────────────────────────── */
 .conn-type-tabs {
   display: flex;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(0, 0, 0, 0.2);
+  border-bottom: 1px solid var(--border);
+  background: var(--conn-tabs-bg);
 }
 
 .conn-type-tab {
@@ -993,19 +1078,20 @@ body {
   padding: 0.85rem 1rem;
   background: none;
   border: none;
-  color: rgba(255, 255, 255, 0.55);
+  color: var(--conn-tab-color);
   font-size: 0.9rem;
+  font-family: var(--font-body);
   font-weight: 600;
   letter-spacing: 0.3px;
   cursor: pointer;
   transition: all 0.2s;
   border-bottom: 2px solid transparent;
-  margin-bottom: -1px; /* overlap the container border */
+  margin-bottom: -1px;
 }
 
 .conn-type-tab:hover {
-  color: rgba(255, 255, 255, 0.85);
-  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-primary);
+  background: var(--overlay-sm);
 }
 
 .conn-type-tab.active {
@@ -1083,12 +1169,12 @@ body {
 }
 
 .btn-secondary {
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
+  background: var(--overlay-lg);
+  color: var(--text-primary);
 }
 
 .btn-secondary:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.2);
+  background: var(--overlay-xl);
 }
 
 .btn-danger {
@@ -1217,7 +1303,7 @@ body {
   display: flex;
   gap: 2rem;
   padding: 1rem;
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--overlay-xs);
   border-radius: 8px;
   margin-bottom: 1rem;
   flex-wrap: wrap;
@@ -1238,7 +1324,7 @@ body {
 }
 
 .debug-section {
-  background: rgba(0, 0, 0, 0.3);
+  background: var(--debug-bg);
   padding: 1rem;
   border-radius: 8px;
   margin-top: 1rem;
@@ -1442,7 +1528,7 @@ body {
 .history-name {
   font-size: 1rem;
   font-weight: 600;
-  color: #fff;
+  color: var(--text-primary);
   margin-bottom: 0.2rem;
 }
 
@@ -1503,7 +1589,7 @@ body {
   display: flex;
   gap: 0.25rem;
   margin-bottom: 1.5rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid var(--tab-border);
   padding-bottom: 0;
 }
 
@@ -1515,8 +1601,9 @@ body {
   background: none;
   border: none;
   border-bottom: 2px solid transparent;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--tab-inactive);
   font-size: 0.9rem;
+  font-family: var(--font-body);
   font-weight: 500;
   cursor: pointer;
   transition: all 0.15s ease;
@@ -1524,7 +1611,7 @@ body {
 }
 
 .home-tab:hover {
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--text-primary);
 }
 
 .home-tab.active {
@@ -1557,7 +1644,7 @@ body {
 
 .my-workouts-subtitle {
   font-size: 0.875rem;
-  color: rgba(255, 255, 255, 0.45);
+  color: var(--muted-45);
   margin: 0;
 }
 
@@ -1583,7 +1670,7 @@ body {
 .my-workouts-empty {
   text-align: center;
   padding: 4rem 2rem;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--muted-50);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1652,4 +1739,72 @@ body {
 .workout-card-delete.deleting {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+/* ── Theme toggle button ─────────────────────────────────────────────── */
+.theme-toggle {
+  background: var(--overlay-sm);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text-secondary);
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.theme-toggle:hover {
+  background: var(--overlay-lg);
+  color: var(--text-primary);
+  border-color: var(--primary-blue);
+}
+
+/* ── Light mode targeted overrides ──────────────────────────────────── */
+[data-theme="light"] .top-nav {
+  box-shadow: 0 1px 12px rgba(0, 30, 60, 0.08);
+}
+
+[data-theme="light"] .workout-card-delete {
+  background: rgba(0, 0, 0, 0.35);
+  border-color: rgba(0, 0, 0, 0.15);
+  color: rgba(0, 0, 0, 0.5);
+}
+
+[data-theme="light"] .nav-back {
+  color: var(--text-primary);
+}
+
+[data-theme="light"] .nav-title {
+  color: var(--text-primary);
+}
+
+[data-theme="light"] .start-hint {
+  color: var(--muted-50);
+}
+
+[data-theme="light"] .btn-text {
+  color: var(--text-primary);
+}
+
+[data-theme="light"] .history-stat-value {
+  color: var(--text-primary);
+}
+
+[data-theme="light"] .filter-category-count {
+  background: rgba(0, 0, 0, 0.07);
+  color: var(--text-secondary);
+}
+
+[data-theme="light"] .device-status-btn {
+  background: var(--overlay-sm);
+  border-color: var(--border);
+  color: var(--text-primary);
+}
+
+[data-theme="light"] .device-status-btn:hover {
+  background: var(--overlay-lg);
 }
