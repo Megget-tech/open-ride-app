@@ -1,0 +1,17 @@
+{
+  "name": "Open Ride",
+  "short_name": "Open Ride",
+  "description": "Open-source indoor cycling app for structured workouts and free rides. Connects directly via ANT+ USB or Bluetooth LE — no account, no cloud.",
+  "icons": [
+    {
+      "src": "/open-ride-logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ],
+  "theme_color": "#0A1929",
+  "background_color": "#0A1929",
+  "display": "standalone",
+  "start_url": "/",
+  "scope": "/"
+}

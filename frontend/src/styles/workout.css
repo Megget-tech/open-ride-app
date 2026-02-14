@@ -87,7 +87,7 @@ body.workout-page {
 
 /* Main Workout Area */
 .workout-main {
-  margin-top: 60px;
+  margin-top: 0;
   padding: 1.5rem;
   display: flex;
   flex-direction: column;
@@ -577,6 +577,11 @@ body.workout-page {
   max-width: 600px;
   width: 90%;
   text-align: center;
+  background: var(--modal-bg);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 2.5rem 2.75rem;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
 }
 
 .complete-header {

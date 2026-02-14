@@ -607,12 +607,7 @@ export default function WorkoutPage() {
 
   return (
     <div>
-      <TopBar
-        variant="activity"
-        title={workout?.name || 'Workout'}
-        backLabel="Exit"
-        onDeviceScanClick={() => setIsDeviceModalOpen(true)}
-      />
+      <TopBar onDeviceScanClick={() => setIsDeviceModalOpen(true)} />
 
       {showPreview ? (
         <main className="workout-preview">
