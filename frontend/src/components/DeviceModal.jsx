@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useAnt } from '../contexts/AntContext';
 
 // ── Icons ─────────────────────────────────────────────────────────────────────
@@ -101,6 +101,47 @@ export default function DeviceModal({ isOpen, onClose }) {
     setConnectionType(type);
   };
 
+  const modalRef = useRef(null);
+
+  // ── Focus trap and Escape key handler ──────────────────────────────────────
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const modal = modalRef.current;
+    if (!modal) return;
+
+    // Move focus into the modal on open
+    const focusableSelectors = 'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex="0"]';
+    const focusables = modal.querySelectorAll(focusableSelectors);
+    if (focusables.length) focusables[0].focus();
+
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        onClose();
+        return;
+      }
+      if (e.key !== 'Tab') return;
+      const focusableList = Array.from(modal.querySelectorAll(focusableSelectors));
+      if (focusableList.length === 0) return;
+      const first = focusableList[0];
+      const last = focusableList[focusableList.length - 1];
+      if (e.shiftKey) {
+        if (document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        }
+      } else {
+        if (document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
 
   // ── Derived display values ─────────────────────────────────────────────────
@@ -118,15 +159,15 @@ export default function DeviceModal({ isOpen, onClose }) {
   // ── Render ─────────────────────────────────────────────────────────────────
 
   return (
-    <div className="modal active">
-      <div className="modal-content device-scan">
+    <div className="modal active" role="dialog" aria-modal="true" aria-labelledby="device-modal-title">
+      <div className="modal-content device-scan" ref={modalRef}>
 
         {/* Header */}
         <div className="modal-header">
           <button className="back-button" onClick={onClose} aria-label="Close">
             <BackArrowIcon />
           </button>
-          <h2>Connect Trainer</h2>
+          <h2 id="device-modal-title">Connect Trainer</h2>
           <div />
         </div>
 
