@@ -76,6 +76,7 @@ function ElevationCanvas({ routePoints, routeStats, currentIndex, isRiding }) {
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas || routePoints.length === 0) return;
+    if (canvas.offsetWidth === 0) return;
 
     const dpr = window.devicePixelRatio || 1;
     const w = canvas.offsetWidth * dpr;
@@ -174,19 +175,17 @@ export default function RoutePage() {
     const totalDistance = routePoints[routePoints.length - 1].distanceFromStart;
     let elevationGain = 0;
     let elevationLoss = 0;
+    // Use a loop for min/max — spread syntax crashes on large arrays (stack overflow)
+    let minEle = routePoints[0].ele;
+    let maxEle = routePoints[0].ele;
     for (let i = 1; i < routePoints.length; i++) {
       const diff = routePoints[i].ele - routePoints[i - 1].ele;
       if (diff > 0) elevationGain += diff;
       else elevationLoss += Math.abs(diff);
+      if (routePoints[i].ele < minEle) minEle = routePoints[i].ele;
+      if (routePoints[i].ele > maxEle) maxEle = routePoints[i].ele;
     }
-    const eles = routePoints.map(p => p.ele);
-    return {
-      totalDistance,
-      elevationGain,
-      elevationLoss,
-      minEle: Math.min(...eles),
-      maxEle: Math.max(...eles),
-    };
+    return { totalDistance, elevationGain, elevationLoss, minEle, maxEle };
   }, [routePoints]);
 
   const positions = useMemo(() => routePoints.map(p => [p.lat, p.lng]), [routePoints]);
