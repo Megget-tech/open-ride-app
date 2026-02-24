@@ -1,9 +1,33 @@
-import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
-import { MapContainer, TileLayer, Polyline, CircleMarker, useMap } from 'react-leaflet';
+import React, { Component, useState, useEffect, useRef, useCallback, useMemo } from 'react';
+import L from 'leaflet';
 import { useAnt } from '../contexts/AntContext';
 import TopBar from '../components/TopBar';
 import DeviceModal from '../components/DeviceModal';
 import '../styles/route.css';
+
+// ── Error Boundary ─────────────────────────────────────────────────────────────
+
+class RouteErrorBoundary extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { error: null };
+  }
+  static getDerivedStateFromError(error) {
+    return { error };
+  }
+  render() {
+    if (this.state.error) {
+      return (
+        <div className="route-crash">
+          <strong>Something went wrong rendering the map:</strong>
+          <pre>{this.state.error.message}</pre>
+          <button type="button" onClick={() => this.setState({ error: null })}>Retry</button>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
 
 // ── GPX helpers ───────────────────────────────────────────────────────────────
 
@@ -21,10 +45,9 @@ function haversineDistance(lat1, lon1, lat2, lon2) {
 function parseGPX(xmlText) {
   const parser = new DOMParser();
   const doc = parser.parseFromString(xmlText, 'text/xml');
-  // getElementsByTagName is namespace-agnostic, unlike querySelectorAll,
-  // so it works with GPX files that declare xmlns="http://www.topografix.com/GPX/1/1"
-  const parseErr = doc.getElementsByTagName('parsererror')[0];
-  if (parseErr) throw new Error('Invalid XML in GPX file');
+  if (doc.getElementsByTagName('parsererror').length > 0) {
+    throw new Error('Invalid XML in GPX file');
+  }
 
   const trkpts = doc.getElementsByTagName('trkpt');
   if (trkpts.length === 0) throw new Error('No track points found in GPX file');
@@ -34,11 +57,14 @@ function parseGPX(xmlText) {
   let prevLat = null;
   let prevLon = null;
 
-  Array.from(trkpts).forEach(pt => {
+  for (let i = 0; i < trkpts.length; i++) {
+    const pt = trkpts[i];
     const lat = parseFloat(pt.getAttribute('lat'));
     const lon = parseFloat(pt.getAttribute('lon'));
+    if (isNaN(lat) || isNaN(lon)) continue;
+
     const eleEl = pt.getElementsByTagName('ele')[0];
-    const ele = eleEl ? parseFloat(eleEl.textContent) : 0;
+    const ele = eleEl ? parseFloat(eleEl.textContent) || 0 : 0;
 
     if (prevLat !== null) {
       totalDistance += haversineDistance(prevLat, prevLon, lat, lon);
@@ -46,43 +72,28 @@ function parseGPX(xmlText) {
     points.push({ lat, lng: lon, ele, distanceFromStart: totalDistance });
     prevLat = lat;
     prevLon = lon;
-  });
+  }
 
+  if (points.length === 0) throw new Error('No valid coordinates in GPX file');
   return points;
 }
 
-// Map grade (%) to resistance (0–100%)
 function gradeToResistance(grade) {
-  // Flat road (0%) → 40% resistance
-  // +12% climb → ~100%, -8% descent → ~0%
   return Math.max(0, Math.min(100, 40 + grade * 5));
 }
 
-// ── Sub-components ────────────────────────────────────────────────────────────
-
-function MapBoundsFitter({ points }) {
-  const map = useMap();
-  useEffect(() => {
-    if (points.length > 1) {
-      map.fitBounds(points.map(p => [p.lat, p.lng]), { padding: [24, 24] });
-    }
-  }, [points, map]);
-  return null;
-}
+// ── Elevation canvas (imperative draw, no crash risk) ────────────────────────
 
 function ElevationCanvas({ routePoints, routeStats, currentIndex, isRiding }) {
   const canvasRef = useRef(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    if (!canvas || routePoints.length === 0) return;
-    if (canvas.offsetWidth === 0) return;
+    if (!canvas || routePoints.length === 0 || canvas.offsetWidth === 0) return;
 
     const dpr = window.devicePixelRatio || 1;
-    const w = canvas.offsetWidth * dpr;
-    const h = canvas.offsetHeight * dpr;
-    canvas.width = w;
-    canvas.height = h;
+    canvas.width = canvas.offsetWidth * dpr;
+    canvas.height = canvas.offsetHeight * dpr;
     const ctx = canvas.getContext('2d');
     ctx.scale(dpr, dpr);
 
@@ -100,10 +111,12 @@ function ElevationCanvas({ routePoints, routeStats, currentIndex, isRiding }) {
 
     ctx.clearRect(0, 0, cw, ch);
 
-    // Filled area
+    // Filled area under elevation line
     ctx.beginPath();
     ctx.moveTo(xOf(0), ch - pad.bottom);
-    routePoints.forEach((p, i) => ctx.lineTo(xOf(i), yOf(p.ele)));
+    for (let i = 0; i < routePoints.length; i++) {
+      ctx.lineTo(xOf(i), yOf(routePoints[i].ele));
+    }
     ctx.lineTo(xOf(routePoints.length - 1), ch - pad.bottom);
     ctx.closePath();
     const grad = ctx.createLinearGradient(0, pad.top, 0, ch - pad.bottom);
@@ -112,17 +125,17 @@ function ElevationCanvas({ routePoints, routeStats, currentIndex, isRiding }) {
     ctx.fillStyle = grad;
     ctx.fill();
 
-    // Line
+    // Elevation line
     ctx.beginPath();
-    routePoints.forEach((p, i) => {
-      if (i === 0) ctx.moveTo(xOf(i), yOf(p.ele));
-      else ctx.lineTo(xOf(i), yOf(p.ele));
-    });
+    for (let i = 0; i < routePoints.length; i++) {
+      if (i === 0) ctx.moveTo(xOf(i), yOf(routePoints[i].ele));
+      else ctx.lineTo(xOf(i), yOf(routePoints[i].ele));
+    }
     ctx.strokeStyle = '#00d4ff';
     ctx.lineWidth = 2;
     ctx.stroke();
 
-    // Current position indicator
+    // Current position
     if (isRiding && currentIndex > 0 && currentIndex < routePoints.length) {
       const x = xOf(currentIndex);
       ctx.beginPath();
@@ -133,16 +146,16 @@ function ElevationCanvas({ routePoints, routeStats, currentIndex, isRiding }) {
       ctx.stroke();
     }
 
-    // Y-axis labels
+    // Y labels
     ctx.fillStyle = '#888';
-    ctx.font = `${11}px sans-serif`;
+    ctx.font = '11px sans-serif';
     ctx.textAlign = 'right';
     for (let i = 0; i <= 4; i++) {
       const ele = minEle + (eleRange * i) / 4;
       ctx.fillText(`${Math.round(ele)}m`, pad.left - 5, yOf(ele) + 4);
     }
 
-    // X-axis labels
+    // X labels
     ctx.textAlign = 'center';
     for (let i = 0; i <= 4; i++) {
       const dist = (totalDistance * i) / 4;
@@ -152,6 +165,99 @@ function ElevationCanvas({ routePoints, routeStats, currentIndex, isRiding }) {
   }, [routePoints, routeStats, currentIndex, isRiding]);
 
   return <canvas ref={canvasRef} className="elevation-canvas" />;
+}
+
+// ── Leaflet map (imperative, no react-leaflet) ────────────────────────────────
+
+function RouteMap({ routePoints, currentIndex, isRiding }) {
+  const containerRef = useRef(null);
+  const mapRef = useRef(null);
+  const polylineRef = useRef(null);
+  const markerRef = useRef(null);
+
+  // Initialize map once
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container || mapRef.current) return;
+
+    const map = L.map(container, { zoomControl: true });
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      maxZoom: 19,
+    }).addTo(map);
+    map.setView([0, 0], 2);
+    mapRef.current = map;
+
+    return () => {
+      map.remove();
+      mapRef.current = null;
+      polylineRef.current = null;
+      markerRef.current = null;
+    };
+  }, []);
+
+  // Draw/update route polyline when points change
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map) return;
+
+    if (polylineRef.current) {
+      polylineRef.current.remove();
+      polylineRef.current = null;
+    }
+    if (markerRef.current) {
+      markerRef.current.remove();
+      markerRef.current = null;
+    }
+
+    if (routePoints.length === 0) return;
+
+    const latlngs = routePoints.map(p => [p.lat, p.lng]);
+    polylineRef.current = L.polyline(latlngs, {
+      color: '#00d4ff',
+      weight: 3,
+      opacity: 0.85,
+    }).addTo(map);
+    map.fitBounds(polylineRef.current.getBounds(), { padding: [24, 24] });
+  }, [routePoints]);
+
+  // Move position marker during ride
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map) return;
+
+    if (!isRiding || routePoints.length === 0) {
+      if (markerRef.current) {
+        markerRef.current.remove();
+        markerRef.current = null;
+      }
+      return;
+    }
+
+    const p = routePoints[currentIndex];
+    if (!p) return;
+    const latlng = [p.lat, p.lng];
+
+    if (markerRef.current) {
+      markerRef.current.setLatLng(latlng);
+    } else {
+      markerRef.current = L.circleMarker(latlng, {
+        radius: 9,
+        color: '#ff6b35',
+        fillColor: '#ff6b35',
+        fillOpacity: 1,
+        weight: 2,
+      }).addTo(map);
+    }
+  }, [isRiding, currentIndex, routePoints]);
+
+  return (
+    <div
+      ref={containerRef}
+      className="leaflet-map"
+      style={{ width: '100%', height: '100%' }}
+    />
+  );
 }
 
 // ── Main page ─────────────────────────────────────────────────────────────────
@@ -169,13 +275,13 @@ export default function RoutePage() {
 
   const startDistanceRef = useRef(0);
   const lastResistanceRef = useRef(-1);
+  const fileInputRef = useRef(null);
 
   const routeStats = useMemo(() => {
     if (routePoints.length === 0) return null;
     const totalDistance = routePoints[routePoints.length - 1].distanceFromStart;
     let elevationGain = 0;
     let elevationLoss = 0;
-    // Use a loop for min/max — spread syntax crashes on large arrays (stack overflow)
     let minEle = routePoints[0].ele;
     let maxEle = routePoints[0].ele;
     for (let i = 1; i < routePoints.length; i++) {
@@ -188,14 +294,17 @@ export default function RoutePage() {
     return { totalDistance, elevationGain, elevationLoss, minEle, maxEle };
   }, [routePoints]);
 
-  const positions = useMemo(() => routePoints.map(p => [p.lat, p.lng]), [routePoints]);
-
   const handleFileUpload = useCallback(e => {
     const file = e.target.files[0];
     if (!file) return;
+    // Reset input so the same file can be re-uploaded
+    if (fileInputRef.current) fileInputRef.current.value = '';
+
     setParseError(null);
     setIsRiding(false);
     setCurrentIndex(0);
+    setLiveStats({ distanceRidden: 0, ele: 0, grade: 0 });
+
     const reader = new FileReader();
     reader.onload = evt => {
       try {
@@ -207,40 +316,33 @@ export default function RoutePage() {
         setRoutePoints([]);
       }
     };
+    reader.onerror = () => setParseError('Could not read file');
     reader.readAsText(file);
   }, []);
 
-  // Track position along route based on trainer distance
+  // Track position during ride
   useEffect(() => {
     if (!isRiding || routePoints.length === 0 || !routeStats) return;
 
     const distanceRidden = Math.max(0, telemetry.distance - startDistanceRef.current);
 
-    // Find current route index (linear scan; route points are ordered by distance)
     let idx = 0;
     for (let i = 0; i < routePoints.length - 1; i++) {
-      if (routePoints[i + 1].distanceFromStart <= distanceRidden) {
-        idx = i + 1;
-      } else {
-        break;
-      }
+      if (routePoints[i + 1].distanceFromStart <= distanceRidden) idx = i + 1;
+      else break;
     }
     idx = Math.min(idx, routePoints.length - 1);
     setCurrentIndex(idx);
 
-    // Grade between current and next point
     let grade = 0;
     if (idx < routePoints.length - 1) {
       const curr = routePoints[idx];
       const next = routePoints[idx + 1];
-      const segDist = (next.distanceFromStart - curr.distanceFromStart) * 1000; // m
-      if (segDist > 0) {
-        grade = ((next.ele - curr.ele) / segDist) * 100;
-      }
+      const segDist = (next.distanceFromStart - curr.distanceFromStart) * 1000;
+      if (segDist > 0) grade = ((next.ele - curr.ele) / segDist) * 100;
     }
 
     const resistance = gradeToResistance(grade);
-    // Only call setResistance when it changes by more than 1% to reduce chatter
     if (Math.abs(resistance - lastResistanceRef.current) >= 1) {
       lastResistanceRef.current = resistance;
       setResistance(resistance).catch(() => {});
@@ -252,10 +354,7 @@ export default function RoutePage() {
       grade: Math.round(grade * 10) / 10,
     });
 
-    // Auto-stop at route end
-    if (distanceRidden >= routeStats.totalDistance) {
-      setIsRiding(false);
-    }
+    if (distanceRidden >= routeStats.totalDistance) setIsRiding(false);
   }, [telemetry.distance, isRiding, routePoints, routeStats, setResistance]);
 
   const handleStartRide = useCallback(() => {
@@ -270,12 +369,6 @@ export default function RoutePage() {
     setIsRiding(false);
     setResistance(50).catch(() => {});
   }, [setResistance]);
-
-  const currentPosition = useMemo(() => {
-    if (!isRiding || routePoints.length === 0) return null;
-    const p = routePoints[currentIndex];
-    return [p.lat, p.lng];
-  }, [isRiding, currentIndex, routePoints]);
 
   const gradeClass = useMemo(() => {
     if (liveStats.grade > 5) return 'grade-hard';
@@ -302,6 +395,7 @@ export default function RoutePage() {
                 {routePoints.length > 0 ? 'Replace GPX file' : 'Upload GPX file'}
               </label>
               <input
+                ref={fileInputRef}
                 id="gpx-file-input"
                 type="file"
                 accept=".gpx"
@@ -402,36 +496,21 @@ export default function RoutePage() {
           {/* Map + elevation */}
           <section className="route-map-section" aria-label="Route map and elevation profile">
             <div className="map-wrapper">
-              {routePoints.length > 0 ? (
-                <MapContainer
-                  center={[routePoints[0].lat, routePoints[0].lng]}
-                  zoom={13}
-                  className="leaflet-map"
-                >
-                  <TileLayer
-                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                  />
-                  <MapBoundsFitter points={routePoints} />
-                  <Polyline
-                    positions={positions}
-                    pathOptions={{ color: '#00d4ff', weight: 3, opacity: 0.85 }}
-                  />
-                  {currentPosition && (
-                    <CircleMarker
-                      center={currentPosition}
-                      radius={9}
-                      pathOptions={{ color: '#ff6b35', fillColor: '#ff6b35', fillOpacity: 1, weight: 2 }}
-                    />
-                  )}
-                </MapContainer>
-              ) : (
+              {routePoints.length === 0 ? (
                 <div className="map-placeholder">
                   <svg width="52" height="52" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                     <path d="M20.5 3l-.16.03L15 5.1 9 3 3.36 4.9c-.21.07-.36.25-.36.48V20.5c0 .28.22.5.5.5l.16-.03L9 18.9l6 2.1 5.64-1.9c.21-.07.36-.25.36-.48V3.5c0-.28-.22-.5-.5-.5zM15 19l-6-2.11V5l6 2.11V19z"/>
                   </svg>
                   <p>Upload a GPX file to see your route</p>
                 </div>
+              ) : (
+                <RouteErrorBoundary>
+                  <RouteMap
+                    routePoints={routePoints}
+                    currentIndex={currentIndex}
+                    isRiding={isRiding}
+                  />
+                </RouteErrorBoundary>
               )}
             </div>
 
