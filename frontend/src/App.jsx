@@ -9,6 +9,7 @@ import AiWorkoutPage from './pages/AiWorkoutPage';
 import TermsOfServicePage from './pages/TermsOfServicePage';
 import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
 import HelpPage from './pages/HelpPage';
+import RoutePage from './pages/RoutePage';
 import Footer from './components/Footer';
 
 function AppShell() {
@@ -27,6 +28,7 @@ function AppShell() {
         <Route path="/ai-workout" element={<AiWorkoutPage />} />
         <Route path="/terms" element={<TermsOfServicePage />} />
         <Route path="/privacy" element={<PrivacyPolicyPage />} />
+        <Route path="/route" element={<RoutePage />} />
         <Route path="/help" element={<HelpPage />} />
       </Routes>
       {!hideFooter && <Footer />}
