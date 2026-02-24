@@ -21,10 +21,12 @@ function haversineDistance(lat1, lon1, lat2, lon2) {
 function parseGPX(xmlText) {
   const parser = new DOMParser();
   const doc = parser.parseFromString(xmlText, 'text/xml');
-  const parseErr = doc.querySelector('parsererror');
+  // getElementsByTagName is namespace-agnostic, unlike querySelectorAll,
+  // so it works with GPX files that declare xmlns="http://www.topografix.com/GPX/1/1"
+  const parseErr = doc.getElementsByTagName('parsererror')[0];
   if (parseErr) throw new Error('Invalid XML in GPX file');
 
-  const trkpts = doc.querySelectorAll('trkpt');
+  const trkpts = doc.getElementsByTagName('trkpt');
   if (trkpts.length === 0) throw new Error('No track points found in GPX file');
 
   const points = [];
@@ -32,10 +34,10 @@ function parseGPX(xmlText) {
   let prevLat = null;
   let prevLon = null;
 
-  trkpts.forEach(pt => {
+  Array.from(trkpts).forEach(pt => {
     const lat = parseFloat(pt.getAttribute('lat'));
     const lon = parseFloat(pt.getAttribute('lon'));
-    const eleEl = pt.querySelector('ele');
+    const eleEl = pt.getElementsByTagName('ele')[0];
     const ele = eleEl ? parseFloat(eleEl.textContent) : 0;
 
     if (prevLat !== null) {
