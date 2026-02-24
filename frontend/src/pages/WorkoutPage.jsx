@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useParams, useNavigate, useBlocker } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import TopBar from '../components/TopBar';
 import DeviceModal from '../components/DeviceModal';
 import { useAnt } from '../contexts/AntContext';
@@ -69,7 +69,13 @@ function WorkoutGraph({ executionPlan, elapsedSeconds, totalDuration, ftp }) {
 export default function WorkoutPage() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { connectedDevice, telemetry, setTargetPower } = useAnt();
+  const { connectedDevice, telemetry, setTargetPower, setWorkoutActive } = useAnt();
+
+  // Keep workoutActive in sync with isRunning; clear on unmount
+  useEffect(() => {
+    setWorkoutActive(isRunning && !showComplete && !hasEnded);
+    return () => setWorkoutActive(false);
+  }, [isRunning, showComplete, hasEnded, setWorkoutActive]);
   const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || '';
 
   const [workout, setWorkout] = useState(null);
@@ -96,9 +102,6 @@ export default function WorkoutPage() {
     } catch (_) {}
     return { ftp: 200, maxHr: 185, restingHr: 60, weight: 70 };
   });
-
-  // Block tab navigation while a workout is in progress
-  const navBlocker = useBlocker(isRunning && !showComplete && !hasEnded);
 
   const timerRef = useRef(null);
   const countdownRef = useRef(null);
@@ -952,31 +955,6 @@ export default function WorkoutPage() {
         </div>
       )}
 
-      {navBlocker.state === 'blocked' && (
-        <div className="notification-modal show">
-          <div className="notification-modal-backdrop" onClick={() => navBlocker.reset()}></div>
-          <div className="notification-modal-content">
-            <div className="notification-modal-icon">⚠️</div>
-            <div className="notification-modal-message">Leave workout? Your progress will be lost.</div>
-            <div className="notification-modal-actions">
-              <button className="notification-btn notification-btn-secondary" onClick={() => navBlocker.reset()}>
-                Stay
-              </button>
-              <button
-                className="notification-btn notification-btn-primary"
-                onClick={() => {
-                  if (timerRef.current) clearInterval(timerRef.current);
-                  if (countdownRef.current) clearInterval(countdownRef.current);
-                  setTargetPower(0);
-                  navBlocker.proceed();
-                }}
-              >
-                Leave
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
 
       {showComplete && completeStats && (
         <div className="complete-overlay">
