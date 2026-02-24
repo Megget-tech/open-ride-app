@@ -260,14 +260,29 @@ function RouteMap({ routePoints, currentIndex, isRiding }) {
   );
 }
 
+// ── localStorage key ──────────────────────────────────────────────────────────
+const STORAGE_KEY = 'openride_current_route';
+
+function loadSavedRoute() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) return JSON.parse(raw);
+  } catch (_) {}
+  return null;
+}
+
 // ── Main page ─────────────────────────────────────────────────────────────────
 
 export default function RoutePage() {
   const { telemetry, setResistance, status } = useAnt();
 
   const [showDeviceModal, setShowDeviceModal] = useState(false);
-  const [routePoints, setRoutePoints] = useState([]);
-  const [routeName, setRouteName] = useState('');
+
+  // Restore route from localStorage on first mount so navigating between
+  // tabs does not discard an uploaded GPX file.
+  const [routePoints, setRoutePoints] = useState(() => loadSavedRoute()?.points ?? []);
+  const [routeName, setRouteName] = useState(() => loadSavedRoute()?.name ?? '');
+
   const [parseError, setParseError] = useState(null);
   const [isRiding, setIsRiding] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -276,6 +291,19 @@ export default function RoutePage() {
   const startDistanceRef = useRef(0);
   const lastResistanceRef = useRef(-1);
   const fileInputRef = useRef(null);
+
+  // Persist route to localStorage whenever it changes
+  useEffect(() => {
+    if (routePoints.length === 0) {
+      localStorage.removeItem(STORAGE_KEY);
+      return;
+    }
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ name: routeName, points: routePoints }));
+    } catch (_) {
+      // Quota exceeded — silently ignore, route still works in memory
+    }
+  }, [routePoints, routeName]);
 
   const routeStats = useMemo(() => {
     if (routePoints.length === 0) return null;
