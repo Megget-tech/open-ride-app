@@ -29,13 +29,14 @@ const CYCLING_POWER_MEASUREMENT = 0x2A63;
 
 // ─── FTMS Control Point op-codes (FTMS spec §4.16.2) ─────────────────────────
 const FTMS_OP = {
-  REQUEST_CONTROL:        0x00,
-  RESET:                  0x01,
-  SET_TARGET_RESISTANCE:  0x04,  // param: sint16 (×0.1, unitless)
-  SET_TARGET_POWER:       0x05,  // param: sint16 (watts)
-  START_RESUME:           0x07,
-  STOP_PAUSE:             0x08,
-  RESPONSE_CODE:          0x80,
+  REQUEST_CONTROL:              0x00,
+  RESET:                        0x01,
+  SET_TARGET_RESISTANCE:        0x04,  // param: sint16 (×0.1, unitless)
+  SET_TARGET_POWER:             0x05,  // param: sint16 (watts)
+  START_RESUME:                 0x07,
+  STOP_PAUSE:                   0x08,
+  SET_INDOOR_BIKE_SIMULATION:   0x11,  // params: wind sint16 (0.001 m/s), grade sint16 (0.01%), crr uint8 (0.0001), cwa uint8 (0.01 kg/m)
+  RESPONSE_CODE:                0x80,
 };
 
 // ─── Minimal EventEmitter ────────────────────────────────────────────────────
@@ -408,6 +409,44 @@ export class BluetoothManagerWebBluetooth extends EventEmitter {
       return true;
     } catch (err) {
       this.log('error', `setResistance failed: ${err.message}`);
+      return false;
+    }
+  }
+
+  /**
+   * Simulate road gradient via FTMS Indoor Bike Simulation Parameters (Op 0x11).
+   * The trainer adjusts resistance to match the physics of the given grade.
+   * @param {number} gradePercent — road gradient in percent, e.g. 5.0 = 5% uphill, -3.0 = 3% downhill
+   */
+  async setGrade(gradePercent) {
+    if (!this._controlPointChar || this._connectionStatus !== 'connected') {
+      this.log('error', 'setGrade: not connected or no control');
+      return false;
+    }
+    // Clamp to a physically reasonable range
+    gradePercent = Math.max(-20, Math.min(20, gradePercent));
+
+    // FTMS §4.16.2.13 — Set Indoor Bike Simulation Parameters (7 bytes total)
+    //   byte 0   : op-code 0x11
+    //   bytes 1-2: wind speed, sint16, resolution 0.001 m/s  → 0 (no wind)
+    //   bytes 3-4: grade,      sint16, resolution 0.01 %     → gradePercent × 100
+    //   byte 5   : Crr,        uint8,  resolution 0.0001     → 40 (≈ 0.0040, typical road tyre)
+    //   byte 6   : CwA,        uint8,  resolution 0.01 kg/m  → 51 (≈ 0.51, typical road rider)
+    const gradeRaw = Math.round(gradePercent * 100);
+    try {
+      if (!this._hasControl) await this._requestControl();
+      const buf  = new ArrayBuffer(7);
+      const view = new DataView(buf);
+      view.setUint8(0,  FTMS_OP.SET_INDOOR_BIKE_SIMULATION);
+      view.setInt16(1,  0,         true); // wind speed = 0
+      view.setInt16(3,  gradeRaw,  true); // grade
+      view.setUint8(5,  40);              // Crr
+      view.setUint8(6,  51);              // CwA
+      await this._controlPointChar.writeValueWithResponse(buf);
+      this.log('info', `Grade → ${gradePercent.toFixed(1)}% (raw ${gradeRaw})`);
+      return true;
+    } catch (err) {
+      this.log('error', `setGrade failed: ${err.message}`);
       return false;
     }
   }
