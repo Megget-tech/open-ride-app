@@ -78,10 +78,6 @@ function parseGPX(xmlText) {
   return points;
 }
 
-function gradeToResistance(grade) {
-  return Math.max(0, Math.min(100, 40 + grade * 5));
-}
-
 // ── Elevation canvas (imperative draw, no crash risk) ────────────────────────
 
 function ElevationCanvas({ routePoints, routeStats, currentIndex, isRiding }) {
@@ -136,12 +132,24 @@ function ElevationCanvas({ routePoints, routeStats, currentIndex, isRiding }) {
     ctx.stroke();
 
     // Current position
-    if (isRiding && currentIndex > 0 && currentIndex < routePoints.length) {
+    if (isRiding && currentIndex >= 0 && currentIndex < routePoints.length) {
       const x = xOf(currentIndex);
+      const y = yOf(routePoints[currentIndex].ele);
+
+      // Vertical guide line
       ctx.beginPath();
       ctx.moveTo(x, pad.top);
       ctx.lineTo(x, ch - pad.bottom);
-      ctx.strokeStyle = '#ff6b35';
+      ctx.strokeStyle = 'rgba(255,107,53,0.45)';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+
+      // Circle on the elevation curve
+      ctx.beginPath();
+      ctx.arc(x, y, 5, 0, Math.PI * 2);
+      ctx.fillStyle = '#ff6b35';
+      ctx.fill();
+      ctx.strokeStyle = '#fff';
       ctx.lineWidth = 2;
       ctx.stroke();
     }
@@ -274,7 +282,7 @@ function loadSavedRoute() {
 // ── Main page ─────────────────────────────────────────────────────────────────
 
 export default function RoutePage() {
-  const { telemetry, setResistance, status } = useAnt();
+  const { telemetry, setGrade, status } = useAnt();
 
   const [showDeviceModal, setShowDeviceModal] = useState(false);
 
@@ -285,12 +293,19 @@ export default function RoutePage() {
 
   const [parseError, setParseError] = useState(null);
   const [isRiding, setIsRiding] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [liveStats, setLiveStats] = useState({ distanceRidden: 0, ele: 0, grade: 0 });
 
-  const startDistanceRef = useRef(0);
+  const speedRef = useRef(0);
+  const distanceRiddenRef = useRef(0);
   const lastResistanceRef = useRef(-1);
   const fileInputRef = useRef(null);
+
+  // Keep speed ref current so the interval always sees the latest value
+  useEffect(() => {
+    speedRef.current = telemetry.speed;
+  }, [telemetry.speed]);
 
   // Persist route to localStorage whenever it changes
   useEffect(() => {
@@ -348,55 +363,74 @@ export default function RoutePage() {
     reader.readAsText(file);
   }, []);
 
-  // Track position during ride
+  // Track position during ride by integrating speed (km/h) once per second.
+  // This works even when the trainer doesn't send the optional FTMS Total Distance field.
   useEffect(() => {
-    if (!isRiding || routePoints.length === 0 || !routeStats) return;
+    if (!isRiding || isPaused || routePoints.length === 0 || !routeStats) return;
 
-    const distanceRidden = Math.max(0, telemetry.distance - startDistanceRef.current);
+    const interval = setInterval(() => {
+      // speed (km/h) × 1 s = speed/3600 km
+      distanceRiddenRef.current += speedRef.current / 3600;
+      const distanceRidden = distanceRiddenRef.current;
 
-    let idx = 0;
-    for (let i = 0; i < routePoints.length - 1; i++) {
-      if (routePoints[i + 1].distanceFromStart <= distanceRidden) idx = i + 1;
-      else break;
-    }
-    idx = Math.min(idx, routePoints.length - 1);
-    setCurrentIndex(idx);
+      let idx = 0;
+      for (let i = 0; i < routePoints.length - 1; i++) {
+        if (routePoints[i + 1].distanceFromStart <= distanceRidden) idx = i + 1;
+        else break;
+      }
+      idx = Math.min(idx, routePoints.length - 1);
+      setCurrentIndex(idx);
 
-    let grade = 0;
-    if (idx < routePoints.length - 1) {
-      const curr = routePoints[idx];
-      const next = routePoints[idx + 1];
-      const segDist = (next.distanceFromStart - curr.distanceFromStart) * 1000;
-      if (segDist > 0) grade = ((next.ele - curr.ele) / segDist) * 100;
-    }
+      let grade = 0;
+      if (idx < routePoints.length - 1) {
+        const curr = routePoints[idx];
+        const next = routePoints[idx + 1];
+        const segDist = (next.distanceFromStart - curr.distanceFromStart) * 1000;
+        if (segDist > 0) grade = ((next.ele - curr.ele) / segDist) * 100;
+      }
 
-    const resistance = gradeToResistance(grade);
-    if (Math.abs(resistance - lastResistanceRef.current) >= 1) {
-      lastResistanceRef.current = resistance;
-      setResistance(resistance).catch(() => {});
-    }
+      const gradeRounded = Math.round(grade * 10) / 10;
+      if (Math.abs(gradeRounded - lastResistanceRef.current) >= 0.2) {
+        lastResistanceRef.current = gradeRounded;
+        setGrade(gradeRounded).catch(() => {});
+      }
 
-    setLiveStats({
-      distanceRidden,
-      ele: routePoints[idx].ele,
-      grade: Math.round(grade * 10) / 10,
-    });
+      setLiveStats({
+        distanceRidden,
+        ele: routePoints[idx].ele,
+        grade: Math.round(grade * 10) / 10,
+      });
 
-    if (distanceRidden >= routeStats.totalDistance) setIsRiding(false);
-  }, [telemetry.distance, isRiding, routePoints, routeStats, setResistance]);
+      if (distanceRidden >= routeStats.totalDistance) setIsRiding(false);
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [isRiding, isPaused, routePoints, routeStats, setGrade]);
 
   const handleStartRide = useCallback(() => {
-    startDistanceRef.current = telemetry.distance;
+    distanceRiddenRef.current = 0;
     lastResistanceRef.current = -1;
     setCurrentIndex(0);
+    setIsPaused(false);
     setLiveStats({ distanceRidden: 0, ele: routePoints[0]?.ele ?? 0, grade: 0 });
     setIsRiding(true);
-  }, [telemetry.distance, routePoints]);
+  }, [routePoints]);
+
+  const handlePauseRide = useCallback(() => {
+    setIsPaused(true);
+    setGrade(0).catch(() => {});
+  }, [setGrade]);
+
+  const handleResumeRide = useCallback(() => {
+    lastResistanceRef.current = -1; // force grade re-send on next tick
+    setIsPaused(false);
+  }, []);
 
   const handleStopRide = useCallback(() => {
     setIsRiding(false);
-    setResistance(50).catch(() => {});
-  }, [setResistance]);
+    setIsPaused(false);
+    setGrade(0).catch(() => {});
+  }, [setGrade]);
 
   const gradeClass = useMemo(() => {
     if (liveStats.grade > 5) return 'grade-hard';
@@ -508,13 +542,32 @@ export default function RoutePage() {
                       {status !== 'connected' ? 'Connect trainer to ride' : 'Start Ride'}
                     </button>
                   ) : (
-                    <button
-                      type="button"
-                      className="btn-stop-ride"
-                      onClick={handleStopRide}
-                    >
-                      Stop Ride
-                    </button>
+                    <div className="ride-active-controls">
+                      {isPaused ? (
+                        <button
+                          type="button"
+                          className="btn-resume-ride"
+                          onClick={handleResumeRide}
+                        >
+                          Resume
+                        </button>
+                      ) : (
+                        <button
+                          type="button"
+                          className="btn-pause-ride"
+                          onClick={handlePauseRide}
+                        >
+                          Pause
+                        </button>
+                      )}
+                      <button
+                        type="button"
+                        className="btn-stop-ride"
+                        onClick={handleStopRide}
+                      >
+                        Stop
+                      </button>
+                    </div>
                   )}
                 </div>
               </>
@@ -558,9 +611,7 @@ export default function RoutePage() {
         </div>
       </main>
 
-      {showDeviceModal && (
-        <DeviceModal onClose={() => setShowDeviceModal(false)} />
-      )}
+      <DeviceModal isOpen={showDeviceModal} onClose={() => setShowDeviceModal(false)} />
     </div>
   );
 }

@@ -548,6 +548,17 @@ export class AntManagerWebUSB extends EventEmitter {
   }
 
   /**
+   * Grade simulation — ANT+ FE-C track resistance (page 51) is not yet implemented
+   * in the underlying library, so fall back to basic resistance as an approximation.
+   * @param {number} gradePercent
+   */
+  async setGrade(gradePercent) {
+    // Approximate: 0% grade → 40% resistance, each 1% grade adds ~5%
+    const approx = Math.max(0, Math.min(100, 40 + gradePercent * 5));
+    return this.setResistance(approx);
+  }
+
+  /**
    * Return a snapshot of current status (used when re-subscribing after tab switch).
    */
   getStatus() {

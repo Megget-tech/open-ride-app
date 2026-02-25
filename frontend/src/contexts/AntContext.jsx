@@ -193,6 +193,15 @@ export function AntProvider({ children }) {
     }
   }, [_activeManager]);
 
+  const setGrade = useCallback(async (gradePercent) => {
+    try {
+      await _activeManager().setGrade(gradePercent);
+    } catch (err) {
+      console.error('[AntContext] setGrade failed:', err);
+      throw err;
+    }
+  }, [_activeManager]);
+
   const value = {
     // State
     status,
@@ -211,6 +220,7 @@ export function AntProvider({ children }) {
     disconnect,
     setTargetPower,
     setResistance,
+    setGrade,
   };
 
   return <AntContext.Provider value={value}>{children}</AntContext.Provider>;
