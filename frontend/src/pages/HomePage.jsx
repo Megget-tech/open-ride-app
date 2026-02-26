@@ -7,7 +7,9 @@ import {
   loadCachedWorkouts,
   loadCachedWorkoutsTimestamp,
   loadCustomWorkouts,
-  saveCachedWorkouts
+  saveCachedWorkouts,
+  loadRouteHistory,
+  ROUTE_HISTORY_KEY,
 } from '../services/dataManager';
 import '../styles/index.css';
 
@@ -22,6 +24,7 @@ export default function HomePage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [isDeviceModalOpen, setIsDeviceModalOpen] = useState(false);
   const [rideHistory, setRideHistory] = useState([]);
+  const [routeHistory, setRouteHistory] = useState([]);
   const [deletingId, setDeletingId] = useState(null);
   const [renamingId, setRenamingId] = useState(null);
   const [renameValue, setRenameValue] = useState('');
@@ -34,6 +37,7 @@ export default function HomePage() {
   useEffect(() => {
     fetchWorkouts();
     loadHistory();
+    setRouteHistory(loadRouteHistory());
   }, []);
 
   const loadHistory = () => {
@@ -47,6 +51,12 @@ export default function HomePage() {
     if (!window.confirm('Clear all ride history?')) return;
     localStorage.removeItem('openride_workout_history');
     setRideHistory([]);
+  };
+
+  const clearRouteHistory = () => {
+    if (!window.confirm('Clear all route ride history?')) return;
+    localStorage.removeItem(ROUTE_HISTORY_KEY);
+    setRouteHistory([]);
   };
 
   const formatHistoryDate = (iso) => {
@@ -478,6 +488,52 @@ export default function HomePage() {
                         <span className="history-stat-value">{ride.intensityFactor}</span>
                         <span className="history-stat-label">IF</span>
                       </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
+
+          {/* Route Ride History */}
+          {routeHistory.length > 0 && (
+            <section className="history-section">
+              <div className="history-header">
+                <h2>Route Rides</h2>
+                <button className="btn-text" onClick={clearRouteHistory}>Clear</button>
+              </div>
+              <div className="history-list">
+                {routeHistory.map(ride => (
+                  <div key={ride.id} className="history-item">
+                    <div className="history-item-left">
+                      <div className="history-name">{ride.routeName || 'Route ride'}</div>
+                      <div className="history-date">{formatHistoryDate(ride.date)}</div>
+                    </div>
+                    <div className="history-stats">
+                      <div className="history-stat">
+                        <span className="history-stat-value">{formatHistoryTime(ride.duration)}</span>
+                        <span className="history-stat-label">Time</span>
+                      </div>
+                      <div className="history-stat">
+                        <span className="history-stat-value">{ride.distance?.toFixed(1)}<small>km</small></span>
+                        <span className="history-stat-label">Distance</span>
+                      </div>
+                      <div className="history-stat">
+                        <span className="history-stat-value">+{ride.elevationGain}<small>m</small></span>
+                        <span className="history-stat-label">Elevation</span>
+                      </div>
+                      {ride.avgPower > 0 && (
+                        <div className="history-stat">
+                          <span className="history-stat-value">{ride.avgPower}<small>W</small></span>
+                          <span className="history-stat-label">Avg Power</span>
+                        </div>
+                      )}
+                      {ride.avgCadence > 0 && (
+                        <div className="history-stat">
+                          <span className="history-stat-value">{ride.avgCadence}<small>rpm</small></span>
+                          <span className="history-stat-label">Cadence</span>
+                        </div>
+                      )}
                     </div>
                   </div>
                 ))}
