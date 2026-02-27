@@ -1,4 +1,5 @@
 import React, { Component, useState, useEffect, useRef, useCallback, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import L from 'leaflet';
 import { useAnt } from '../contexts/AntContext';
 import TopBar from '../components/TopBar';
@@ -269,6 +270,7 @@ function loadSavedRoute() {
 
 export default function RoutePage() {
   const { telemetry, setGrade, status } = useAnt();
+  const navigate = useNavigate();
 
   const [showDeviceModal, setShowDeviceModal] = useState(false);
 
@@ -293,6 +295,10 @@ export default function RoutePage() {
   const [currentIndex,  setCurrentIndex]  = useState(0);
   const [liveStats,     setLiveStats]     = useState({ distanceRidden: 0, ele: 0, grade: 0, duration: 0 });
 
+  // Completion summary
+  const [showSummary,   setShowSummary]   = useState(false);
+  const [summaryStats,  setSummaryStats]  = useState(null);
+
   // Refs for interval
   const speedRef           = useRef(0);
   const powerRef           = useRef(0);
@@ -305,10 +311,22 @@ export default function RoutePage() {
 
   const fileInputRef = useRef(null);
 
+  // Refs for detecting ride end
+  const prevIsRidingRef = useRef(false);
+  // Stable refs for route info (used in summary effect without being deps)
+  const routePointsRef  = useRef(routePoints);
+  const routeNameRef    = useRef(routeName);
+  const routeIdRef      = useRef(routeId);
+
   // Keep telemetry refs current for interval
   useEffect(() => { speedRef.current   = telemetry.speed;   }, [telemetry.speed]);
   useEffect(() => { powerRef.current   = telemetry.power;   }, [telemetry.power]);
   useEffect(() => { cadenceRef.current = telemetry.cadence; }, [telemetry.cadence]);
+
+  // Keep route info refs current
+  useEffect(() => { routePointsRef.current = routePoints; }, [routePoints]);
+  useEffect(() => { routeNameRef.current   = routeName;   }, [routeName]);
+  useEffect(() => { routeIdRef.current     = routeId;     }, [routeId]);
 
   // Load library on mount
   useEffect(() => {
@@ -340,6 +358,56 @@ export default function RoutePage() {
     }
     return { totalDistance, elevationGain, minEle, maxEle };
   }, [routePoints]);
+
+  // ── Reset trainer grade on unmount ──────────────────────────────────────────
+  useEffect(() => {
+    return () => { setGrade(0).catch(() => {}); };
+  }, [setGrade]);
+
+  // ── Ride completion summary ───────────────────────────────────────────────────
+  useEffect(() => {
+    const wasRiding = prevIsRidingRef.current;
+    prevIsRidingRef.current = isRiding;
+
+    // Only trigger when ride transitions from active to stopped
+    if (!wasRiding || isRiding) return;
+
+    // Skip summary for trivial distances (< 100 m)
+    if (distanceRiddenRef.current < 0.1) return;
+
+    const pts    = routePointsRef.current;
+    const name   = routeNameRef.current;
+    const rid    = routeIdRef.current;
+    const endIdx = Math.min(currentIndexRef.current, pts.length - 1);
+
+    let gainRidden = 0;
+    for (let i = 1; i <= endIdx; i++) {
+      const diff = pts[i].ele - pts[i - 1].ele;
+      if (diff > 0) gainRidden += diff;
+    }
+
+    const p = ridePowerAccRef.current;
+    const c = rideCadenceAccRef.current;
+
+    const stats = {
+      routeName:     name,
+      distance:      distanceRiddenRef.current,
+      duration:      durationRef.current,
+      elevationGain: Math.round(gainRidden),
+      avgPower:      p.count > 0 ? Math.round(p.total / p.count) : 0,
+      avgCadence:    c.count > 0 ? Math.round(c.total / c.count) : 0,
+    };
+
+    saveRouteRide({
+      routeId:   rid,
+      routeName: name,
+      date:      new Date().toISOString(),
+      ...stats,
+    });
+
+    setSummaryStats(stats);
+    setShowSummary(true);
+  }, [isRiding]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // ── File upload ──────────────────────────────────────────────────────────────
 
@@ -511,36 +579,24 @@ export default function RoutePage() {
   }, []);
 
   const handleStopRide = useCallback(() => {
-    setIsRiding(false);
     setIsPaused(false);
     setGrade(0).catch(() => {});
+    setIsRiding(false); // triggers the summary useEffect
+  }, [setGrade]);
 
-    // Log to history if at least 100m was ridden
-    if (distanceRiddenRef.current >= 0.1 && routeStats) {
-      const p = ridePowerAccRef.current;
-      const c = rideCadenceAccRef.current;
+  const handleRideAgain = useCallback(() => {
+    setShowSummary(false);
+    setSummaryStats(null);
+    distanceRiddenRef.current       = 0;
+    durationRef.current             = 0;
+    lastGradeRef.current            = -999;
+    ridePowerAccRef.current         = { total: 0, count: 0 };
+    rideCadenceAccRef.current       = { total: 0, count: 0 };
+    setCurrentIndex(0);
+    setLiveStats({ distanceRidden: 0, ele: routePointsRef.current[0]?.ele ?? 0, grade: 0, duration: 0 });
+  }, []);
 
-      // Elevation gain for the portion actually ridden
-      let gainRidden = 0;
-      for (let i = 1; i <= Math.min(currentIndexRef.current, routePoints.length - 1); i++) {
-        const diff = routePoints[i].ele - routePoints[i - 1].ele;
-        if (diff > 0) gainRidden += diff;
-      }
-
-      saveRouteRide({
-        routeId:       routeId,
-        routeName:     routeName,
-        date:          new Date().toISOString(),
-        distance:      distanceRiddenRef.current,
-        duration:      durationRef.current,
-        elevationGain: Math.round(gainRidden),
-        avgPower:      p.count > 0 ? Math.round(p.total / p.count) : 0,
-        avgCadence:    c.count > 0 ? Math.round(c.total / c.count) : 0,
-      });
-    }
-  }, [setGrade, routeStats, routeName, routeId, routePoints]);
-
-  // Keep a ref to currentIndex so handleStopRide can read it without being a dep
+  // Keep a ref to currentIndex so the summary effect can read it without being a dep
   const currentIndexRef = useRef(0);
   useEffect(() => { currentIndexRef.current = currentIndex; }, [currentIndex]);
 
@@ -803,6 +859,66 @@ export default function RoutePage() {
       </main>
 
       <DeviceModal isOpen={showDeviceModal} onClose={() => setShowDeviceModal(false)} />
+
+      {showSummary && summaryStats && (
+        <div className="route-complete-overlay">
+          <div className="route-complete-card">
+            <div className="route-complete-header">
+              <div className="route-complete-icon">✓</div>
+              <div className="route-complete-title">Ride Complete</div>
+              <div className="route-complete-name">{summaryStats.routeName || 'Route'}</div>
+            </div>
+
+            <div className="route-complete-stats">
+              <div className="route-complete-stat">
+                <div className="route-complete-stat-value">{formatDuration(summaryStats.duration)}</div>
+                <div className="route-complete-stat-label">Duration</div>
+              </div>
+              <div className="route-complete-stat highlight">
+                <div className="route-complete-stat-value">
+                  {summaryStats.distance.toFixed(2)}
+                  <span className="route-stat-unit">km</span>
+                </div>
+                <div className="route-complete-stat-label">Distance</div>
+              </div>
+              <div className="route-complete-stat">
+                <div className="route-complete-stat-value">
+                  +{summaryStats.elevationGain}
+                  <span className="route-stat-unit">m</span>
+                </div>
+                <div className="route-complete-stat-label">Elevation gain</div>
+              </div>
+              {summaryStats.avgPower > 0 && (
+                <div className="route-complete-stat">
+                  <div className="route-complete-stat-value">
+                    {summaryStats.avgPower}
+                    <span className="route-stat-unit">W</span>
+                  </div>
+                  <div className="route-complete-stat-label">Avg power</div>
+                </div>
+              )}
+              {summaryStats.avgCadence > 0 && (
+                <div className="route-complete-stat">
+                  <div className="route-complete-stat-value">
+                    {summaryStats.avgCadence}
+                    <span className="route-stat-unit">rpm</span>
+                  </div>
+                  <div className="route-complete-stat-label">Avg cadence</div>
+                </div>
+              )}
+            </div>
+
+            <div className="route-complete-actions">
+              <button className="route-complete-btn secondary" onClick={() => navigate('/')}>
+                Back to Home
+              </button>
+              <button className="route-complete-btn primary" onClick={handleRideAgain}>
+                Ride Again
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

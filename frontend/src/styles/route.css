@@ -524,3 +524,139 @@
   background: #e8ecf0;
   color: #aaa;
 }
+
+/* ── Ride completion overlay ──────────────────────────────────────────────── */
+
+.route-complete-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: routeFadeIn 0.3s ease;
+}
+
+@keyframes routeFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.route-complete-card {
+  max-width: 520px;
+  width: 90%;
+  text-align: center;
+  background: #1a1a2e;
+  border: 1px solid rgba(0, 212, 255, 0.25);
+  border-radius: 24px;
+  padding: 2.5rem 2.75rem;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55);
+}
+
+.route-complete-header {
+  margin-bottom: 2rem;
+}
+
+.route-complete-icon {
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, #00d4ff, #0090aa);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  color: #fff;
+  margin: 0 auto 1rem;
+  box-shadow: 0 4px 20px rgba(0, 212, 255, 0.4);
+}
+
+.route-complete-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 0.4rem;
+}
+
+.route-complete-name {
+  font-size: 1rem;
+  color: #888;
+}
+
+.route-complete-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin: 2rem 0;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 16px;
+  padding: 1.5rem;
+}
+
+.route-complete-stat {
+  text-align: center;
+  padding: 0.5rem;
+}
+
+.route-complete-stat.highlight {
+  background: rgba(0, 212, 255, 0.1);
+  border-radius: 12px;
+  border: 1px solid rgba(0, 212, 255, 0.3);
+}
+
+.route-complete-stat-value {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.route-stat-unit {
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: #888;
+  margin-left: 2px;
+}
+
+.route-complete-stat-label {
+  font-size: 0.75rem;
+  color: #888;
+  margin-top: 0.25rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.route-complete-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.route-complete-btn {
+  padding: 0.9rem 2rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s;
+}
+
+.route-complete-btn.primary {
+  background: #00d4ff;
+  color: #000;
+}
+
+.route-complete-btn.primary:hover {
+  background: #00b8d9;
+  transform: translateY(-2px);
+}
+
+.route-complete-btn.secondary {
+  background: rgba(255, 255, 255, 0.08);
+  color: #e0e0e0;
+}
+
+.route-complete-btn.secondary:hover {
+  background: rgba(255, 255, 255, 0.14);
+}
