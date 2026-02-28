@@ -209,11 +209,22 @@ export default function TopBar({
     </nav>
 
     {pendingNav && (
-      <div className="notification-modal show" role="dialog" aria-modal="true">
+      <div
+        className="notification-modal show"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Confirm leaving workout"
+        aria-describedby="notification-modal-message"
+      >
         <div className="notification-modal-backdrop" onClick={() => setPendingNav(null)}></div>
         <div className="notification-modal-content">
           <div className="notification-modal-icon">⚠️</div>
-          <div className="notification-modal-message">Leave workout? Your progress will be lost.</div>
+          <div
+            id="notification-modal-message"
+            className="notification-modal-message"
+          >
+            Leave workout? Your progress will be lost.
+          </div>
           <div className="notification-modal-actions">
             <button className="notification-btn notification-btn-secondary" onClick={() => setPendingNav(null)}>
               Stay
