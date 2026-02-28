@@ -22,6 +22,9 @@ export function AntProvider({ children }) {
     () => localStorage.getItem('openride_connection_type') || 'ant+'
   );
 
+  // Tracks whether a workout is actively in progress (used by TopBar to guard navigation)
+  const [workoutActive, setWorkoutActive] = useState(false);
+
   // Shared UI state
   const [status,            setStatus]            = useState('disconnected');
   const [isScanning,        setIsScanning]        = useState(false);
@@ -204,6 +207,8 @@ export function AntProvider({ children }) {
 
   const value = {
     // State
+    workoutActive,
+    setWorkoutActive,
     status,
     isScanning,
     discoveredDevices,

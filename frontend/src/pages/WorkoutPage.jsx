@@ -69,7 +69,7 @@ function WorkoutGraph({ executionPlan, elapsedSeconds, totalDuration, ftp }) {
 export default function WorkoutPage() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { connectedDevice, telemetry, setTargetPower } = useAnt();
+  const { connectedDevice, telemetry, setTargetPower, setWorkoutActive } = useAnt();
   const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || '';
 
   const [workout, setWorkout] = useState(null);
@@ -96,6 +96,12 @@ export default function WorkoutPage() {
     } catch (_) {}
     return { ftp: 200, maxHr: 185, restingHr: 60, weight: 70 };
   });
+
+  // Keep workoutActive in sync with isRunning; clear on unmount
+  useEffect(() => {
+    setWorkoutActive(isRunning && !showComplete && !hasEnded);
+    return () => setWorkoutActive(false);
+  }, [isRunning, showComplete, hasEnded, setWorkoutActive]);
 
   const timerRef = useRef(null);
   const countdownRef = useRef(null);
@@ -948,6 +954,7 @@ export default function WorkoutPage() {
           </div>
         </div>
       )}
+
 
       {showComplete && completeStats && (
         <div className="complete-overlay">
