@@ -299,7 +299,9 @@ export default function RoutePage() {
 
   const speedRef = useRef(0);
   const distanceRiddenRef = useRef(0);
-  const lastResistanceRef = useRef(-1);
+  const lastGradeSentRef = useRef(-1);
+  // Backwards-compat alias: prefer lastGradeSentRef for new code.
+  const lastResistanceRef = lastGradeSentRef;
   const fileInputRef = useRef(null);
 
   // Keep speed ref current so the interval always sees the latest value
