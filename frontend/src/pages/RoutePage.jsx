@@ -166,10 +166,15 @@ function ElevationCanvas({ routePoints, routeStats, currentIndex, isRiding }) {
 
     // X labels
     ctx.textAlign = 'center';
-    for (let i = 0; i <= 4; i++) {
-      const dist = (totalDistance * i) / 4;
-      const x = pad.left + (dist / totalDistance) * innerW;
-      ctx.fillText(`${dist.toFixed(1)}km`, x, ch - 6);
+    if (totalDistance > 0) {
+      for (let i = 0; i <= 4; i++) {
+        const dist = (totalDistance * i) / 4;
+        const x = pad.left + (dist / totalDistance) * innerW;
+        ctx.fillText(`${dist.toFixed(1)}km`, x, ch - 6);
+      }
+    } else {
+      // Zero-length route: avoid division by zero and show a single label
+      ctx.fillText('0.0km', pad.left, ch - 6);
     }
   }, [routePoints, routeStats, currentIndex, isRiding]);
 
