@@ -2,15 +2,17 @@
  * Route Library — IndexedDB storage for multiple GPX routes.
  *
  * Stored route schema:
- *   { id, name, points, totalDistance, elevationGain, minEle, maxEle, createdAt }
+ *   { id, name, points, totalDistance, elevationGain, minEle, maxEle, createdAt, userId }
  *
  * IndexedDB is used instead of localStorage because parsed GPX route arrays
  * can be several hundred KB each, and users may store many routes.
  */
 
+import { getActiveUserId } from './userManager';
+
 const DB_NAME    = 'openride';
 const STORE_NAME = 'routes';
-const DB_VERSION = 1;
+const DB_VERSION = 2;
 
 function openDB() {
   return new Promise((resolve, reject) => {
@@ -20,6 +22,25 @@ function openDB() {
       const db = e.target.result;
       if (!db.objectStoreNames.contains(STORE_NAME)) {
         db.createObjectStore(STORE_NAME, { keyPath: 'id' });
+      }
+
+      // v1 → v2: stamp existing routes with the current active user so they
+      // continue to show up for the initial user after the upgrade.
+      if (e.oldVersion < 2) {
+        const userId = getActiveUserId();
+        if (userId) {
+          const tx    = e.target.transaction;
+          const store = tx.objectStore(STORE_NAME);
+          const getAllReq = store.getAll();
+          getAllReq.onsuccess = () => {
+            for (const route of getAllReq.result || []) {
+              if (!route.userId) {
+                route.userId = userId;
+                store.put(route);
+              }
+            }
+          };
+        }
       }
     };
 
@@ -47,6 +68,7 @@ export async function saveRoute({ id, name, points, totalDistance, elevationGain
       minEle,
       maxEle,
       createdAt:     new Date().toISOString(),
+      userId:        getActiveUserId(),
     };
     store.put(entry);
     tx.oncomplete = () => resolve(entry);
@@ -59,15 +81,18 @@ export async function saveRoute({ id, name, points, totalDistance, elevationGain
  * Points arrays are included (full objects).
  */
 export async function loadAllRoutes() {
-  const db = await openDB();
+  const db     = await openDB();
+  const userId = getActiveUserId();
   return new Promise((resolve, reject) => {
     const tx    = db.transaction(STORE_NAME, 'readonly');
     const store = tx.objectStore(STORE_NAME);
     const req   = store.getAll();
     req.onsuccess = () => {
-      const sorted = (req.result || []).sort(
-        (a, b) => b.createdAt.localeCompare(a.createdAt)
-      );
+      const all = req.result || [];
+      // Include routes that belong to this user, or routes with no userId
+      // (legacy routes created before multi-profile support).
+      const filtered = all.filter(r => !r.userId || r.userId === userId);
+      const sorted   = filtered.sort((a, b) => b.createdAt.localeCompare(a.createdAt));
       resolve(sorted);
     };
     req.onerror = (e) => reject(e.target.error);

@@ -11,6 +11,11 @@ import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
 import HelpPage from './pages/HelpPage';
 import RoutePage from './pages/RoutePage';
 import Footer from './components/Footer';
+import { initUsers } from './services/userManager';
+
+// Run once at module load — before any component renders.
+// Creates the initial user record from existing data on first launch.
+initUsers();
 
 function AppShell() {
   const location = useLocation();
