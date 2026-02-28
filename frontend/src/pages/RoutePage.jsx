@@ -401,7 +401,11 @@ export default function RoutePage() {
         grade: Math.round(grade * 10) / 10,
       });
 
-      if (distanceRidden >= routeStats.totalDistance) setIsRiding(false);
+      if (distanceRidden >= routeStats.totalDistance) {
+        setIsRiding(false);
+        setIsPaused(false);
+        setGrade(0).catch(() => {});
+      }
     }, 1000);
 
     return () => clearInterval(interval);
