@@ -376,10 +376,19 @@ export default function RoutePage() {
       distanceRiddenRef.current += speedRef.current / 3600;
       const distanceRidden = distanceRiddenRef.current;
 
+      // Find the largest index whose distanceFromStart is <= distanceRidden.
+      // Using binary search avoids O(n) scans on every tick for long routes.
+      let left = 0;
+      let right = routePoints.length - 1;
       let idx = 0;
-      for (let i = 0; i < routePoints.length - 1; i++) {
-        if (routePoints[i + 1].distanceFromStart <= distanceRidden) idx = i + 1;
-        else break;
+      while (left <= right) {
+        const mid = Math.floor((left + right) / 2);
+        if (routePoints[mid].distanceFromStart <= distanceRidden) {
+          idx = mid;
+          left = mid + 1;
+        } else {
+          right = mid - 1;
+        }
       }
       idx = Math.min(idx, routePoints.length - 1);
       setCurrentIndex(idx);
