@@ -332,6 +332,15 @@ export class AntManagerEmulator extends EventEmitter {
   }
 
   /**
+   * Grade simulation stub for the emulator.
+   * @param {number} gradePercent
+   */
+  async setGrade(gradePercent) {
+    const approx = Math.max(0, Math.min(100, 40 + gradePercent * 5));
+    return this.setResistance(approx);
+  }
+
+  /**
    * Get discovered devices
    */
   getDiscoveredDevices() {
