@@ -526,11 +526,17 @@ export default function RoutePage() {
       const distanceRidden = distanceRiddenRef.current;
 
       let idx = 0;
-      for (let i = 0; i < routePoints.length - 1; i++) {
-        if (routePoints[i + 1].distanceFromStart <= distanceRidden) idx = i + 1;
-        else break;
+      let low = 0;
+      let high = routePoints.length - 1;
+      while (low <= high) {
+        const mid = Math.floor((low + high) / 2);
+        if (routePoints[mid].distanceFromStart <= distanceRidden) {
+          idx = mid;
+          low = mid + 1;
+        } else {
+          high = mid - 1;
+        }
       }
-      idx = Math.min(idx, routePoints.length - 1);
       setCurrentIndex(idx);
 
       let grade = 0;
