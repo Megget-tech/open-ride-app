@@ -53,6 +53,16 @@ const FAQ_ITEMS = [
     question: 'What workout file format does Open Ride use?',
     answer:
       'Open Ride uses the .orw (Open Ride Workout) XML format. These files define workout segments with target power, cadence, and duration. You can find example files in the workouts directory of the project.'
+  },
+  {
+    question: 'What GPX files work with Route Ride?',
+    answer:
+      'Any standard GPX file that contains a track (trkpt elements) with latitude, longitude, and elevation data will work. You can export GPX files from Strava, Komoot, Garmin Connect, RideWithGPS, and most other cycling apps. The route must include elevation data for automatic grade control to work.'
+  },
+  {
+    question: 'How does the trainer resistance work during a route ride?',
+    answer:
+      'Open Ride calculates the road gradient from the elevation data in your GPX file and sends that grade to your trainer in real time. As you progress along the route (tracked by your speed), the resistance increases on climbs and decreases on descents, simulating the feel of the actual road.'
   }
 ];
 
@@ -156,6 +166,42 @@ export default function HelpPage() {
           </p>
         </div>
 
+        {/* ---- Route Rides ---- */}
+        <div className="help-section">
+          <div className="help-section-header">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M20.5 3l-.16.03L15 5.1 9 3 3.36 4.9c-.21.07-.36.25-.36.48V20.5c0 .28.22.5.5.5l.16-.03L9 18.9l6 2.1 5.64-1.9c.21-.07.36-.25.36-.48V3.5c0-.28-.22-.5-.5-.5zM15 19l-6-2.11V5l6 2.11V19z"/>
+            </svg>
+            <h2>Route Rides</h2>
+          </div>
+          <p className="help-text">
+            The <Link to="/route">Route Ride</Link> page lets you ride real outdoor routes on your
+            indoor trainer. Upload a <strong>GPX file</strong> from any cycling app (Strava, Komoot,
+            Garmin Connect, RideWithGPS, etc.) and Open Ride will:
+          </p>
+          <ul className="help-list">
+            <li>Display an interactive map of the route with your current position.</li>
+            <li>Show an elevation profile with a live progress marker.</li>
+            <li>
+              <strong>Automatically adjust trainer resistance</strong> to match the road gradient —
+              climbs feel harder, descents feel easier.
+            </li>
+            <li>Track distance, elevation gain, duration, power, and cadence in real time.</li>
+            <li>Save completed rides to your route history.</li>
+          </ul>
+          <p className="help-text">
+            <strong>Saving routes:</strong> After uploading a GPX file, click <em>Save to Library</em>
+            to keep it for future sessions. Saved routes appear in the library panel on the Route Ride
+            page and can also be added to your <Link to="/training">weekly training schedule</Link>.
+          </p>
+          <p className="help-text">
+            <strong>Adding route rides to your training plan:</strong> On the{' '}
+            <Link to="/training">Training Program</Link> page, click the <strong>+</strong> button on
+            any day, switch to the <em>Route Rides</em> tab, and select a saved route. The route ride
+            will appear on that day alongside any structured workouts.
+          </p>
+        </div>
+
         {/* ---- Training Programs ---- */}
         <div className="help-section">
           <div className="help-section-header">
@@ -166,8 +212,8 @@ export default function HelpPage() {
           </div>
           <p className="help-text">
             The <Link to="/training">Training</Link> page lets you build a weekly training schedule.
-            Assign workouts to specific days of the week to create a structured plan. Your program
-            is saved locally and persists between sessions.
+            Assign workouts and route rides to specific days of the week to create a structured plan.
+            Your program is saved locally and persists between sessions.
           </p>
         </div>
 
