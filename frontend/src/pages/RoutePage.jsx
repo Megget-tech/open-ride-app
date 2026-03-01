@@ -118,6 +118,10 @@ function ElevationCanvas({ routePoints, routeStats, currentIndex, isRiding }) {
     const { minEle, maxEle, totalDistance } = routeStats;
     const eleRange = maxEle - minEle || 1;
 
+    if (!totalDistance || totalDistance <= 0) {
+      ctx.clearRect(0, 0, cw, ch);
+      return;
+    }
     const xOf = i => pad.left + (routePoints[i].distanceFromStart / totalDistance) * innerW;
     const yOf = ele => pad.top + innerH - ((ele - minEle) / eleRange) * innerH;
 
