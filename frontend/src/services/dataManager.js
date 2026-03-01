@@ -19,10 +19,14 @@ const WORKOUTS_CACHE_KEY = 'openride_cached_workouts';
 const WORKOUTS_CACHE_TS_KEY = 'openride_cached_workouts_at';
 const WORKOUT_CACHE_PREFIX = 'openride_cached_workout_';
 
+export const ROUTE_HISTORY_KEY = 'openride_route_history';
+const MAX_ROUTE_HISTORY = 100;
+
 // All keys that belong to Open Ride (used for export/import)
 const ALL_KEYS = [
   'openride_settings',
   'openride_workout_history',
+  ROUTE_HISTORY_KEY,
   'openride_training_program',
   CUSTOM_WORKOUTS_KEY,
   'openride_use_emulator',
@@ -123,6 +127,33 @@ export function saveCachedWorkout(workout) {
   if (!workout || !workout.id) return;
   try {
     localStorage.setItem(`${WORKOUT_CACHE_PREFIX}${workout.id}`, JSON.stringify(workout));
+  } catch (_) {}
+}
+
+// ─── Route ride history ───────────────────────────────────────────────────────
+
+/**
+ * Load all saved route ride entries, newest first.
+ * Entry schema: { id, routeId, routeName, date, distance, duration,
+ *                 elevationGain, avgPower, avgCadence }
+ */
+export function loadRouteHistory() {
+  try {
+    const raw = localStorage.getItem(ROUTE_HISTORY_KEY);
+    if (raw) return JSON.parse(raw);
+  } catch (_) {}
+  return [];
+}
+
+/**
+ * Append a completed route ride to history (capped at MAX_ROUTE_HISTORY).
+ */
+export function saveRouteRide(entry) {
+  const history = loadRouteHistory();
+  history.unshift({ ...entry, id: Date.now() });
+  if (history.length > MAX_ROUTE_HISTORY) history.length = MAX_ROUTE_HISTORY;
+  try {
+    localStorage.setItem(ROUTE_HISTORY_KEY, JSON.stringify(history));
   } catch (_) {}
 }
 

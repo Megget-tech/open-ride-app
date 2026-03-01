@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAnt } from '../contexts/AntContext';
 import logoSvg from '../assets/open-ride-logo.svg';
+import UserSwitcher from './UserSwitcher';
 
 export default function TopBar({
   variant = 'main',
@@ -93,6 +94,7 @@ export default function TopBar({
           <span className="nav-title">{title || ''}</span>
         </div>
         <div className="nav-right">
+          <UserSwitcher interactive={false} />
           {showConnection && (
             <button type="button" className={`connection-badge ${status === 'connected' ? 'connected' : ''}`} onClick={onDeviceScanClick} aria-label={connectionText}>
               {isBluetooth ? (
@@ -151,6 +153,7 @@ export default function TopBar({
       </div>
       <div className="nav-right">
         {showEmulator && <div className="emulator-badge-nav" role="status" aria-live="polite">🎮 EMULATOR</div>}
+        <UserSwitcher />
         {showConnection && (
           <button type="button" className={`connection-badge ${status === 'connected' ? 'connected' : ''}`} onClick={onDeviceScanClick} aria-label={connectionText}>
             {isBluetooth ? (

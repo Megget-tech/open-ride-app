@@ -1,8 +1,16 @@
 import React, { Component, useState, useEffect, useRef, useCallback, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import L from 'leaflet';
 import { useAnt } from '../contexts/AntContext';
 import TopBar from '../components/TopBar';
 import DeviceModal from '../components/DeviceModal';
+import {
+  saveRoute,
+  loadAllRoutes,
+  deleteRoute,
+  renameRoute,
+} from '../services/routeLibrary';
+import { saveRouteRide } from '../services/dataManager';
 import '../styles/route.css';
 
 // ── Error Boundary ─────────────────────────────────────────────────────────────
@@ -78,7 +86,15 @@ function parseGPX(xmlText) {
   return points;
 }
 
-// ── Elevation canvas (imperative draw, no crash risk) ────────────────────────
+function formatDuration(seconds) {
+  const h = Math.floor(seconds / 3600);
+  const m = Math.floor((seconds % 3600) / 60);
+  const s = seconds % 60;
+  if (h > 0) return `${h}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+  return `${m}:${String(s).padStart(2, '0')}`;
+}
+
+// ── Elevation canvas ──────────────────────────────────────────────────────────
 
 function ElevationCanvas({ routePoints, routeStats, currentIndex, isRiding }) {
   const canvasRef = useRef(null);
@@ -101,14 +117,16 @@ function ElevationCanvas({ routePoints, routeStats, currentIndex, isRiding }) {
 
     const { minEle, maxEle, totalDistance } = routeStats;
     const eleRange = maxEle - minEle || 1;
-    const safeTotalDistance = totalDistance > 0 ? totalDistance : 1;
 
-    const xOf = i => pad.left + (routePoints[i].distanceFromStart / safeTotalDistance) * innerW;
+    if (!totalDistance || totalDistance <= 0) {
+      ctx.clearRect(0, 0, cw, ch);
+      return;
+    }
+    const xOf = i => pad.left + (routePoints[i].distanceFromStart / totalDistance) * innerW;
     const yOf = ele => pad.top + innerH - ((ele - minEle) / eleRange) * innerH;
 
     ctx.clearRect(0, 0, cw, ch);
 
-    // Filled area under elevation line
     ctx.beginPath();
     ctx.moveTo(xOf(0), ch - pad.bottom);
     for (let i = 0; i < routePoints.length; i++) {
@@ -122,7 +140,6 @@ function ElevationCanvas({ routePoints, routeStats, currentIndex, isRiding }) {
     ctx.fillStyle = grad;
     ctx.fill();
 
-    // Elevation line
     ctx.beginPath();
     for (let i = 0; i < routePoints.length; i++) {
       if (i === 0) ctx.moveTo(xOf(i), yOf(routePoints[i].ele));
@@ -132,12 +149,10 @@ function ElevationCanvas({ routePoints, routeStats, currentIndex, isRiding }) {
     ctx.lineWidth = 2;
     ctx.stroke();
 
-    // Current position
     if (isRiding && currentIndex >= 0 && currentIndex < routePoints.length) {
       const x = xOf(currentIndex);
       const y = yOf(routePoints[currentIndex].ele);
 
-      // Vertical guide line
       ctx.beginPath();
       ctx.moveTo(x, pad.top);
       ctx.lineTo(x, ch - pad.bottom);
@@ -145,7 +160,6 @@ function ElevationCanvas({ routePoints, routeStats, currentIndex, isRiding }) {
       ctx.lineWidth = 1.5;
       ctx.stroke();
 
-      // Circle on the elevation curve
       ctx.beginPath();
       ctx.arc(x, y, 5, 0, Math.PI * 2);
       ctx.fillStyle = '#ff6b35';
@@ -155,7 +169,6 @@ function ElevationCanvas({ routePoints, routeStats, currentIndex, isRiding }) {
       ctx.stroke();
     }
 
-    // Y labels
     ctx.fillStyle = '#888';
     ctx.font = '11px sans-serif';
     ctx.textAlign = 'right';
@@ -164,32 +177,25 @@ function ElevationCanvas({ routePoints, routeStats, currentIndex, isRiding }) {
       ctx.fillText(`${Math.round(ele)}m`, pad.left - 5, yOf(ele) + 4);
     }
 
-    // X labels
     ctx.textAlign = 'center';
-    if (totalDistance > 0) {
-      for (let i = 0; i <= 4; i++) {
-        const dist = (totalDistance * i) / 4;
-        const x = pad.left + (dist / totalDistance) * innerW;
-        ctx.fillText(`${dist.toFixed(1)}km`, x, ch - 6);
-      }
-    } else {
-      // Zero-length route: avoid division by zero and show a single label
-      ctx.fillText('0.0km', pad.left, ch - 6);
+    for (let i = 0; i <= 4; i++) {
+      const dist = (totalDistance * i) / 4;
+      const x = pad.left + (dist / totalDistance) * innerW;
+      ctx.fillText(`${dist.toFixed(1)}km`, x, ch - 6);
     }
   }, [routePoints, routeStats, currentIndex, isRiding]);
 
   return <canvas ref={canvasRef} className="elevation-canvas" />;
 }
 
-// ── Leaflet map (imperative, no react-leaflet) ────────────────────────────────
+// ── Leaflet map ───────────────────────────────────────────────────────────────
 
 function RouteMap({ routePoints, currentIndex, isRiding }) {
   const containerRef = useRef(null);
-  const mapRef = useRef(null);
-  const polylineRef = useRef(null);
-  const markerRef = useRef(null);
+  const mapRef       = useRef(null);
+  const polylineRef  = useRef(null);
+  const markerRef    = useRef(null);
 
-  // Initialize map once
   useEffect(() => {
     const container = containerRef.current;
     if (!container || mapRef.current) return;
@@ -204,47 +210,34 @@ function RouteMap({ routePoints, currentIndex, isRiding }) {
 
     return () => {
       map.remove();
-      mapRef.current = null;
+      mapRef.current    = null;
       polylineRef.current = null;
-      markerRef.current = null;
+      markerRef.current   = null;
     };
   }, []);
 
-  // Draw/update route polyline when points change
   useEffect(() => {
     const map = mapRef.current;
     if (!map) return;
 
-    if (polylineRef.current) {
-      polylineRef.current.remove();
-      polylineRef.current = null;
-    }
-    if (markerRef.current) {
-      markerRef.current.remove();
-      markerRef.current = null;
-    }
+    if (polylineRef.current) { polylineRef.current.remove(); polylineRef.current = null; }
+    if (markerRef.current)   { markerRef.current.remove();   markerRef.current   = null; }
 
     if (routePoints.length === 0) return;
 
     const latlngs = routePoints.map(p => [p.lat, p.lng]);
     polylineRef.current = L.polyline(latlngs, {
-      color: '#00d4ff',
-      weight: 3,
-      opacity: 0.85,
+      color: '#00d4ff', weight: 3, opacity: 0.85,
     }).addTo(map);
     map.fitBounds(polylineRef.current.getBounds(), { padding: [24, 24] });
   }, [routePoints]);
 
-  // Move position marker during ride
   useEffect(() => {
     const map = mapRef.current;
     if (!map) return;
 
     if (!isRiding || routePoints.length === 0) {
-      if (markerRef.current) {
-        markerRef.current.remove();
-        markerRef.current = null;
-      }
+      if (markerRef.current) { markerRef.current.remove(); markerRef.current = null; }
       return;
     }
 
@@ -256,25 +249,17 @@ function RouteMap({ routePoints, currentIndex, isRiding }) {
       markerRef.current.setLatLng(latlng);
     } else {
       markerRef.current = L.circleMarker(latlng, {
-        radius: 9,
-        color: '#ff6b35',
-        fillColor: '#ff6b35',
-        fillOpacity: 1,
-        weight: 2,
+        radius: 9, color: '#ff6b35', fillColor: '#ff6b35', fillOpacity: 1, weight: 2,
       }).addTo(map);
     }
   }, [isRiding, currentIndex, routePoints]);
 
   return (
-    <div
-      ref={containerRef}
-      className="leaflet-map"
-      style={{ width: '100%', height: '100%' }}
-    />
+    <div ref={containerRef} className="leaflet-map" style={{ width: '100%', height: '100%' }} />
   );
 }
 
-// ── localStorage key ──────────────────────────────────────────────────────────
+// ── localStorage key for active route ─────────────────────────────────────────
 const STORAGE_KEY = 'openride_current_route';
 
 function loadSavedRoute() {
@@ -289,72 +274,157 @@ function loadSavedRoute() {
 
 export default function RoutePage() {
   const { telemetry, setGrade, status } = useAnt();
+  const navigate = useNavigate();
 
   const [showDeviceModal, setShowDeviceModal] = useState(false);
 
-  // Restore route from localStorage on first mount so navigating between
-  // tabs does not discard an uploaded GPX file.
+  // Active route (loaded from file or library)
   const [routePoints, setRoutePoints] = useState(() => loadSavedRoute()?.points ?? []);
-  const [routeName, setRouteName] = useState(() => loadSavedRoute()?.name ?? '');
+  const [routeName,   setRouteName]   = useState(() => loadSavedRoute()?.name   ?? '');
+  const [routeId,     setRouteId]     = useState(() => loadSavedRoute()?.id     ?? null);
 
+  // Route library
+  const [library,       setLibrary]       = useState([]);
+  const [showLibrary,   setShowLibrary]   = useState(false);
+  const [renamingId,    setRenamingId]    = useState(null);
+  const [renameValue,   setRenameValue]   = useState('');
+  const [savedToLib,    setSavedToLib]    = useState(false);
+
+  // Parse error
   const [parseError, setParseError] = useState(null);
-  const [isRiding, setIsRiding] = useState(false);
-  const [isPaused, setIsPaused] = useState(false);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [liveStats, setLiveStats] = useState({ distanceRidden: 0, ele: 0, grade: 0 });
 
-  const speedRef = useRef(0);
-  const distanceRiddenRef = useRef(0);
-  const lastGradeSentRef = useRef(-1);
-  // Backwards-compat alias: prefer lastGradeSentRef for new code.
-  const lastResistanceRef = lastGradeSentRef;
+  // Ride state
+  const [isRiding,      setIsRiding]      = useState(false);
+  const [isPaused,      setIsPaused]      = useState(false);
+  const [currentIndex,  setCurrentIndex]  = useState(0);
+  const [liveStats,     setLiveStats]     = useState({ distanceRidden: 0, ele: 0, grade: 0, duration: 0 });
+
+  // Completion summary
+  const [showSummary,   setShowSummary]   = useState(false);
+  const [summaryStats,  setSummaryStats]  = useState(null);
+
+  // Refs for interval
+  const speedRef           = useRef(0);
+  const powerRef           = useRef(0);
+  const cadenceRef         = useRef(0);
+  const distanceRiddenRef  = useRef(0);
+  const durationRef        = useRef(0);
+  const lastGradeRef       = useRef(-999);
+  const ridePowerAccRef    = useRef({ total: 0, count: 0 });
+  const rideCadenceAccRef  = useRef({ total: 0, count: 0 });
+
   const fileInputRef = useRef(null);
 
-  // Keep speed ref current so the interval always sees the latest value
-  useEffect(() => {
-    speedRef.current = telemetry.speed;
-  }, [telemetry.speed]);
+  // Refs for detecting ride end
+  const prevIsRidingRef = useRef(false);
+  // Stable refs for route info (used in summary effect without being deps)
+  const routePointsRef  = useRef(routePoints);
+  const routeNameRef    = useRef(routeName);
+  const routeIdRef      = useRef(routeId);
 
-  // Persist route to localStorage whenever it changes
+  // Keep telemetry refs current for interval
+  useEffect(() => { speedRef.current   = telemetry.speed;   }, [telemetry.speed]);
+  useEffect(() => { powerRef.current   = telemetry.power;   }, [telemetry.power]);
+  useEffect(() => { cadenceRef.current = telemetry.cadence; }, [telemetry.cadence]);
+
+  // Keep route info refs current
+  useEffect(() => { routePointsRef.current = routePoints; }, [routePoints]);
+  useEffect(() => { routeNameRef.current   = routeName;   }, [routeName]);
+  useEffect(() => { routeIdRef.current     = routeId;     }, [routeId]);
+
+  // Load library on mount
+  useEffect(() => {
+    loadAllRoutes().then(setLibrary).catch(() => {});
+  }, []);
+
+  // Persist active route to localStorage
   useEffect(() => {
     if (routePoints.length === 0) {
       localStorage.removeItem(STORAGE_KEY);
       return;
     }
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify({ name: routeName, points: routePoints }));
-    } catch (_) {
-      // Quota exceeded — silently ignore, route still works in memory
-    }
-  }, [routePoints, routeName]);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ id: routeId, name: routeName, points: routePoints }));
+    } catch (_) {}
+  }, [routePoints, routeName, routeId]);
 
   const routeStats = useMemo(() => {
     if (routePoints.length === 0) return null;
     const totalDistance = routePoints[routePoints.length - 1].distanceFromStart;
     let elevationGain = 0;
-    let elevationLoss = 0;
     let minEle = routePoints[0].ele;
     let maxEle = routePoints[0].ele;
     for (let i = 1; i < routePoints.length; i++) {
       const diff = routePoints[i].ele - routePoints[i - 1].ele;
       if (diff > 0) elevationGain += diff;
-      else elevationLoss += Math.abs(diff);
       if (routePoints[i].ele < minEle) minEle = routePoints[i].ele;
       if (routePoints[i].ele > maxEle) maxEle = routePoints[i].ele;
     }
-    return { totalDistance, elevationGain, elevationLoss, minEle, maxEle };
+    return { totalDistance, elevationGain, minEle, maxEle };
   }, [routePoints]);
+
+  // ── Reset trainer grade on unmount ──────────────────────────────────────────
+  useEffect(() => {
+    return () => { setGrade(0).catch(() => {}); };
+  }, [setGrade]);
+
+  // ── Ride completion summary ───────────────────────────────────────────────────
+  useEffect(() => {
+    const wasRiding = prevIsRidingRef.current;
+    prevIsRidingRef.current = isRiding;
+
+    // Only trigger when ride transitions from active to stopped
+    if (!wasRiding || isRiding) return;
+
+    // Skip summary for trivial distances (< 100 m)
+    if (distanceRiddenRef.current < 0.1) return;
+
+    const pts    = routePointsRef.current;
+    const name   = routeNameRef.current;
+    const rid    = routeIdRef.current;
+    const endIdx = Math.min(currentIndexRef.current, pts.length - 1);
+
+    let gainRidden = 0;
+    for (let i = 1; i <= endIdx; i++) {
+      const diff = pts[i].ele - pts[i - 1].ele;
+      if (diff > 0) gainRidden += diff;
+    }
+
+    const p = ridePowerAccRef.current;
+    const c = rideCadenceAccRef.current;
+
+    const stats = {
+      routeName:     name,
+      distance:      distanceRiddenRef.current,
+      duration:      durationRef.current,
+      elevationGain: Math.round(gainRidden),
+      avgPower:      p.count > 0 ? Math.round(p.total / p.count) : 0,
+      avgCadence:    c.count > 0 ? Math.round(c.total / c.count) : 0,
+    };
+
+    saveRouteRide({
+      routeId:   rid,
+      routeName: name,
+      date:      new Date().toISOString(),
+      ...stats,
+    });
+
+    setSummaryStats(stats);
+    setShowSummary(true);
+  }, [isRiding]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // ── File upload ──────────────────────────────────────────────────────────────
 
   const handleFileUpload = useCallback(e => {
     const file = e.target.files[0];
     if (!file) return;
-    // Reset input so the same file can be re-uploaded
     if (fileInputRef.current) fileInputRef.current.value = '';
 
     setParseError(null);
     setIsRiding(false);
     setCurrentIndex(0);
-    setLiveStats({ distanceRidden: 0, ele: 0, grade: 0 });
+    setLiveStats({ distanceRidden: 0, ele: 0, grade: 0, duration: 0 });
+    setSavedToLib(false);
 
     const reader = new FileReader();
     reader.onload = evt => {
@@ -362,6 +432,7 @@ export default function RoutePage() {
         const points = parseGPX(evt.target.result);
         setRoutePoints(points);
         setRouteName(file.name.replace(/\.gpx$/i, ''));
+        setRouteId(null); // not yet saved to library
       } catch (err) {
         setParseError(err.message);
         setRoutePoints([]);
@@ -371,31 +442,101 @@ export default function RoutePage() {
     reader.readAsText(file);
   }, []);
 
-  // Track position during ride by integrating speed (km/h) once per second.
-  // This works even when the trainer doesn't send the optional FTMS Total Distance field.
+  // ── Library actions ──────────────────────────────────────────────────────────
+
+  const handleSaveToLibrary = useCallback(async () => {
+    if (routePoints.length === 0 || !routeStats) return;
+    try {
+      const entry = await saveRoute({
+        id:            routeId || undefined,
+        name:          routeName,
+        points:        routePoints,
+        totalDistance: routeStats.totalDistance,
+        elevationGain: routeStats.elevationGain,
+        minEle:        routeStats.minEle,
+        maxEle:        routeStats.maxEle,
+      });
+      setRouteId(entry.id);
+      setSavedToLib(true);
+      const updated = await loadAllRoutes();
+      setLibrary(updated);
+    } catch (_) {}
+  }, [routePoints, routeStats, routeName, routeId]);
+
+  const handleLoadFromLibrary = useCallback((entry) => {
+    setRoutePoints(entry.points);
+    setRouteName(entry.name);
+    setRouteId(entry.id);
+    setSavedToLib(true);
+    setIsRiding(false);
+    setCurrentIndex(0);
+    setLiveStats({ distanceRidden: 0, ele: 0, grade: 0, duration: 0 });
+    setParseError(null);
+    setShowLibrary(false);
+  }, []);
+
+  const handleDeleteFromLibrary = useCallback(async (id, e) => {
+    e.stopPropagation();
+    try {
+      await deleteRoute(id);
+      const updated = await loadAllRoutes();
+      setLibrary(updated);
+      if (routeId === id) {
+        setRouteId(null);
+        setSavedToLib(false);
+      }
+    } catch (_) {}
+  }, [routeId]);
+
+  const handleStartRename = useCallback((entry, e) => {
+    e.stopPropagation();
+    setRenamingId(entry.id);
+    setRenameValue(entry.name);
+  }, []);
+
+  const handleConfirmRename = useCallback(async (id) => {
+    if (!renameValue.trim()) { setRenamingId(null); return; }
+    try {
+      await renameRoute(id, renameValue.trim());
+      const updated = await loadAllRoutes();
+      setLibrary(updated);
+      if (routeId === id) setRouteName(renameValue.trim());
+    } catch (_) {}
+    setRenamingId(null);
+  }, [renameValue, routeId]);
+
+  // ── Ride tracking ────────────────────────────────────────────────────────────
+
   useEffect(() => {
     if (!isRiding || isPaused || routePoints.length === 0 || !routeStats) return;
 
     const interval = setInterval(() => {
-      // speed (km/h) × 1 s = speed/3600 km
       distanceRiddenRef.current += speedRef.current / 3600;
+      durationRef.current       += 1;
+
+      if (powerRef.current > 0) {
+        ridePowerAccRef.current.total += powerRef.current;
+        ridePowerAccRef.current.count += 1;
+      }
+      if (cadenceRef.current > 0) {
+        rideCadenceAccRef.current.total += cadenceRef.current;
+        rideCadenceAccRef.current.count += 1;
+      }
+
       const distanceRidden = distanceRiddenRef.current;
 
-      // Find the largest index whose distanceFromStart is <= distanceRidden.
-      // Using binary search avoids O(n) scans on every tick for long routes.
-      let left = 0;
-      let right = routePoints.length - 1;
       let idx = 0;
-      while (left <= right) {
-        const mid = Math.floor((left + right) / 2);
+      let low = 0;
+      let high = routePoints.length - 1;
+      while (low <= high) {
+        const mid = Math.floor((low + high) / 2);
         if (routePoints[mid].distanceFromStart <= distanceRidden) {
           idx = mid;
-          left = mid + 1;
+          low = mid + 1;
         } else {
-          right = mid - 1;
+          high = mid - 1;
         }
       }
-      idx = Math.min(idx, routePoints.length - 1);
       setCurrentIndex(idx);
 
       let grade = 0;
@@ -407,33 +548,33 @@ export default function RoutePage() {
       }
 
       const gradeRounded = Math.round(grade * 10) / 10;
-      if (Math.abs(gradeRounded - lastResistanceRef.current) >= 0.2) {
-        lastResistanceRef.current = gradeRounded;
+      if (Math.abs(gradeRounded - lastGradeRef.current) >= 0.2) {
+        lastGradeRef.current = gradeRounded;
         setGrade(gradeRounded).catch(() => {});
       }
 
       setLiveStats({
         distanceRidden,
-        ele: routePoints[idx].ele,
-        grade: Math.round(grade * 10) / 10,
+        ele:      routePoints[idx].ele,
+        grade:    gradeRounded,
+        duration: durationRef.current,
       });
 
-      if (distanceRidden >= routeStats.totalDistance) {
-        setIsRiding(false);
-        setIsPaused(false);
-        setGrade(0).catch(() => {});
-      }
+      if (distanceRidden >= routeStats.totalDistance) setIsRiding(false);
     }, 1000);
 
     return () => clearInterval(interval);
   }, [isRiding, isPaused, routePoints, routeStats, setGrade]);
 
   const handleStartRide = useCallback(() => {
-    distanceRiddenRef.current = 0;
-    lastResistanceRef.current = -1;
+    distanceRiddenRef.current       = 0;
+    durationRef.current             = 0;
+    lastGradeRef.current            = -999;
+    ridePowerAccRef.current         = { total: 0, count: 0 };
+    rideCadenceAccRef.current       = { total: 0, count: 0 };
     setCurrentIndex(0);
     setIsPaused(false);
-    setLiveStats({ distanceRidden: 0, ele: routePoints[0]?.ele ?? 0, grade: 0 });
+    setLiveStats({ distanceRidden: 0, ele: routePoints[0]?.ele ?? 0, grade: 0, duration: 0 });
     setIsRiding(true);
   }, [routePoints]);
 
@@ -443,21 +584,39 @@ export default function RoutePage() {
   }, [setGrade]);
 
   const handleResumeRide = useCallback(() => {
-    lastResistanceRef.current = -1; // force grade re-send on next tick
+    lastGradeRef.current = -999;
     setIsPaused(false);
   }, []);
 
   const handleStopRide = useCallback(() => {
-    setIsRiding(false);
     setIsPaused(false);
     setGrade(0).catch(() => {});
+    setIsRiding(false); // triggers the summary useEffect
   }, [setGrade]);
+
+  const handleRideAgain = useCallback(() => {
+    setShowSummary(false);
+    setSummaryStats(null);
+    distanceRiddenRef.current       = 0;
+    durationRef.current             = 0;
+    lastGradeRef.current            = -999;
+    ridePowerAccRef.current         = { total: 0, count: 0 };
+    rideCadenceAccRef.current       = { total: 0, count: 0 };
+    setCurrentIndex(0);
+    setLiveStats({ distanceRidden: 0, ele: routePointsRef.current[0]?.ele ?? 0, grade: 0, duration: 0 });
+  }, []);
+
+  // Keep a ref to currentIndex so the summary effect can read it without being a dep
+  const currentIndexRef = useRef(0);
+  useEffect(() => { currentIndexRef.current = currentIndex; }, [currentIndex]);
 
   const gradeClass = useMemo(() => {
     if (liveStats.grade > 5) return 'grade-hard';
     if (liveStats.grade > 0) return 'grade-moderate';
     return 'grade-easy';
   }, [liveStats.grade]);
+
+  // ── Render ───────────────────────────────────────────────────────────────────
 
   return (
     <div className="route-page">
@@ -470,12 +629,13 @@ export default function RoutePage() {
           <aside className="route-sidebar">
             <h1 className="route-heading">Route Ride</h1>
 
+            {/* Upload + library toggle */}
             <div className="route-upload-section">
               <label className="gpx-upload-btn" htmlFor="gpx-file-input">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                   <path d="M19.35 10.04A7.49 7.49 0 0 0 12 4C9.11 4 6.6 5.64 5.35 8.04A5.994 5.994 0 0 0 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z"/>
                 </svg>
-                {routePoints.length > 0 ? 'Replace GPX file' : 'Upload GPX file'}
+                {routePoints.length > 0 ? 'Replace GPX' : 'Upload GPX'}
               </label>
               <input
                 ref={fileInputRef}
@@ -485,7 +645,81 @@ export default function RoutePage() {
                 onChange={handleFileUpload}
                 className="gpx-file-input"
               />
+              <button
+                type="button"
+                className={`btn-library-toggle ${showLibrary ? 'active' : ''}`}
+                onClick={() => setShowLibrary(v => !v)}
+                title="Saved routes"
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M20 6h-8l-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 12H4V6h5.17l2 2H20v10z"/>
+                </svg>
+                {library.length > 0 && <span className="library-count">{library.length}</span>}
+              </button>
             </div>
+
+            {/* Route library panel */}
+            {showLibrary && (
+              <div className="route-library">
+                <div className="route-library-header">Saved Routes</div>
+                {library.length === 0 ? (
+                  <p className="route-library-empty">No saved routes yet. Upload a GPX and save it to the library.</p>
+                ) : (
+                  <ul className="route-library-list">
+                    {library.map(entry => (
+                      <li
+                        key={entry.id}
+                        className={`route-library-item ${routeId === entry.id ? 'active' : ''}`}
+                        onClick={() => handleLoadFromLibrary(entry)}
+                      >
+                        {renamingId === entry.id ? (
+                          <input
+                            className="route-library-rename-input"
+                            value={renameValue}
+                            autoFocus
+                            onChange={e => setRenameValue(e.target.value)}
+                            onKeyDown={e => {
+                              if (e.key === 'Enter')  handleConfirmRename(entry.id);
+                              if (e.key === 'Escape') setRenamingId(null);
+                            }}
+                            onBlur={() => handleConfirmRename(entry.id)}
+                            onClick={e => e.stopPropagation()}
+                          />
+                        ) : (
+                          <>
+                            <span className="route-library-name">{entry.name}</span>
+                            <span className="route-library-meta">
+                              {entry.totalDistance?.toFixed(1)} km · +{Math.round(entry.elevationGain ?? 0)} m
+                            </span>
+                          </>
+                        )}
+                        <div className="route-library-actions">
+                          <button
+                            type="button"
+                            title="Rename"
+                            onClick={e => handleStartRename(entry, e)}
+                          >
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                              <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
+                            </svg>
+                          </button>
+                          <button
+                            type="button"
+                            title="Delete"
+                            className="btn-delete-route"
+                            onClick={e => handleDeleteFromLibrary(entry.id, e)}
+                          >
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                              <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
+                            </svg>
+                          </button>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            )}
 
             {parseError && (
               <p className="route-error" role="alert">{parseError}</p>
@@ -499,7 +733,21 @@ export default function RoutePage() {
 
             {routeStats && (
               <>
-                <div className="route-name">{routeName}</div>
+                <div className="route-name-row">
+                  <span className="route-name">{routeName}</span>
+                  {!savedToLib ? (
+                    <button
+                      type="button"
+                      className="btn-save-to-lib"
+                      onClick={handleSaveToLibrary}
+                      title="Save to library"
+                    >
+                      Save
+                    </button>
+                  ) : (
+                    <span className="route-saved-badge">✓ Saved</span>
+                  )}
+                </div>
 
                 <div className="route-stats-grid">
                   <div className="route-stat">
@@ -525,6 +773,10 @@ export default function RoutePage() {
                     <div className="ride-live-stat">
                       <span className="ride-live-label">Ridden</span>
                       <span className="ride-live-value">{liveStats.distanceRidden.toFixed(2)} km</span>
+                    </div>
+                    <div className="ride-live-stat">
+                      <span className="ride-live-label">Time</span>
+                      <span className="ride-live-value">{formatDuration(liveStats.duration)}</span>
                     </div>
                     <div className="ride-live-stat">
                       <span className="ride-live-label">Elevation</span>
@@ -565,27 +817,15 @@ export default function RoutePage() {
                   ) : (
                     <div className="ride-active-controls">
                       {isPaused ? (
-                        <button
-                          type="button"
-                          className="btn-resume-ride"
-                          onClick={handleResumeRide}
-                        >
+                        <button type="button" className="btn-resume-ride" onClick={handleResumeRide}>
                           Resume
                         </button>
                       ) : (
-                        <button
-                          type="button"
-                          className="btn-pause-ride"
-                          onClick={handlePauseRide}
-                        >
+                        <button type="button" className="btn-pause-ride" onClick={handlePauseRide}>
                           Pause
                         </button>
                       )}
-                      <button
-                        type="button"
-                        className="btn-stop-ride"
-                        onClick={handleStopRide}
-                      >
+                      <button type="button" className="btn-stop-ride" onClick={handleStopRide}>
                         Stop
                       </button>
                     </div>
@@ -607,11 +847,7 @@ export default function RoutePage() {
                 </div>
               ) : (
                 <RouteErrorBoundary>
-                  <RouteMap
-                    routePoints={routePoints}
-                    currentIndex={currentIndex}
-                    isRiding={isRiding}
-                  />
+                  <RouteMap routePoints={routePoints} currentIndex={currentIndex} isRiding={isRiding} />
                 </RouteErrorBoundary>
               )}
             </div>
@@ -633,6 +869,66 @@ export default function RoutePage() {
       </main>
 
       <DeviceModal isOpen={showDeviceModal} onClose={() => setShowDeviceModal(false)} />
+
+      {showSummary && summaryStats && (
+        <div className="route-complete-overlay">
+          <div className="route-complete-card">
+            <div className="route-complete-header">
+              <div className="route-complete-icon">✓</div>
+              <div className="route-complete-title">Ride Complete</div>
+              <div className="route-complete-name">{summaryStats.routeName || 'Route'}</div>
+            </div>
+
+            <div className="route-complete-stats">
+              <div className="route-complete-stat">
+                <div className="route-complete-stat-value">{formatDuration(summaryStats.duration)}</div>
+                <div className="route-complete-stat-label">Duration</div>
+              </div>
+              <div className="route-complete-stat highlight">
+                <div className="route-complete-stat-value">
+                  {summaryStats.distance.toFixed(2)}
+                  <span className="route-stat-unit">km</span>
+                </div>
+                <div className="route-complete-stat-label">Distance</div>
+              </div>
+              <div className="route-complete-stat">
+                <div className="route-complete-stat-value">
+                  +{summaryStats.elevationGain}
+                  <span className="route-stat-unit">m</span>
+                </div>
+                <div className="route-complete-stat-label">Elevation gain</div>
+              </div>
+              {summaryStats.avgPower > 0 && (
+                <div className="route-complete-stat">
+                  <div className="route-complete-stat-value">
+                    {summaryStats.avgPower}
+                    <span className="route-stat-unit">W</span>
+                  </div>
+                  <div className="route-complete-stat-label">Avg power</div>
+                </div>
+              )}
+              {summaryStats.avgCadence > 0 && (
+                <div className="route-complete-stat">
+                  <div className="route-complete-stat-value">
+                    {summaryStats.avgCadence}
+                    <span className="route-stat-unit">rpm</span>
+                  </div>
+                  <div className="route-complete-stat-label">Avg cadence</div>
+                </div>
+              )}
+            </div>
+
+            <div className="route-complete-actions">
+              <button className="route-complete-btn secondary" onClick={() => navigate('/')}>
+                Back to Home
+              </button>
+              <button className="route-complete-btn primary" onClick={handleRideAgain}>
+                Ride Again
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

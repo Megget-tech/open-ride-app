@@ -1,0 +1,238 @@
+/* ── User avatar circle ─────────────────────────────────────────────────────── */
+
+.user-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #000;
+  cursor: pointer;
+  border: 2px solid transparent;
+  flex-shrink: 0;
+  transition: border-color 0.15s, opacity 0.15s;
+  background: none;
+  padding: 0;
+  line-height: 1;
+  letter-spacing: 0;
+}
+
+.user-avatar:hover {
+  border-color: rgba(255, 255, 255, 0.4);
+  opacity: 0.9;
+}
+
+.user-avatar--sm {
+  width: 26px;
+  height: 26px;
+  font-size: 0.65rem;
+}
+
+/* ── Switcher panel ─────────────────────────────────────────────────────────── */
+
+.user-switcher-wrapper {
+  position: relative;
+}
+
+.user-switcher-panel {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  min-width: 220px;
+  background: #1a1a2e;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  z-index: 500;
+  overflow: hidden;
+  animation: us-fade-in 0.12s ease;
+}
+
+@keyframes us-fade-in {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.user-switcher-panel-header {
+  padding: 10px 14px 8px;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.4);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* ── User list items ────────────────────────────────────────────────────────── */
+
+.user-switcher-list {
+  list-style: none;
+  margin: 0;
+  padding: 4px 0;
+}
+
+.user-switcher-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 14px;
+  cursor: pointer;
+  transition: background 0.1s;
+}
+
+.user-switcher-item:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.user-switcher-item--active {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.user-switcher-item-name {
+  flex: 1;
+  font-size: 0.9rem;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.user-switcher-item-name--active {
+  font-weight: 600;
+}
+
+.user-switcher-check {
+  font-size: 0.85rem;
+  color: #00d4ff;
+  flex-shrink: 0;
+}
+
+.user-switcher-actions {
+  display: flex;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.user-switcher-icon-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.45);
+  transition: background 0.1s, color 0.1s;
+  padding: 0;
+}
+
+.user-switcher-icon-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.user-switcher-icon-btn--danger:hover {
+  background: rgba(255, 80, 80, 0.15);
+  color: #ff6b6b;
+}
+
+/* ── Inline rename input ────────────────────────────────────────────────────── */
+
+.user-switcher-rename-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 14px;
+}
+
+.user-switcher-name-input {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  color: #fff;
+  font-size: 0.85rem;
+  padding: 5px 8px;
+  outline: none;
+}
+
+.user-switcher-name-input:focus {
+  border-color: #00d4ff;
+}
+
+.user-switcher-confirm-btn {
+  background: #00d4ff;
+  border: none;
+  border-radius: 6px;
+  color: #000;
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 5px 10px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.user-switcher-confirm-btn:hover {
+  background: #33ddff;
+}
+
+.user-switcher-cancel-btn {
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.8rem;
+  padding: 5px 8px;
+  cursor: pointer;
+}
+
+.user-switcher-cancel-btn:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+/* ── Add user section ───────────────────────────────────────────────────────── */
+
+.user-switcher-footer {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 6px 0 4px;
+}
+
+.user-switcher-add-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 8px 14px;
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.85rem;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.1s, color 0.1s;
+}
+
+.user-switcher-add-btn:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
+}
+
+.user-switcher-add-icon {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 1.5px dashed rgba(255, 255, 255, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.user-switcher-add-form {
+  padding: 6px 14px 10px;
+}
