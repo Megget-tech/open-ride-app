@@ -1,5 +1,5 @@
 import React, { Component, useState, useEffect, useRef, useCallback, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import L from 'leaflet';
 import { useAnt } from '../contexts/AntContext';
 import TopBar from '../components/TopBar';
@@ -7,6 +7,7 @@ import DeviceModal from '../components/DeviceModal';
 import {
   saveRoute,
   loadAllRoutes,
+  loadRoute,
   deleteRoute,
   renameRoute,
 } from '../services/routeLibrary';
@@ -275,6 +276,7 @@ function loadSavedRoute() {
 export default function RoutePage() {
   const { telemetry, setGrade, status } = useAnt();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
   const [showDeviceModal, setShowDeviceModal] = useState(false);
 
@@ -336,6 +338,18 @@ export default function RoutePage() {
   useEffect(() => {
     loadAllRoutes().then(setLibrary).catch(() => {});
   }, []);
+
+  // Load a specific route requested via ?routeId= (e.g. from Training Program)
+  useEffect(() => {
+    const requestedId = searchParams.get('routeId');
+    if (!requestedId) return;
+    loadRoute(requestedId).then(entry => {
+      if (!entry) return;
+      setRoutePoints(entry.points);
+      setRouteName(entry.name);
+      setRouteId(entry.id);
+    }).catch(() => {});
+  }, [searchParams]);
 
   // Persist active route to localStorage
   useEffect(() => {

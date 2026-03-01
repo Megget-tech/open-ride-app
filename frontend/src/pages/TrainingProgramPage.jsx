@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import TopBar from '../components/TopBar';
 import DeviceModal from '../components/DeviceModal';
 import { loadCachedWorkouts, loadCustomWorkouts, saveCachedWorkouts } from '../services/dataManager';
+import { loadAllRoutes } from '../services/routeLibrary';
 import '../styles/training.css';
 
 const DAYS = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
@@ -57,8 +58,10 @@ export default function TrainingProgramPage() {
   });
 
   const [allWorkouts, setAllWorkouts] = useState([]);
+  const [allRoutes, setAllRoutes] = useState([]);
   const [isDeviceModalOpen, setIsDeviceModalOpen] = useState(false);
   const [pickerDay, setPickerDay] = useState(null); // which day the picker is open for
+  const [pickerTab, setPickerTab] = useState('workout'); // 'workout' | 'route'
   const [pickerSearch, setPickerSearch] = useState('');
   const [selectedMobileDay, setSelectedMobileDay] = useState(getTodayKey());
   const dayStripRef = useRef(null);
@@ -68,6 +71,7 @@ export default function TrainingProgramPage() {
 
   useEffect(() => {
     fetchWorkouts();
+    loadAllRoutes().then(setAllRoutes).catch(() => {});
   }, []);
 
   useEffect(() => {
@@ -121,18 +125,44 @@ export default function TrainingProgramPage() {
     );
   }, [allWorkouts, pickerSearch]);
 
+  const filteredPickerRoutes = useMemo(() => {
+    if (!pickerSearch.trim()) return allRoutes;
+    const q = pickerSearch.toLowerCase();
+    return allRoutes.filter(r => r.name.toLowerCase().includes(q));
+  }, [allRoutes, pickerSearch]);
+
   const addWorkoutToDay = (day, workout) => {
     setProgram(prev => {
       const updated = { ...prev };
       updated[day] = [
         ...updated[day],
         {
+          type: 'workout',
           id: workout.id,
           name: workout.name,
           duration: workout.totalDuration,
           category: workout.category || '',
           subcategory: workout.subcategory || '',
           chartProfile: workout.chartProfile || [],
+        }
+      ];
+      return updated;
+    });
+    setPickerDay(null);
+    setPickerSearch('');
+  };
+
+  const addRouteToDay = (day, route) => {
+    setProgram(prev => {
+      const updated = { ...prev };
+      updated[day] = [
+        ...updated[day],
+        {
+          type: 'route',
+          id: route.id,
+          name: route.name,
+          totalDistance: route.totalDistance,
+          elevationGain: route.elevationGain,
         }
       ];
       return updated;
@@ -171,19 +201,26 @@ export default function TrainingProgramPage() {
     setProgram(empty);
   };
 
-  const todayWorkouts = program[todayKey] || [];
-  const hasAnyWorkouts = DAYS.some(d => program[d] && program[d].length > 0);
+  const todayItems = program[todayKey] || [];
+  const hasAnySessions = DAYS.some(d => program[d] && program[d].length > 0);
+  const hasAnyWorkouts = hasAnySessions; // backwards-compatible alias
 
   const weeklyStats = useMemo(() => {
     let totalDuration = 0;
-    let workoutCount = 0;
+    let itemCount = 0;
     DAYS.forEach(d => {
-      (program[d] || []).forEach(w => {
-        totalDuration += w.duration || 0;
-        workoutCount++;
+      (program[d] || []).forEach(item => {
+        // Only include items with a valid duration in the weekly stats.
+        const duration = item && typeof item.duration === 'number' && Number.isFinite(item.duration)
+          ? item.duration
+          : null;
+        if (duration !== null) {
+          totalDuration += duration;
+          itemCount++;
+        }
       });
     });
-    return { totalDuration, workoutCount };
+    return { totalDuration, itemCount };
   }, [program]);
 
   // Drag & Drop state
@@ -235,8 +272,8 @@ export default function TrainingProgramPage() {
               <div className="tp-header-actions">
                 <div className="tp-weekly-stats">
                   <div className="tp-stat">
-                    <span className="tp-stat-value">{weeklyStats.workoutCount}</span>
-                    <span className="tp-stat-label">Workouts</span>
+                    <span className="tp-stat-value">{weeklyStats.itemCount}</span>
+                    <span className="tp-stat-label">Sessions</span>
                   </div>
                   <div className="tp-stat">
                     <span className="tp-stat-value">{formatDuration(weeklyStats.totalDuration)}</span>
@@ -271,8 +308,8 @@ export default function TrainingProgramPage() {
             </Link>
           </section>
 
-          {/* Today's Workout Hero */}
-          {todayWorkouts.length > 0 && (
+          {/* Today's Training Hero */}
+          {todayItems.length > 0 && (
             <section className="tp-today-hero">
               <div className="tp-today-label">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
@@ -281,8 +318,41 @@ export default function TrainingProgramPage() {
                 Today's Training &mdash; {DAY_LABELS_FULL[todayIndex]}
               </div>
               <div className="tp-today-cards">
-                {todayWorkouts.map((workout, i) => {
-                  const bars = generateChartBars(workout.chartProfile);
+                {todayItems.map((item, i) => {
+                  if (item.type === 'route') {
+                    return (
+                      <div key={`today-${i}`} className="tp-today-card">
+                        <div className="tp-today-chart tp-today-route-thumb">
+                          <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                            <path d="M20.5 3l-.16.03L15 5.1 9 3 3.36 4.9c-.21.07-.36.25-.36.48V20.5c0 .28.22.5.5.5l.16-.03L9 18.9l6 2.1 5.64-1.9c.21-.07.36-.25.36-.48V3.5c0-.28-.22-.5-.5-.5zM15 19l-6-2.11V5l6 2.11V19z"/>
+                          </svg>
+                        </div>
+                        <div className="tp-today-info">
+                          <div className="tp-today-meta">
+                            <span className="tp-today-category">Route Ride</span>
+                            {item.totalDistance > 0 && (
+                              <span className="tp-today-duration">
+                                {item.totalDistance.toFixed(1)} km
+                              </span>
+                            )}
+                            {item.elevationGain > 0 && (
+                              <span className="tp-today-duration">
+                                +{Math.round(item.elevationGain)} m
+                              </span>
+                            )}
+                          </div>
+                          <h2 className="tp-today-name">{item.name}</h2>
+                          <Link to={`/route?routeId=${item.id}`} className="tp-start-btn">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                              <path d="M8 5v14l11-7z"/>
+                            </svg>
+                            Start Route
+                          </Link>
+                        </div>
+                      </div>
+                    );
+                  }
+                  const bars = generateChartBars(item.chartProfile);
                   return (
                     <div key={`today-${i}`} className="tp-today-card">
                       <div className="tp-today-chart">
@@ -296,18 +366,18 @@ export default function TrainingProgramPage() {
                       </div>
                       <div className="tp-today-info">
                         <div className="tp-today-meta">
-                          {workout.category && (
-                            <span className="tp-today-category">{workout.category}</span>
+                          {item.category && (
+                            <span className="tp-today-category">{item.category}</span>
                           )}
                           <span className="tp-today-duration">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
                               <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
                             </svg>
-                            {formatDuration(workout.duration)}
+                            {formatDuration(item.duration)}
                           </span>
                         </div>
-                        <h2 className="tp-today-name">{workout.name}</h2>
-                        <Link to={`/workout/${workout.id}`} className="tp-start-btn">
+                        <h2 className="tp-today-name">{item.name}</h2>
+                        <Link to={`/workout/${item.id}`} className="tp-start-btn">
                           <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                             <path d="M8 5v14l11-7z"/>
                           </svg>
@@ -350,7 +420,7 @@ export default function TrainingProgramPage() {
               dayLabel={DAY_LABELS_FULL[DAYS.indexOf(selectedMobileDay)]}
               workouts={program[selectedMobileDay] || []}
               isToday={selectedMobileDay === todayKey}
-              onAdd={() => { setPickerDay(selectedMobileDay); setPickerSearch(''); }}
+              onAdd={() => { setPickerDay(selectedMobileDay); setPickerSearch(''); setPickerTab('workout'); }}
               onRemove={(index) => removeWorkoutFromDay(selectedMobileDay, index)}
               onClear={() => clearDay(selectedMobileDay)}
             />
@@ -376,36 +446,49 @@ export default function TrainingProgramPage() {
                     {isToday && <span className="tp-today-badge">Today</span>}
                   </div>
                   <div className="tp-day-workouts">
-                    {dayWorkouts.map((workout, wi) => {
-                      const bars = generateChartBars(workout.chartProfile);
+                    {dayWorkouts.map((item, wi) => {
+                      const isRoute = item.type === 'route';
+                      const bars = isRoute ? [] : generateChartBars(item.chartProfile);
                       return (
                         <div
                           key={`${day}-${wi}`}
-                          className="tp-workout-card"
+                          className={`tp-workout-card${isRoute ? ' tp-workout-card--route' : ''}`}
                           draggable
                           onDragStart={(e) => handleDragStart(e, day, wi)}
                           onDragEnd={handleDragEnd}
                         >
-                          <div className="tp-workout-chart-mini">
-                            {bars.map((bar, bi) => (
-                              <div
-                                key={bi}
-                                className="tp-workout-chart-bar-mini"
-                                style={{ height: `${bar.height}%`, background: bar.color }}
-                              />
-                            ))}
-                          </div>
+                          {isRoute ? (
+                            <div className="tp-workout-chart-mini tp-route-thumb-mini">
+                              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                <path d="M20.5 3l-.16.03L15 5.1 9 3 3.36 4.9c-.21.07-.36.25-.36.48V20.5c0 .28.22.5.5.5l.16-.03L9 18.9l6 2.1 5.64-1.9c.21-.07.36-.25.36-.48V3.5c0-.28-.22-.5-.5-.5zM15 19l-6-2.11V5l6 2.11V19z"/>
+                              </svg>
+                            </div>
+                          ) : (
+                            <div className="tp-workout-chart-mini">
+                              {bars.map((bar, bi) => (
+                                <div
+                                  key={bi}
+                                  className="tp-workout-chart-bar-mini"
+                                  style={{ height: `${bar.height}%`, background: bar.color }}
+                                />
+                              ))}
+                            </div>
+                          )}
                           <div className="tp-workout-card-body">
-                            <div className="tp-workout-card-name">{workout.name}</div>
+                            <div className="tp-workout-card-name">{item.name}</div>
                             <div className="tp-workout-card-meta">
-                              <span>{formatDuration(workout.duration)}</span>
+                              {isRoute ? (
+                                <span>{item.totalDistance ? `${item.totalDistance.toFixed(1)} km` : 'Route'}</span>
+                              ) : (
+                                <span>{formatDuration(item.duration)}</span>
+                              )}
                             </div>
                           </div>
                           <div className="tp-workout-card-actions">
                             <Link
-                              to={`/workout/${workout.id}`}
+                              to={isRoute ? `/route?routeId=${item.id}` : `/workout/${item.id}`}
                               className="tp-workout-go-btn"
-                              title="Start workout"
+                              title={isRoute ? 'Start route' : 'Start workout'}
                               onClick={(e) => e.stopPropagation()}
                             >
                               <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
@@ -433,8 +516,8 @@ export default function TrainingProgramPage() {
                   </div>
                   <button
                     className="tp-add-btn"
-                    onClick={() => { setPickerDay(day); setPickerSearch(''); }}
-                    title={`Add workout to ${DAY_LABELS_FULL[i]}`}
+                    onClick={() => { setPickerDay(day); setPickerSearch(''); setPickerTab('workout'); }}
+                    title={`Add to ${DAY_LABELS_FULL[i]}`}
                   >
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                       <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
@@ -451,14 +534,14 @@ export default function TrainingProgramPage() {
               <svg width="56" height="56" viewBox="0 0 24 24" fill="currentColor" style={{ opacity: 0.25 }}>
                 <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM9 10H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2z"/>
               </svg>
-              <h3>No workouts scheduled yet</h3>
-              <p>Click the <strong>+</strong> button on any day to add workouts to your weekly plan.</p>
+              <h3>No sessions scheduled yet</h3>
+              <p>Click the <strong>+</strong> button on any day to add workouts or route rides to your weekly plan.</p>
             </section>
           )}
         </div>
       </main>
 
-      {/* Workout Picker Modal */}
+      {/* Picker Modal */}
       {pickerDay && (
         <div className="tp-picker-overlay" onClick={() => { setPickerDay(null); setPickerSearch(''); }}>
           <div className="tp-picker-modal" onClick={(e) => e.stopPropagation()}>
@@ -470,59 +553,114 @@ export default function TrainingProgramPage() {
                 </svg>
               </button>
             </div>
+            <div className="tp-picker-tabs">
+              <button
+                className={`tp-picker-tab ${pickerTab === 'workout' ? 'active' : ''}`}
+                onClick={() => { setPickerTab('workout'); setPickerSearch(''); }}
+              >
+                Workouts
+              </button>
+              <button
+                className={`tp-picker-tab ${pickerTab === 'route' ? 'active' : ''}`}
+                onClick={() => { setPickerTab('route'); setPickerSearch(''); }}
+              >
+                Route Rides
+              </button>
+            </div>
             <div className="tp-picker-search">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
               </svg>
               <input
                 type="text"
-                placeholder="Search workouts..."
+                placeholder={pickerTab === 'route' ? 'Search routes...' : 'Search workouts...'}
                 value={pickerSearch}
                 onChange={(e) => setPickerSearch(e.target.value)}
                 autoFocus
               />
             </div>
             <div className="tp-picker-list">
-              {filteredPickerWorkouts.map(workout => {
-                const bars = generateChartBars(workout.chartProfile);
-                return (
-                  <button
-                    key={workout.id}
-                    className="tp-picker-item"
-                    onClick={() => addWorkoutToDay(pickerDay, workout)}
-                  >
-                    <div className="tp-picker-item-chart">
-                      {bars.map((bar, bi) => (
-                        <div
-                          key={bi}
-                          className="tp-picker-chart-bar"
-                          style={{ height: `${bar.height}%`, background: bar.color }}
-                        />
-                      ))}
+              {pickerTab === 'workout' ? (
+                <>
+                  {filteredPickerWorkouts.map(workout => {
+                    const bars = generateChartBars(workout.chartProfile);
+                    return (
+                      <button
+                        key={workout.id}
+                        className="tp-picker-item"
+                        onClick={() => addWorkoutToDay(pickerDay, workout)}
+                      >
+                        <div className="tp-picker-item-chart">
+                          {bars.map((bar, bi) => (
+                            <div
+                              key={bi}
+                              className="tp-picker-chart-bar"
+                              style={{ height: `${bar.height}%`, background: bar.color }}
+                            />
+                          ))}
+                        </div>
+                        <div className="tp-picker-item-info">
+                          {workout.category && (
+                            <span className="tp-picker-item-category">
+                              {workout.category}{workout.subcategory ? ` \u203A ${workout.subcategory}` : ''}
+                            </span>
+                          )}
+                          <span className="tp-picker-item-name">{workout.name}</span>
+                          <span className="tp-picker-item-meta">
+                            {formatDuration(workout.totalDuration)}
+                          </span>
+                        </div>
+                        <div className="tp-picker-item-add">
+                          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+                          </svg>
+                        </div>
+                      </button>
+                    );
+                  })}
+                  {filteredPickerWorkouts.length === 0 && (
+                    <div className="tp-picker-empty">
+                      <p>No workouts found</p>
                     </div>
-                    <div className="tp-picker-item-info">
-                      {workout.category && (
-                        <span className="tp-picker-item-category">
-                          {workout.category}{workout.subcategory ? ` \u203A ${workout.subcategory}` : ''}
+                  )}
+                </>
+              ) : (
+                <>
+                  {filteredPickerRoutes.map(route => (
+                    <button
+                      key={route.id}
+                      className="tp-picker-item"
+                      onClick={() => addRouteToDay(pickerDay, route)}
+                    >
+                      <div className="tp-picker-item-chart tp-picker-route-thumb">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                          <path d="M20.5 3l-.16.03L15 5.1 9 3 3.36 4.9c-.21.07-.36.25-.36.48V20.5c0 .28.22.5.5.5l.16-.03L9 18.9l6 2.1 5.64-1.9c.21-.07.36-.25.36-.48V3.5c0-.28-.22-.5-.5-.5zM15 19l-6-2.11V5l6 2.11V19z"/>
+                        </svg>
+                      </div>
+                      <div className="tp-picker-item-info">
+                        <span className="tp-picker-item-category">Route Ride</span>
+                        <span className="tp-picker-item-name">{route.name}</span>
+                        <span className="tp-picker-item-meta">
+                          {route.totalDistance ? `${route.totalDistance.toFixed(1)} km` : ''}
+                          {route.elevationGain > 0 ? ` · +${Math.round(route.elevationGain)} m` : ''}
                         </span>
-                      )}
-                      <span className="tp-picker-item-name">{workout.name}</span>
-                      <span className="tp-picker-item-meta">
-                        {formatDuration(workout.totalDuration)}
-                      </span>
+                      </div>
+                      <div className="tp-picker-item-add">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                          <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+                        </svg>
+                      </div>
+                    </button>
+                  ))}
+                  {filteredPickerRoutes.length === 0 && (
+                    <div className="tp-picker-empty">
+                      <p>No saved routes found.</p>
+                      <p style={{ fontSize: '0.8rem', marginTop: '0.5rem' }}>
+                        Upload a GPX file on the <Link to="/route" style={{ color: 'var(--primary-blue)' }} onClick={() => setPickerDay(null)}>Route Ride</Link> page to save routes here.
+                      </p>
                     </div>
-                    <div className="tp-picker-item-add">
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
-                      </svg>
-                    </div>
-                  </button>
-                );
-              })}
-              {filteredPickerWorkouts.length === 0 && (
-                <div className="tp-picker-empty">
-                  <p>No workouts found</p>
-                </div>
+                  )}
+                </>
               )}
             </div>
           </div>
@@ -554,36 +692,51 @@ function MobileDayView({ day, dayLabel, workouts, isToday, onAdd, onRemove, onCl
             <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
               <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
             </svg>
-            Add Workout
+            Add Session
           </button>
         </div>
       ) : (
         <>
           <div className="tp-mobile-workout-list">
-            {workouts.map((workout, i) => {
-              const bars = generateChartBars(workout.chartProfile);
+            {workouts.map((item, i) => {
+              const isRoute = item.type === 'route';
+              const bars = isRoute ? [] : generateChartBars(item.chartProfile);
               return (
                 <div key={`m-${i}`} className="tp-mobile-workout-card">
-                  <div className="tp-mobile-workout-chart">
-                    {bars.map((bar, bi) => (
-                      <div
-                        key={bi}
-                        className="tp-mobile-chart-bar"
-                        style={{ height: `${bar.height}%`, background: bar.color }}
-                      />
-                    ))}
-                  </div>
+                  {isRoute ? (
+                    <div className="tp-mobile-workout-chart tp-route-thumb-mini">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                        <path d="M20.5 3l-.16.03L15 5.1 9 3 3.36 4.9c-.21.07-.36.25-.36.48V20.5c0 .28.22.5.5.5l.16-.03L9 18.9l6 2.1 5.64-1.9c.21-.07.36-.25.36-.48V3.5c0-.28-.22-.5-.5-.5zM15 19l-6-2.11V5l6 2.11V19z"/>
+                      </svg>
+                    </div>
+                  ) : (
+                    <div className="tp-mobile-workout-chart">
+                      {bars.map((bar, bi) => (
+                        <div
+                          key={bi}
+                          className="tp-mobile-chart-bar"
+                          style={{ height: `${bar.height}%`, background: bar.color }}
+                        />
+                      ))}
+                    </div>
+                  )}
                   <div className="tp-mobile-workout-info">
-                    {workout.category && (
-                      <span className="tp-mobile-workout-category">{workout.category}</span>
-                    )}
-                    <span className="tp-mobile-workout-name">{workout.name}</span>
+                    <span className="tp-mobile-workout-category">
+                      {isRoute ? 'Route Ride' : item.category}
+                    </span>
+                    <span className="tp-mobile-workout-name">{item.name}</span>
                     <span className="tp-mobile-workout-meta">
-                      {formatDuration(workout.duration)}
+                      {isRoute
+                        ? (item.totalDistance ? `${item.totalDistance.toFixed(1)} km` : '')
+                        : formatDuration(item.duration)}
                     </span>
                   </div>
                   <div className="tp-mobile-workout-actions">
-                    <Link to={`/workout/${workout.id}`} className="tp-workout-go-btn" title="Start">
+                    <Link
+                      to={isRoute ? `/route?routeId=${item.id}` : `/workout/${item.id}`}
+                      className="tp-workout-go-btn"
+                      title="Start"
+                    >
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M8 5v14l11-7z"/>
                       </svg>
@@ -602,7 +755,7 @@ function MobileDayView({ day, dayLabel, workouts, isToday, onAdd, onRemove, onCl
             <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
               <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
             </svg>
-            Add Another
+            Add Another Session
           </button>
         </>
       )}

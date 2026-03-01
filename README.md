@@ -181,9 +181,23 @@ Follow structured training sessions with automatic ERG mode control. The app adj
 
 During a workout, scale interval intensity by ±10% (90%–110%) without changing your FTP. Useful for hard or easy days.
 
+### Route Rides
+
+Ride real outdoor routes on your indoor trainer using GPX files:
+
+- Upload a GPX file exported from Strava, Komoot, Garmin Connect, RideWithGPS, or any other cycling app
+- An interactive map shows the route and your current position
+- An elevation profile canvas displays a live progress marker
+- Trainer resistance adjusts automatically to match the road gradient in real time (climbs increase resistance, descents decrease it)
+- Live stats: distance ridden, current elevation, current grade, power, cadence, and duration
+- Completed rides are saved to your route history
+- Saved routes can be added to your weekly Training Program alongside structured workouts
+
+Routes are stored in the browser's **IndexedDB** (not localStorage) because parsed GPX files can be several hundred KB. Nothing leaves your browser.
+
 ### Training Program
 
-Plan your week by assigning workouts to each day of the week. Drag and drop to rearrange. The Training page shows today's scheduled workout at a glance.
+Plan your week by assigning workouts and route rides to each day of the week. Drag and drop to rearrange. The Training page shows today's scheduled sessions at a glance.
 
 ### AI Workout Generator
 
@@ -272,6 +286,28 @@ Add `<textevent>` elements inside any segment to show coaching messages at speci
 
 ---
 
+## Route Rides
+
+Upload any GPX file that contains a track with elevation data to ride it on your trainer. The app parses the file client-side — no upload to any server.
+
+**Supported GPX sources:** Strava, Komoot, Garmin Connect, RideWithGPS, and any app that exports standard `.gpx` files with `<trkpt>` elements.
+
+**Elevation requirement:** The GPX file must include `<ele>` elements for automatic grade control to work. Routes without elevation data can still be ridden but resistance will not change.
+
+**How grade control works:**
+
+```
+GPX elevation data  →  calculate gradient between track points
+                    →  send grade % to trainer via FE-C / FTMS
+                    →  trainer adjusts resistance in real time
+```
+
+Progress along the route is tracked using your reported speed (from the trainer). The app advances your position along the track proportionally, then looks up the gradient at that location.
+
+**Storage:** Saved routes live in the browser's IndexedDB under the `openride` database, `routes` store. They are scoped per user profile. Route ride history (completed ride summaries) is stored in localStorage under `openride_route_history`.
+
+---
+
 ## Troubleshooting
 
 ### Bluetooth
@@ -331,7 +367,8 @@ open-ride-app/
 │   │   │   ├── HomePage.jsx           # Workout library + My Workouts
 │   │   │   ├── WorkoutPage.jsx        # Structured workout runner
 │   │   │   ├── FreeRidePage.jsx       # Free ride mode
-│   │   │   ├── TrainingProgramPage.jsx # Weekly training planner
+│   │   │   ├── RoutePage.jsx          # GPX route ride (map + elevation + grade control)
+│   │   │   ├── TrainingProgramPage.jsx # Weekly training planner (workouts + routes)
 │   │   │   ├── AiWorkoutPage.jsx      # AI workout generator
 │   │   │   └── SettingsPage.jsx       # User settings & data management
 │   │   ├── components/
@@ -345,6 +382,7 @@ open-ride-app/
 │   │   │   ├── antManagerWebUSB.js        # ANT+ via WebUSB + ant-plus-next
 │   │   │   ├── antManagerEmulator.js      # Client-side trainer emulator
 │   │   │   ├── bluetoothManagerWebBluetooth.js  # BLE via Web Bluetooth (FTMS/CPS)
+│   │   │   ├── routeLibrary.js            # IndexedDB storage for GPX routes
 │   │   │   ├── aiWorkoutGenerator.js      # LLM workout generation
 │   │   │   ├── workoutParser.js           # Browser-side .orw XML parser
 │   │   │   └── dataManager.js             # localStorage CRUD + export/import
