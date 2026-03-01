@@ -209,8 +209,14 @@ export default function TrainingProgramPage() {
     let itemCount = 0;
     DAYS.forEach(d => {
       (program[d] || []).forEach(item => {
-        totalDuration += item.duration || 0;
-        itemCount++;
+        // Only include items with a valid duration in the weekly stats.
+        const duration = item && typeof item.duration === 'number' && Number.isFinite(item.duration)
+          ? item.duration
+          : null;
+        if (duration !== null) {
+          totalDuration += duration;
+          itemCount++;
+        }
       });
     });
     return { totalDuration, itemCount };
