@@ -202,7 +202,8 @@ export default function TrainingProgramPage() {
   };
 
   const todayItems = program[todayKey] || [];
-  const hasAnyWorkouts = DAYS.some(d => program[d] && program[d].length > 0);
+  const hasAnySessions = DAYS.some(d => program[d] && program[d].length > 0);
+  const hasAnyWorkouts = hasAnySessions; // backwards-compatible alias
 
   const weeklyStats = useMemo(() => {
     let totalDuration = 0;
