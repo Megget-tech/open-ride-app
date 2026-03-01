@@ -69,10 +69,23 @@ function restoreSnapshot(userId) {
 
 /**
  * Called once at app startup. Creates the first user from existing data if
- * no `openride_users` list exists yet (first-time migration).
+ * no `openride_users` list exists yet (first-time migration), or repairs it
+ * if the stored value is invalid/corrupted.
  */
 export function initUsers() {
-  if (localStorage.getItem('openride_users') !== null) return; // already set up
+  const rawUsers = localStorage.getItem('openride_users');
+  if (rawUsers !== null) {
+    try {
+      const parsed = JSON.parse(rawUsers);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        // Already set up with at least one user; nothing to do.
+        return;
+      }
+      // If it's not an array or it's empty, fall through to repair.
+    } catch {
+      // Corrupted JSON; fall through to repair.
+    }
+  }
 
   // Read name from existing settings if available
   let name = 'Rider 1';
