@@ -4,6 +4,7 @@ import TopBar from '../components/TopBar';
 import DeviceModal from '../components/DeviceModal';
 import { useAnt } from '../contexts/AntContext';
 import { loadCachedWorkout, loadCustomWorkouts, saveCachedWorkout } from '../services/dataManager';
+import { useWakeLock } from '../hooks/useWakeLock';
 import '../styles/workout.css';
 import '../styles/notifications.css';
 
@@ -96,6 +97,8 @@ export default function WorkoutPage() {
     } catch (_) {}
     return { ftp: 200, maxHr: 185, restingHr: 60, weight: 70 };
   });
+
+  useWakeLock(isRunning && !isPaused && !hasEnded && !showComplete);
 
   // Keep workoutActive in sync with isRunning; clear on unmount
   useEffect(() => {

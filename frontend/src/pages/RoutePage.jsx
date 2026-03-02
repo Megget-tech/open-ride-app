@@ -12,6 +12,7 @@ import {
   renameRoute,
 } from '../services/routeLibrary';
 import { saveRouteRide } from '../services/dataManager';
+import { useWakeLock } from '../hooks/useWakeLock';
 import '../styles/route.css';
 
 // ── Error Boundary ─────────────────────────────────────────────────────────────
@@ -300,6 +301,8 @@ export default function RoutePage() {
   const [isPaused,      setIsPaused]      = useState(false);
   const [currentIndex,  setCurrentIndex]  = useState(0);
   const [liveStats,     setLiveStats]     = useState({ distanceRidden: 0, ele: 0, grade: 0, duration: 0 });
+
+  useWakeLock(isRiding && !isPaused);
 
   // Completion summary
   const [showSummary,   setShowSummary]   = useState(false);
