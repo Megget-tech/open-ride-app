@@ -33,6 +33,11 @@ export function AntProvider({ children }) {
   const [telemetry,         setTelemetry]         = useState({
     power: 0, cadence: 0, speed: 0, heartRate: 0, distance: 0, elapsedTime: 0
   });
+  const [discoveredHrmDevices, setDiscoveredHrmDevices] = useState([]);
+  const [connectedHrmDevice,   setConnectedHrmDevice]   = useState(null);
+
+  // Tracks the latest HRM heart rate so trainer telemetry doesn't overwrite it
+  const hrmHeartRateRef = useRef(0);
 
   // Ref so event handlers always access the latest discovered devices without
   // needing to be recreated whenever the list changes.
@@ -48,6 +53,9 @@ export function AntProvider({ children }) {
     setIsScanning(false);
     setDiscoveredDevices([]);
     setConnectedDevice(null);
+    setDiscoveredHrmDevices([]);
+    setConnectedHrmDevice(null);
+    hrmHeartRateRef.current = 0;
 
     // Sync current hardware state (e.g. switching back to ANT+ while dongle connected)
     const current = manager.getStatus ? manager.getStatus() : null;
@@ -87,20 +95,48 @@ export function AntProvider({ children }) {
         power:       data.instantaneousPower || 0,
         cadence:     data.instantaneousCadence || 0,
         speed:       data.speed || 0,
-        heartRate:   data.heartRate || 0,
+        // Prefer dedicated HRM reading if available
+        heartRate:   hrmHeartRateRef.current || data.heartRate || 0,
         distance:    data.distance || 0,
         elapsedTime: data.elapsedTime || 0,
       });
     };
 
-    manager.on('status',           handleStatus);
+    const handleHrmDiscovered = (device) => {
+      setDiscoveredHrmDevices(prev => {
+        if (prev.find(d => d.deviceId === device.deviceId)) return prev;
+        return [...prev, device];
+      });
+    };
+
+    const handleHrmStatus = (statusObj) => {
+      if (statusObj.connection === 'connected' && statusObj.connectedDeviceId) {
+        setConnectedHrmDevice({ deviceId: statusObj.connectedDeviceId });
+      } else {
+        setConnectedHrmDevice(null);
+        hrmHeartRateRef.current = 0;
+      }
+    };
+
+    const handleHrmTelemetry = (data) => {
+      hrmHeartRateRef.current = data.heartRate || 0;
+      setTelemetry(prev => ({ ...prev, heartRate: data.heartRate || 0 }));
+    };
+
+    manager.on('status',            handleStatus);
     manager.on('device_discovered', handleDeviceDiscovered);
     manager.on('telemetry',         handleTelemetry);
+    manager.on('hrm_discovered',    handleHrmDiscovered);
+    manager.on('hrm_status',        handleHrmStatus);
+    manager.on('hrm_telemetry',     handleHrmTelemetry);
 
     return () => {
-      manager.off('status',           handleStatus);
+      manager.off('status',            handleStatus);
       manager.off('device_discovered', handleDeviceDiscovered);
       manager.off('telemetry',         handleTelemetry);
+      manager.off('hrm_discovered',    handleHrmDiscovered);
+      manager.off('hrm_status',        handleHrmStatus);
+      manager.off('hrm_telemetry',     handleHrmTelemetry);
     };
   }, [connectionType, antManager, bluetoothManager]);
 
@@ -205,6 +241,41 @@ export function AntProvider({ children }) {
     }
   }, [_activeManager]);
 
+  const startHrmScan = useCallback(async () => {
+    try {
+      await _activeManager().startHrmScan?.();
+      // Belt-and-suspenders: sync state directly from the manager after scan
+      // in case the hrm_discovered event didn't reach the handler
+      const found = _activeManager().getDiscoveredHrmDevices?.() || [];
+      if (found.length > 0) {
+        setDiscoveredHrmDevices(found);
+      }
+    } catch (err) {
+      console.error('[AntContext] startHrmScan failed:', err);
+    }
+  }, [_activeManager]);
+
+  const connectHrm = useCallback(async (deviceId) => {
+    try {
+      await _activeManager().connectHrm?.(deviceId);
+      // Sync state directly as fallback
+      const hrmDeviceId = _activeManager().connectedHrmDeviceId;
+      if (hrmDeviceId) {
+        setConnectedHrmDevice({ deviceId: hrmDeviceId });
+      }
+    } catch (err) {
+      console.error('[AntContext] connectHrm failed:', err);
+    }
+  }, [_activeManager]);
+
+  const disconnectHrm = useCallback(async () => {
+    try {
+      await _activeManager().disconnectHrm?.();
+    } catch (err) {
+      console.error('[AntContext] disconnectHrm failed:', err);
+    }
+  }, [_activeManager]);
+
   const value = {
     // State
     workoutActive,
@@ -215,6 +286,8 @@ export function AntProvider({ children }) {
     connectedDevice,
     telemetry,
     connectionType,
+    discoveredHrmDevices,
+    connectedHrmDevice,
 
     // Actions
     setConnectionType,
@@ -226,6 +299,9 @@ export function AntProvider({ children }) {
     setTargetPower,
     setResistance,
     setGrade,
+    startHrmScan,
+    connectHrm,
+    disconnectHrm,
   };
 
   return <AntContext.Provider value={value}>{children}</AntContext.Provider>;

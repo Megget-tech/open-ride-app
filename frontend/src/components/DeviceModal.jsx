@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useAnt } from '../contexts/AntContext';
 
 // ── Icons ─────────────────────────────────────────────────────────────────────
@@ -46,6 +46,8 @@ function SignalGraphic() {
 // ── DeviceModal ───────────────────────────────────────────────────────────────
 
 export default function DeviceModal({ isOpen, onClose }) {
+  const [isHrmScanning, setIsHrmScanning] = useState(false);
+
   const {
     status,
     isScanning,
@@ -58,6 +60,11 @@ export default function DeviceModal({ isOpen, onClose }) {
     stopScan,
     connect,
     disconnect,
+    discoveredHrmDevices,
+    connectedHrmDevice,
+    startHrmScan,
+    connectHrm,
+    disconnectHrm,
   } = useAnt();
 
   // ── Handlers ───────────────────────────────────────────────────────────────
@@ -99,6 +106,33 @@ export default function DeviceModal({ isOpen, onClose }) {
   const handleTabChange = (type) => {
     if (type === connectionType) return;
     setConnectionType(type);
+  };
+
+  const handleStartHrmScan = async () => {
+    try {
+      setIsHrmScanning(true);
+      await startHrmScan();
+    } catch (err) {
+      console.error('Failed to start HRM scan:', err);
+    } finally {
+      setIsHrmScanning(false);
+    }
+  };
+
+  const handleConnectHrm = async (deviceId) => {
+    try {
+      await connectHrm(deviceId);
+    } catch (err) {
+      console.error('Failed to connect HRM:', err);
+    }
+  };
+
+  const handleDisconnectHrm = async () => {
+    try {
+      await disconnectHrm();
+    } catch (err) {
+      console.error('Failed to disconnect HRM:', err);
+    }
   };
 
   const modalRef = useRef(null);
@@ -337,6 +371,76 @@ export default function DeviceModal({ isOpen, onClose }) {
                 </button>
               </div>
             )}
+          </div>
+
+          {/* ── Heart Rate Monitor section (ANT+ and Bluetooth) ──────────── */}
+          <div className="devices-found-section hrm-section">
+            <div className="section-header">
+              <h3>
+                {isHrmScanning
+                  ? 'Searching for HR monitors…'
+                  : discoveredHrmDevices.length === 0
+                    ? 'Heart Rate Monitor'
+                    : `${discoveredHrmDevices.length} HR monitor${discoveredHrmDevices.length !== 1 ? 's' : ''} found`}
+              </h3>
+              <div className="scan-actions">
+                <button
+                  className="btn-text"
+                  onClick={handleStartHrmScan}
+                  disabled={isHrmScanning || (isAntPlus && status === 'disconnected')}
+                >
+                  {isHrmScanning ? 'Scanning…' : isBluetooth ? 'FIND' : 'SCAN'}
+                </button>
+              </div>
+            </div>
+
+            <div className="devices-list">
+              {isAntPlus && status === 'disconnected' ? (
+                <div className="empty-state hrm-empty-state">
+                  <p>Connect your ANT+ dongle first using Start Scan above</p>
+                </div>
+              ) : discoveredHrmDevices.length === 0 ? (
+                <div className="empty-state hrm-empty-state">
+                  <p>
+                    {isHrmScanning
+                      ? 'Looking for heart rate monitors…'
+                      : isBluetooth
+                        ? 'Click FIND to open the Bluetooth HR picker'
+                        : 'Click SCAN to find ANT+ heart rate monitors'}
+                  </p>
+                </div>
+              ) : (
+                discoveredHrmDevices.map(device => {
+                  const isConnected = connectedHrmDevice?.deviceId === device.deviceId;
+                  return (
+                    <div key={device.deviceId} className={`device-item ${isConnected ? 'selected' : ''}`}>
+                      <div className="device-info">
+                        {isBluetooth && (
+                          <span className="device-icon" aria-hidden="true">
+                            <BluetoothIcon />
+                          </span>
+                        )}
+                        <div>
+                          <div className="device-name">{device.name || `HR Monitor ${device.deviceId}`}</div>
+                          <div className="device-meta">
+                            {isBluetooth ? 'BLE · Heart Rate' : `ID: ${device.deviceId} | ANT+ HRM`}
+                          </div>
+                        </div>
+                      </div>
+                      {isConnected ? (
+                        <button className="btn btn-danger btn-sm" onClick={handleDisconnectHrm}>
+                          Disconnect
+                        </button>
+                      ) : (
+                        <button className="btn btn-primary btn-sm" onClick={() => handleConnectHrm(device.deviceId)}>
+                          Connect
+                        </button>
+                      )}
+                    </div>
+                  );
+                })
+              )}
+            </div>
           </div>
         </div>
       </div>

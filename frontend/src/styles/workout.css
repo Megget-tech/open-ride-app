@@ -710,6 +710,43 @@ body.workout-page {
   background: var(--overlay-xl);
 }
 
+.complete-export {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  margin-bottom: 0.5rem;
+}
+
+.complete-btn.export {
+  background: var(--overlay-lg);
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  padding: 0.75rem 1.5rem;
+}
+
+.complete-btn.export:hover {
+  background: var(--overlay-xl);
+  color: var(--text-primary);
+}
+
+.complete-btn.strava {
+  background: #fc4c02;
+  color: #fff;
+  font-size: 0.9rem;
+  padding: 0.75rem 1.5rem;
+}
+
+.complete-btn.strava:hover:not(:disabled) {
+  background: #e04400;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(252, 76, 2, 0.4);
+}
+
+.complete-btn.strava:disabled {
+  opacity: 0.7;
+  cursor: default;
+}
+
 /* In-Workout Settings Panel */
 .workout-settings-overlay {
   position: fixed;

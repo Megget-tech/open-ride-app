@@ -1,0 +1,62 @@
+.synthwave-container {
+  position: relative;
+  flex: 1;
+  min-height: 420px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #050510;
+}
+
+.synthwave-container canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.synthwave-hud {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  padding: 1rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.hud-segment-name {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.hud-segment-time {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.hud-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.hud-power {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.hud-power-target {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.hud-cadence {
+  font-size: 1.4rem;
+  color: rgba(255, 255, 255, 0.7);
+  text-align: right;
+}
+
+.control-btn.secondary.active {
+  background: rgba(0, 212, 255, 0.2);
+  border-color: #00d4ff;
+  color: #00d4ff;
+}

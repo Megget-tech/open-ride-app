@@ -5,8 +5,12 @@ import DeviceModal from '../components/DeviceModal';
 import { useAnt } from '../contexts/AntContext';
 import { loadCachedWorkout, loadCustomWorkouts, saveCachedWorkout } from '../services/dataManager';
 import { useWakeLock } from '../hooks/useWakeLock';
+import SynthwaveCanvas from '../components/SynthwaveCanvas';
+import { generateTCX, downloadTCX } from '../utils/tcxExport';
+import { isStravaConnected, uploadToStrava, initiateStravaAuth, getStravaAthleteName } from '../utils/stravaService';
 import '../styles/workout.css';
 import '../styles/notifications.css';
+import '../styles/synthwave.css';
 
 // Workout Graph Component
 function WorkoutGraph({ executionPlan, elapsedSeconds, totalDuration, ftp }) {
@@ -87,9 +91,12 @@ export default function WorkoutPage() {
   const [showEndConfirm, setShowEndConfirm] = useState(false);
   const [showComplete, setShowComplete] = useState(false);
   const [completeStats, setCompleteStats] = useState(null);
+  const [completeTCX, setCompleteTCX] = useState(null);
+  const [stravaUploadStatus, setStravaUploadStatus] = useState(null); // null | 'uploading' | 'done' | 'error'
   const [hasEnded, setHasEnded] = useState(false);
   const [loadError, setLoadError] = useState(null);
   const [showSettings, setShowSettings] = useState(false);
+  const [showSynthwave, setShowSynthwave] = useState(false);
   const [settingsForm, setSettingsForm] = useState(() => {
     try {
       const stored = localStorage.getItem('openride_settings');
@@ -111,6 +118,8 @@ export default function WorkoutPage() {
   const telemetryRef = useRef(telemetry);
   const intensityBiasRef = useRef(100);
   const workoutElementsRef = useRef(null);
+  const trackpointsRef = useRef([]);        // per-second telemetry for TCX export
+  const workoutStartTimeRef = useRef(null); // ISO string of workout start
   const workoutStatsRef = useRef({
     totalPower: 0,
     powerReadings: 0,
@@ -378,6 +387,8 @@ export default function WorkoutPage() {
       totalCadence: 0,
       cadenceReadings: 0
     };
+    trackpointsRef.current    = [];
+    workoutStartTimeRef.current = new Date().toISOString();
 
     // Set initial target power with intensity bias applied
     if (executionPlan[0] && connectedDevice) {
@@ -396,6 +407,13 @@ export default function WorkoutPage() {
         workoutStatsRef.current.totalCadence += currentTelemetry.cadence;
         workoutStatsRef.current.cadenceReadings += 1;
       }
+
+      trackpointsRef.current.push({
+        time:    new Date().toISOString(),
+        power:   Math.round(currentTelemetry.power    || 0),
+        hr:      Math.round(currentTelemetry.heartRate || 0),
+        cadence: Math.round(currentTelemetry.cadence   || 0),
+      });
 
       setElapsedSeconds(prev => prev + 1);
       setSegmentElapsed(prev => prev + 1);
@@ -418,6 +436,13 @@ export default function WorkoutPage() {
           workoutStatsRef.current.totalCadence += currentTelemetry.cadence;
           workoutStatsRef.current.cadenceReadings += 1;
         }
+
+        trackpointsRef.current.push({
+          time:    new Date().toISOString(),
+          power:   Math.round(currentTelemetry.power    || 0),
+          hr:      Math.round(currentTelemetry.heartRate || 0),
+          cadence: Math.round(currentTelemetry.cadence   || 0),
+        });
 
         setElapsedSeconds(prev => prev + 1);
         setSegmentElapsed(prev => prev + 1);
@@ -479,10 +504,19 @@ export default function WorkoutPage() {
       ftp
     };
 
+    const tcx = generateTCX(
+      trackpointsRef.current,
+      stats,
+      workout?.name || 'Workout',
+      workoutStartTimeRef.current || new Date().toISOString()
+    );
+
     setIsRunning(false);
     setHasEnded(true);
     setTargetPower(0);
     setCompleteStats(stats);
+    setCompleteTCX(tcx);
+    setStravaUploadStatus(null);
     saveWorkoutHistory(stats);
     setShowComplete(true);
   };
@@ -649,13 +683,114 @@ export default function WorkoutPage() {
         </main>
       ) : (
       <main id="main-content" className="workout-main">
-        <div className="workout-graph-container">
-          <WorkoutGraph executionPlan={executionPlan} elapsedSeconds={elapsedSeconds} totalDuration={totalDuration} ftp={ftp} />
-          <div
-            className="workout-progress-line"
-            style={{ left: `${(elapsedSeconds / totalDuration) * 100}%` }}
-          ></div>
-        </div>
+        {showSynthwave ? (
+          <SynthwaveCanvas
+            executionPlan={executionPlan}
+            currentSegmentIndex={currentSegmentIndex}
+            segmentElapsed={segmentElapsed}
+            telemetry={telemetry}
+            targetPower={targetPower}
+            ftp={ftp}
+            isPaused={isPaused}
+          />
+        ) : (
+          <>
+            <div className="workout-graph-container">
+              <WorkoutGraph executionPlan={executionPlan} elapsedSeconds={elapsedSeconds} totalDuration={totalDuration} ftp={ftp} />
+              <div
+                className="workout-progress-line"
+                style={{ left: `${(elapsedSeconds / totalDuration) * 100}%` }}
+              ></div>
+            </div>
+
+            <div className="workout-metrics">
+              <div className="metrics-top">
+                <div className={powerCardClass} style={{ '--gauge-position': `${powerGauge.gaugePosition}%`, '--ok-width': `${powerGauge.okWidth}%` }}>
+                  <div className="gauge-header">
+                    <div className="metric-label">POWER</div>
+                    <div className="gauge-status">{powerGauge.statusText}</div>
+                  </div>
+                  <div className="gauge-body">
+                    <div className="gauge-value">
+                      {currentPower}
+                      <span>W</span>
+                    </div>
+                  </div>
+                  <div className="gauge-line" aria-hidden="true">
+                    <div className="gauge-track"></div>
+                    <div className="gauge-ok"></div>
+                    <div className="gauge-needle"></div>
+                  </div>
+                  <div className="gauge-footer">
+                    <span className="gauge-target">
+                      Target <strong>{targetPower || '--'}</strong>W
+                      {intensityBias !== 100 && (
+                        <span className="metric-bias"> ({intensityBias}%)</span>
+                      )}
+                    </span>
+                  </div>
+                </div>
+
+                <div className={cadenceCardClass} style={{ '--gauge-position': `${cadenceGauge.gaugePosition}%`, '--ok-width': `${cadenceGauge.okWidth}%` }}>
+                  <div className="gauge-header">
+                    <div className="metric-label">CADENCE</div>
+                    <div className="gauge-status">{cadenceGauge.statusText}</div>
+                  </div>
+                  <div className="gauge-body">
+                    <div className="gauge-value">
+                      {currentCadence}
+                      <span>rpm</span>
+                    </div>
+                  </div>
+                  <div className="gauge-line" aria-hidden="true">
+                    <div className="gauge-track"></div>
+                    <div className="gauge-ok"></div>
+                    <div className="gauge-needle"></div>
+                  </div>
+                  <div className="gauge-footer">
+                    <span className="gauge-target">
+                      Target <strong>{targetCadence || '--'}</strong> rpm
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="metrics-bottom">
+                <div className="metric-card time">
+                  <div className="metric-label">TIME</div>
+                  <div className="metric-value">{formatTime(elapsedSeconds)}</div>
+                  <div className="metric-secondary">
+                    <span>Remaining:</span> {formatTime(remainingTime)}
+                  </div>
+                </div>
+
+                <div className="metric-card heart-rate">
+                  <div className="metric-label">HEART RATE</div>
+                  <div className="metric-value">
+                    <span>{telemetry.heartRate || '--'}</span>
+                    <span className="metric-unit">bpm</span>
+                  </div>
+                </div>
+
+                <div className="metric-card speed">
+                  <div className="metric-label">SPEED</div>
+                  <div className="metric-value">
+                    <span>{telemetry.speed.toFixed(1)}</span>
+                    <span className="metric-unit">km/h</span>
+                  </div>
+                </div>
+
+                <div className="metric-card distance">
+                  <div className="metric-label">DISTANCE</div>
+                  <div className="metric-value">
+                    <span>{(telemetry.distance / 1000).toFixed(2)}</span>
+                    <span className="metric-unit">km</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </>
+        )}
 
         <div className="segment-info">
           <div className="segment-current">{currentSegment.name}</div>
@@ -694,93 +829,6 @@ export default function WorkoutPage() {
           </div>
         </div>
 
-        <div className="workout-metrics">
-          <div className="metrics-top">
-            <div className={powerCardClass} style={{ '--gauge-position': `${powerGauge.gaugePosition}%`, '--ok-width': `${powerGauge.okWidth}%` }}>
-              <div className="gauge-header">
-                <div className="metric-label">POWER</div>
-                <div className="gauge-status">{powerGauge.statusText}</div>
-              </div>
-              <div className="gauge-body">
-                <div className="gauge-value">
-                  {currentPower}
-                  <span>W</span>
-                </div>
-              </div>
-              <div className="gauge-line" aria-hidden="true">
-                <div className="gauge-track"></div>
-                <div className="gauge-ok"></div>
-                <div className="gauge-needle"></div>
-              </div>
-              <div className="gauge-footer">
-                <span className="gauge-target">
-                  Target <strong>{targetPower || '--'}</strong>W
-                  {intensityBias !== 100 && (
-                    <span className="metric-bias"> ({intensityBias}%)</span>
-                  )}
-                </span>
-              </div>
-            </div>
-
-            <div className={cadenceCardClass} style={{ '--gauge-position': `${cadenceGauge.gaugePosition}%`, '--ok-width': `${cadenceGauge.okWidth}%` }}>
-              <div className="gauge-header">
-                <div className="metric-label">CADENCE</div>
-                <div className="gauge-status">{cadenceGauge.statusText}</div>
-              </div>
-              <div className="gauge-body">
-                <div className="gauge-value">
-                  {currentCadence}
-                  <span>rpm</span>
-                </div>
-              </div>
-              <div className="gauge-line" aria-hidden="true">
-                <div className="gauge-track"></div>
-                <div className="gauge-ok"></div>
-                <div className="gauge-needle"></div>
-              </div>
-              <div className="gauge-footer">
-                <span className="gauge-target">
-                  Target <strong>{targetCadence || '--'}</strong> rpm
-                </span>
-              </div>
-            </div>
-          </div>
-
-          <div className="metrics-bottom">
-          <div className="metric-card time">
-            <div className="metric-label">TIME</div>
-            <div className="metric-value">{formatTime(elapsedSeconds)}</div>
-            <div className="metric-secondary">
-              <span>Remaining:</span> {formatTime(remainingTime)}
-            </div>
-          </div>
-
-          <div className="metric-card heart-rate">
-            <div className="metric-label">HEART RATE</div>
-            <div className="metric-value">
-              <span>{telemetry.heartRate || '--'}</span>
-              <span className="metric-unit">bpm</span>
-            </div>
-          </div>
-
-          <div className="metric-card speed">
-            <div className="metric-label">SPEED</div>
-            <div className="metric-value">
-              <span>{telemetry.speed.toFixed(1)}</span>
-              <span className="metric-unit">km/h</span>
-            </div>
-          </div>
-
-          <div className="metric-card distance">
-            <div className="metric-label">DISTANCE</div>
-            <div className="metric-value">
-              <span>{(telemetry.distance / 1000).toFixed(2)}</span>
-              <span className="metric-unit">km</span>
-            </div>
-          </div>
-          </div>
-        </div>
-
         <div className="workout-controls">
           <button className="control-btn secondary" onClick={togglePause} disabled={!isRunning}>
             {isPaused ? (
@@ -814,6 +862,19 @@ export default function WorkoutPage() {
               <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 00.12-.61l-1.92-3.32a.49.49 0 00-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 00-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.07.62-.07.94s.02.64.07.94l-2.03 1.58a.49.49 0 00-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6A3.6 3.6 0 1115.6 12 3.6 3.6 0 0112 15.6z"/>
             </svg>
             Settings
+          </button>
+
+          <button
+            className={`control-btn secondary${showSynthwave ? ' active' : ''}`}
+            onClick={() => setShowSynthwave(s => !s)}
+            title="Synthwave view"
+          >
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+              <circle cx="12" cy="12" r="4"/>
+              <path d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+              <path d="M2 17 Q6 14 12 14 Q18 14 22 17" fill="none" stroke="currentColor" strokeWidth="1.5"/>
+            </svg>
+            Synthwave
           </button>
 
           <button className="control-btn danger" onClick={endWorkout}>
@@ -1020,6 +1081,42 @@ export default function WorkoutPage() {
                 <span className="secondary-value">{completeStats.ftp}W</span>
               </div>
             </div>
+
+            {completeTCX && (
+              <div className="complete-export">
+                <button
+                  className="complete-btn export"
+                  onClick={() => {
+                    const date = new Date().toISOString().slice(0, 10);
+                    const name = (workout?.name || 'workout').replace(/\s+/g, '-').toLowerCase();
+                    downloadTCX(completeTCX, `${name}-${date}.tcx`);
+                  }}
+                >
+                  ↓ Download .tcx
+                </button>
+                <button
+                  className="complete-btn strava"
+                  disabled={stravaUploadStatus === 'uploading' || stravaUploadStatus === 'done'}
+                  onClick={() => {
+                    if (isStravaConnected()) {
+                      setStravaUploadStatus('uploading');
+                      uploadToStrava(completeTCX, workout?.name || 'Workout')
+                        .then(() => setStravaUploadStatus('done'))
+                        .catch(() => setStravaUploadStatus('error'));
+                    } else {
+                      initiateStravaAuth({ tcxContent: completeTCX, workoutName: workout?.name || 'Workout' });
+                    }
+                  }}
+                >
+                  {stravaUploadStatus === 'uploading' && 'Uploading…'}
+                  {stravaUploadStatus === 'done'      && '✓ Uploaded to Strava'}
+                  {stravaUploadStatus === 'error'     && 'Upload failed — retry?'}
+                  {!stravaUploadStatus && (isStravaConnected()
+                    ? `Upload to Strava${getStravaAthleteName() ? ` (${getStravaAthleteName()})` : ''}`
+                    : 'Connect & Upload to Strava')}
+                </button>
+              </div>
+            )}
 
             <div className="complete-actions">
               <button className="complete-btn secondary" onClick={() => navigate('/')}>Back to Home</button>

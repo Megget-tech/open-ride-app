@@ -48,6 +48,9 @@ app.use((_req, res, next) => {
   next();
 });
 
+// JSON body parser (allow up to 10 MB for TCX payloads)
+app.use(express.json({ limit: '10mb' }));
+
 // Security headers
 app.use((_req, res, next) => {
   res.setHeader('X-Frame-Options', 'DENY');
@@ -133,7 +136,158 @@ app.post('/api/workouts/reload', (_req, res) => {
   });
 });
 
-// Graceful shutdown
+// ── Strava OAuth + upload ─────────────────────────────────────────────────────
+
+const STRAVA_CLIENT_ID     = process.env.STRAVA_CLIENT_ID;
+const STRAVA_CLIENT_SECRET = process.env.STRAVA_CLIENT_SECRET;
+const FRONTEND_URL         = process.env.FRONTEND_URL || 'http://localhost:3000';
+
+/** Whether Strava credentials are configured in the environment. */
+app.get('/api/strava/status', (_req, res) => {
+  res.json({ configured: !!(STRAVA_CLIENT_ID && STRAVA_CLIENT_SECRET) });
+});
+
+/** Redirect to Strava's OAuth authorisation page. */
+app.get('/api/strava/auth', (req, res) => {
+  if (!STRAVA_CLIENT_ID) {
+    res.status(503).json({ error: 'Strava not configured — set STRAVA_CLIENT_ID and STRAVA_CLIENT_SECRET in .env' });
+    return;
+  }
+  const redirectUri = `${req.protocol}://${req.get('host')}/api/strava/callback`;
+  const url = new URL('https://www.strava.com/oauth/authorize');
+  url.searchParams.set('client_id',    STRAVA_CLIENT_ID);
+  url.searchParams.set('redirect_uri', redirectUri);
+  url.searchParams.set('response_type', 'code');
+  url.searchParams.set('scope', 'activity:write');
+  res.redirect(url.toString());
+});
+
+/** Receives the auth code from Strava, exchanges it for tokens, redirects to frontend. */
+app.get('/api/strava/callback', async (req, res) => {
+  const { code, error } = req.query as Record<string, string>;
+
+  if (error || !code) {
+    res.redirect(`${FRONTEND_URL}/strava/callback?strava_error=${error || 'cancelled'}`);
+    return;
+  }
+
+  try {
+    const tokenRes = await fetch('https://www.strava.com/oauth/token', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        client_id:     STRAVA_CLIENT_ID,
+        client_secret: STRAVA_CLIENT_SECRET,
+        code,
+        grant_type:    'authorization_code',
+      }),
+    });
+
+    const data = await tokenRes.json() as Record<string, unknown>;
+
+    if (typeof data.access_token !== 'string') {
+      res.redirect(`${FRONTEND_URL}/strava/callback?strava_error=token_exchange_failed`);
+      return;
+    }
+
+    const athlete = data.athlete as Record<string, unknown> | undefined;
+    const params = new URLSearchParams({
+      strava_access_token:  data.access_token,
+      strava_refresh_token: String(data.refresh_token ?? ''),
+      strava_expires_at:    String(data.expires_at ?? '0'),
+      strava_athlete:       String(athlete?.firstname ?? ''),
+    });
+    res.redirect(`${FRONTEND_URL}/strava/callback?${params}`);
+
+  } catch (err) {
+    console.error('[Strava] Callback error:', err);
+    res.redirect(`${FRONTEND_URL}/strava/callback?strava_error=server_error`);
+  }
+});
+
+/**
+ * Upload a TCX workout to Strava.
+ * Body: { accessToken, refreshToken, expiresAt, tcxContent, workoutName }
+ */
+app.post('/api/strava/upload', async (req, res) => {
+  if (!STRAVA_CLIENT_ID || !STRAVA_CLIENT_SECRET) {
+    res.status(503).json({ error: 'Strava not configured on server' });
+    return;
+  }
+
+  const { accessToken, refreshToken, expiresAt, tcxContent, workoutName } = req.body as {
+    accessToken:  string;
+    refreshToken: string;
+    expiresAt:    number;
+    tcxContent:   string;
+    workoutName:  string;
+  };
+
+  if (!accessToken || !tcxContent) {
+    res.status(400).json({ error: 'Missing accessToken or tcxContent' });
+    return;
+  }
+
+  let activeToken = accessToken;
+  let newToken: Record<string, unknown> | null = null;
+
+  // Refresh token if it expires within the next minute
+  if (expiresAt < Date.now() / 1000 + 60) {
+    try {
+      const refreshRes = await fetch('https://www.strava.com/oauth/token', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          client_id:     STRAVA_CLIENT_ID,
+          client_secret: STRAVA_CLIENT_SECRET,
+          refresh_token: refreshToken,
+          grant_type:    'refresh_token',
+        }),
+      });
+      const refreshData = await refreshRes.json() as Record<string, unknown>;
+      if (typeof refreshData.access_token === 'string') {
+        activeToken = refreshData.access_token;
+        newToken = {
+          accessToken:  refreshData.access_token,
+          refreshToken: String(refreshData.refresh_token ?? refreshToken),
+          expiresAt:    Number(refreshData.expires_at ?? 0),
+        };
+      }
+    } catch (err) {
+      console.error('[Strava] Token refresh failed:', err);
+      // Proceed with the existing token; it may still work
+    }
+  }
+
+  try {
+    const formData = new FormData();
+    formData.append('file',      new Blob([tcxContent], { type: 'application/vnd.garmin.tcx+xml' }), 'workout.tcx');
+    formData.append('data_type', 'tcx');
+    formData.append('name',      workoutName || 'Open Ride Workout');
+
+    const uploadRes = await fetch('https://www.strava.com/api/v3/uploads', {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${activeToken}` },
+      body: formData,
+    });
+
+    const uploadData = await uploadRes.json() as Record<string, unknown>;
+
+    if (!uploadRes.ok) {
+      console.error('[Strava] Upload rejected:', uploadData);
+      res.status(uploadRes.status).json({ error: String(uploadData.message ?? 'Strava upload failed'), ...(newToken ? { newToken } : {}) });
+      return;
+    }
+
+    res.json({ id: uploadData.id, status: uploadData.status, ...(newToken ? { newToken } : {}) });
+
+  } catch (err) {
+    console.error('[Strava] Upload error:', err);
+    res.status(500).json({ error: 'Server error during upload' });
+  }
+});
+
+// ── Graceful shutdown
 async function shutdown(): Promise<void> {
   console.log('\nShutting down...');
   server.close();
@@ -155,6 +309,9 @@ async function main(): Promise<void> {
     console.log(`  GET  /api/workouts/:id - Get workout details`);
     console.log(`  GET  /api/workouts/categories - List categories`);
     console.log(`  POST /api/workouts/reload - Reload workouts from disk`);
+    console.log(`  GET  /api/strava/status   - Check Strava config`);
+    console.log(`  GET  /api/strava/auth     - Initiate Strava OAuth`);
+    console.log(`  POST /api/strava/upload   - Upload TCX to Strava`);
     console.log();
     console.log('Frontend:');
     console.log('  Run `cd frontend && npm run dev` to start Vite dev server');

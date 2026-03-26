@@ -5,7 +5,7 @@
  * Requires Chrome/Edge/Opera browser with WebUSB support.
  */
 
-import { WebUsbStick, FitnessEquipmentSensor, FitnessEquipmentScanner } from 'ant-plus-next';
+import { WebUsbStick, FitnessEquipmentSensor, FitnessEquipmentScanner, HeartRateSensor, HeartRateScanner } from 'ant-plus-next';
 
 /**
  * Simple EventEmitter for browser
@@ -59,6 +59,13 @@ export class AntManagerWebUSB extends EventEmitter {
 
     this.discoveredDevices = new Map();
     this.pageCounters = new Map();
+
+    // Heart rate monitor (separate channel)
+    this.hrmScanner = null;
+    this.hrmSensor = null;
+    this.discoveredHrmDevices = new Map();
+    this._connectedHrmDeviceId = null;
+    this._hrmConnectionStatus = 'disconnected';
   }
 
   // Getters for status
@@ -577,6 +584,172 @@ export class AntManagerWebUSB extends EventEmitter {
     return Array.from(this.discoveredDevices.values());
   }
 
+  get connectedHrmDeviceId() {
+    return this._connectedHrmDeviceId;
+  }
+
+  /**
+   * Scan for ANT+ heart rate monitors (HRM profile, device type 120).
+   * Only one scanner can run at a time — stops the trainer scanner first if needed.
+   */
+  async startHrmScan() {
+    if (!this.stick || this._dongleStatus !== 'connected') {
+      this.log('error', 'Cannot scan for HRM: dongle not connected');
+      return false;
+    }
+
+    // ANT+ allows only one scan channel — stop trainer scan if active
+    if (this._scanStatus === 'scanning') {
+      await this.stopScan();
+      await new Promise(resolve => setTimeout(resolve, 300));
+    }
+
+    // Clean up any previous HRM scanner
+    if (this.hrmScanner) {
+      try {
+        this.hrmScanner.removeAllListeners();
+        await this.hrmScanner.detach();
+      } catch (err) {
+        this.log('warn', `HRM scanner cleanup error (ignored): ${err.message}`);
+      }
+      this.hrmScanner = null;
+      await new Promise(resolve => setTimeout(resolve, 300));
+    }
+
+    this.log('info', 'Starting HR monitor scan...');
+    this.discoveredHrmDevices.clear();
+
+    try {
+      this.hrmScanner = new HeartRateScanner(this.stick);
+
+      this.hrmScanner.on('heartRateData', (state) => {
+        const deviceId = state.DeviceId;
+        if (!deviceId) return;
+        const isNew = !this.discoveredHrmDevices.has(deviceId);
+        const device = {
+          deviceId,
+          deviceType: 'hrm',
+          name: `HR Monitor ${deviceId}`,
+          timestamp: Date.now(),
+        };
+        this.discoveredHrmDevices.set(deviceId, device);
+        if (isNew) {
+          this.log('info', `Discovered HR monitor: ${deviceId}`);
+          this.emit('hrm_discovered', device);
+        }
+      });
+
+      this.hrmScanner.on('attached', () => {
+        this.log('info', 'HRM scanner attached — listening for HR monitors...');
+      });
+
+      this.hrmScanner.on('error', (err) => {
+        this.log('error', `HRM scanner error: ${err.message}`);
+      });
+
+      await this.hrmScanner.scan();
+      this.log('info', 'HRM scan started');
+      return true;
+    } catch (err) {
+      this.log('error', `Failed to start HRM scan: ${err.message}`);
+      this.hrmScanner = null;
+      return false;
+    }
+  }
+
+  async stopHrmScan() {
+    if (this.hrmScanner) {
+      this.log('info', 'Stopping HRM scan...');
+      try {
+        this.hrmScanner.removeAllListeners();
+        await this.hrmScanner.detach();
+      } catch (err) {
+        this.log('warn', `HRM scanner stop error (ignored): ${err.message}`);
+      }
+      this.hrmScanner = null;
+    }
+  }
+
+  /**
+   * Connect to a specific ANT+ heart rate monitor on channel 1.
+   * The trainer sensor remains on channel 0 and is unaffected.
+   */
+  async connectHrm(deviceId) {
+    if (!this.stick || this._dongleStatus !== 'connected') {
+      this.log('error', 'Cannot connect HRM: dongle not connected');
+      return false;
+    }
+
+    if (this._connectedHrmDeviceId === deviceId) {
+      this.log('info', `Already connected to HR monitor ${deviceId}`);
+      return true;
+    }
+
+    if (this._hrmConnectionStatus === 'connected') {
+      await this.disconnectHrm();
+      await new Promise(resolve => setTimeout(resolve, 300));
+    }
+
+    await this.stopHrmScan();
+    await new Promise(resolve => setTimeout(resolve, 300));
+
+    this.log('info', `Connecting to HR monitor ${deviceId}...`);
+    this.setHrmConnectionStatus('connecting');
+
+    try {
+      this.hrmSensor = new HeartRateSensor(this.stick);
+
+      this.hrmSensor.on('heartRateData', (state) => {
+        if (state.ComputedHeartRate !== undefined) {
+          this.emit('hrm_telemetry', { heartRate: state.ComputedHeartRate, deviceId: state.DeviceId });
+        }
+      });
+
+      this.hrmSensor.on('attached', () => {
+        this.log('info', `HR monitor attached: ${deviceId}`);
+        this._connectedHrmDeviceId = deviceId;
+        this.setHrmConnectionStatus('connected');
+      });
+
+      this.hrmSensor.on('detached', () => {
+        this.log('info', 'HR monitor detached');
+        this._connectedHrmDeviceId = null;
+        this.setHrmConnectionStatus('disconnected');
+      });
+
+      this.hrmSensor.on('error', (err) => {
+        this.log('error', `HRM sensor error: ${err.message}`);
+      });
+
+      await this.hrmSensor.attach(1, deviceId);
+      this.log('info', `Connected to HR monitor ${deviceId}`);
+      return true;
+    } catch (err) {
+      this.log('error', `Failed to connect HR monitor: ${err.message}`);
+      this.setHrmConnectionStatus('disconnected');
+      return false;
+    }
+  }
+
+  async disconnectHrm() {
+    if (this.hrmSensor) {
+      this.log('info', 'Disconnecting HR monitor...');
+      try {
+        this.hrmSensor.removeAllListeners();
+        await this.hrmSensor.detach();
+      } catch (err) {
+        this.log('warn', `HRM sensor detach error (ignored): ${err.message}`);
+      }
+      this.hrmSensor = null;
+    }
+    this._connectedHrmDeviceId = null;
+    this.setHrmConnectionStatus('disconnected');
+  }
+
+  getDiscoveredHrmDevices() {
+    return Array.from(this.discoveredHrmDevices.values());
+  }
+
   /**
    * Shutdown manager and release resources
    */
@@ -584,7 +757,9 @@ export class AntManagerWebUSB extends EventEmitter {
     this.log('info', 'Shutting down ANT+ manager...');
 
     await this.disconnect();
+    await this.disconnectHrm();
     await this.stopScan();
+    await this.stopHrmScan();
 
     if (this.stick) {
       try {
@@ -617,6 +792,14 @@ export class AntManagerWebUSB extends EventEmitter {
   setConnectionStatus(status) {
     this._connectionStatus = status;
     this.emitStatus();
+  }
+
+  setHrmConnectionStatus(status) {
+    this._hrmConnectionStatus = status;
+    this.emit('hrm_status', {
+      connection: status,
+      connectedDeviceId: this._connectedHrmDeviceId,
+    });
   }
 
   emitStatus() {

@@ -16,6 +16,10 @@
  * Requires a Chromium-based browser (Chrome 56+, Edge, Opera) with Web Bluetooth enabled.
  */
 
+// ─── Heart Rate Service UUIDs ────────────────────────────────────────────────
+const HEART_RATE_SERVICE      = 0x180D;
+const HEART_RATE_MEASUREMENT  = 0x2A37;
+
 // ─── FTMS UUIDs ──────────────────────────────────────────────────────────────
 const FTMS_SERVICE             = 0x1826;
 const FITNESS_MACHINE_FEATURE  = 0x2ACC;
@@ -82,13 +86,21 @@ export class BluetoothManagerWebBluetooth extends EventEmitter {
     this._connectionStatus = 'disconnected'; // 'disconnected'|'connecting'|'connected'
     this._connectedDeviceId   = null;
     this._connectedDeviceName = null;
+
+    // Heart Rate Monitor (separate BLE device / connection)
+    this._selectedHrmDevice    = null;
+    this._hrmGattServer        = null;
+    this._hrmChar              = null;
+    this._connectedHrmDeviceId = null;
+    this._discoveredHrmDevices = new Map(); // id → { deviceId, name, type }
   }
 
   // ── Public getters (same as AntManagerWebUSB) ──────────────────────────────
-  get dongleStatus()     { return this._dongleStatus; }
-  get scanStatus()       { return this._scanStatus; }
-  get connectionStatus() { return this._connectionStatus; }
-  get connectedDeviceId(){ return this._connectedDeviceId; }
+  get dongleStatus()        { return this._dongleStatus; }
+  get scanStatus()          { return this._scanStatus; }
+  get connectionStatus()    { return this._connectionStatus; }
+  get connectedDeviceId()   { return this._connectedDeviceId; }
+  get connectedHrmDeviceId(){ return this._connectedHrmDeviceId; }
 
   /**
    * Check that the Web Bluetooth API is available.
@@ -577,6 +589,146 @@ export class BluetoothManagerWebBluetooth extends EventEmitter {
     }
 
     this.emit('telemetry', t);
+  }
+
+  // ── Heart Rate Monitor (BLE, separate device) ──────────────────────────────
+
+  /**
+   * Open the browser's native Bluetooth device picker filtered to HR monitors.
+   * Emits 'hrm_discovered' when the user selects a device.
+   */
+  async startHrmScan() {
+    if (!navigator.bluetooth) {
+      this.log('error', 'Web Bluetooth not available');
+      return false;
+    }
+
+    // Auto-init if needed
+    if (this._dongleStatus !== 'connected') {
+      const ready = await this.initialize();
+      if (!ready) return false;
+    }
+
+    this.log('info', 'Opening Bluetooth HR device picker…');
+
+    try {
+      // Use acceptAllDevices so any Bluetooth device (Garmin, Polar, Apple Watch, etc.)
+      // appears in the picker — not all watches advertise the standard HRS UUID.
+      // We request HEART_RATE_SERVICE as optional so Chrome grants access after pairing.
+      const device = await navigator.bluetooth.requestDevice({
+        acceptAllDevices: true,
+        optionalServices: [HEART_RATE_SERVICE],
+      });
+
+      this._selectedHrmDevice = device;
+      this.log('info', `HR device selected: "${device.name || device.id}"`);
+
+      const discovered = {
+        deviceId: device.id,
+        name:     device.name || 'BLE HR Monitor',
+        type:     'ble-hrm',
+      };
+      this._discoveredHrmDevices.set(device.id, discovered);
+      this.emit('hrm_discovered', discovered);
+      return true;
+
+    } catch (err) {
+      if (err.name === 'NotFoundError') {
+        this.log('info', 'HR Bluetooth picker dismissed by user');
+      } else {
+        this.log('error', `HR requestDevice failed: ${err.message}`);
+      }
+      return false;
+    }
+  }
+
+  /**
+   * Connect to a previously selected HR monitor via GATT.
+   * Subscribes to Heart Rate Measurement notifications.
+   * @param {string} deviceId
+   */
+  async connectHrm(deviceId) {
+    const device = this._selectedHrmDevice;
+    if (!device || device.id !== deviceId) {
+      this.log('error', 'HR device not found — run startHrmScan() first');
+      return false;
+    }
+
+    this.log('info', `Connecting to HR monitor "${device.name || deviceId}"…`);
+    this._setHrmConnectionStatus('connecting');
+
+    try {
+      this._hrmGattServer = await device.gatt.connect();
+
+      device.addEventListener('gattserverdisconnected', () => {
+        this.log('info', 'HR GATT disconnected unexpectedly');
+        this._hrmChar              = null;
+        this._hrmGattServer        = null;
+        this._connectedHrmDeviceId = null;
+        this._setHrmConnectionStatus('disconnected');
+      });
+
+      const hrService  = await this._hrmGattServer.getPrimaryService(HEART_RATE_SERVICE);
+      this._hrmChar    = await hrService.getCharacteristic(HEART_RATE_MEASUREMENT);
+      await this._hrmChar.startNotifications();
+      this._hrmChar.addEventListener(
+        'characteristicvaluechanged',
+        (e) => this._handleHrmMeasurement(e.target.value)
+      );
+
+      this._connectedHrmDeviceId = deviceId;
+      this._setHrmConnectionStatus('connected');
+      this.log('info', `Connected to HR monitor: ${device.name || deviceId}`);
+      return true;
+
+    } catch (err) {
+      this.log('error', `HR GATT connection failed: ${err.message}`);
+      this._setHrmConnectionStatus('disconnected');
+      return false;
+    }
+  }
+
+  /** Disconnect from the HR monitor cleanly. */
+  async disconnectHrm() {
+    if (this._hrmChar) {
+      try { await this._hrmChar.stopNotifications(); } catch { /* ignore */ }
+      this._hrmChar = null;
+    }
+    if (this._selectedHrmDevice && this._selectedHrmDevice.gatt.connected) {
+      try { this._selectedHrmDevice.gatt.disconnect(); } catch { /* ignore */ }
+    }
+    this._hrmGattServer        = null;
+    this._connectedHrmDeviceId = null;
+    this._setHrmConnectionStatus('disconnected');
+  }
+
+  /**
+   * Parse Heart Rate Measurement characteristic (0x2A37).
+   * Flags byte bit 0: 0 = HR is uint8, 1 = HR is uint16.
+   */
+  _handleHrmMeasurement(dataView) {
+    if (dataView.byteLength < 2) return;
+    const flags     = dataView.getUint8(0);
+    const is16bit   = (flags & 0x01) !== 0;
+    const heartRate = is16bit
+      ? dataView.getUint16(1, true)
+      : dataView.getUint8(1);
+
+    this.emit('hrm_telemetry', {
+      heartRate,
+      deviceId: this._connectedHrmDeviceId,
+    });
+  }
+
+  getDiscoveredHrmDevices() {
+    return Array.from(this._discoveredHrmDevices.values());
+  }
+
+  _setHrmConnectionStatus(s) {
+    this.emit('hrm_status', {
+      connection:        s,
+      connectedDeviceId: s === 'connected' ? this._connectedHrmDeviceId : null,
+    });
   }
 
   // ── Status helpers ─────────────────────────────────────────────────────────

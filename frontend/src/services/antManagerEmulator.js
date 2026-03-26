@@ -42,6 +42,24 @@ class EventEmitter {
 }
 
 /**
+ * Emulated ANT+ heart rate monitor
+ */
+class EmulatedHrm {
+  constructor(deviceId, name) {
+    this.deviceId = deviceId;
+    this.name = name;
+    this.heartRate = 68;
+  }
+
+  update() {
+    // Slow realistic drift with small noise
+    this.heartRate += (Math.random() - 0.49) * 1.2;
+    this.heartRate = Math.max(50, Math.min(185, this.heartRate));
+    return { heartRate: Math.round(this.heartRate), deviceId: this.deviceId };
+  }
+}
+
+/**
  * Emulated trainer device
  */
 class EmulatedTrainer {
@@ -180,6 +198,14 @@ export class AntManagerEmulator extends EventEmitter {
       new EmulatedTrainer(54321, 'Wahoo KICKR'),
       new EmulatedTrainer(99999, 'Elite Direto'),
     ];
+
+    // Heart rate monitors
+    this.emulatedHrms = [
+      new EmulatedHrm(77777, 'Garmin HRM-Pro'),
+    ];
+    this.discoveredHrmDevices = new Map();
+    this.connectedHrm = null;
+    this.hrmInterval = null;
   }
 
   // Getters for status
@@ -341,6 +367,73 @@ export class AntManagerEmulator extends EventEmitter {
   }
 
   /**
+   * Scan for emulated HR monitors
+   */
+  async startHrmScan() {
+    this.log('info', 'Starting emulated HRM scan...');
+    this.discoveredHrmDevices.clear();
+
+    for (const hrm of this.emulatedHrms) {
+      await new Promise(resolve => setTimeout(resolve, 400));
+      const device = {
+        deviceId: hrm.deviceId,
+        deviceType: 'hrm',
+        name: hrm.name,
+        timestamp: Date.now(),
+      };
+      this.discoveredHrmDevices.set(hrm.deviceId, device);
+      this.log('info', `Discovered emulated HR monitor: ${hrm.name} (${hrm.deviceId})`);
+      this.emit('hrm_discovered', device);
+    }
+    return true;
+  }
+
+  async stopHrmScan() {
+    this.log('info', 'Stopping emulated HRM scan');
+  }
+
+  async connectHrm(deviceId) {
+    const hrm = this.emulatedHrms.find(h => h.deviceId === deviceId);
+    if (!hrm) {
+      this.log('error', `Emulated HR monitor ${deviceId} not found`);
+      return false;
+    }
+
+    if (this.hrmInterval) {
+      clearInterval(this.hrmInterval);
+      this.hrmInterval = null;
+    }
+
+    this.log('info', `Connecting to emulated HR monitor ${hrm.name}...`);
+    await new Promise(resolve => setTimeout(resolve, 300));
+
+    this.connectedHrm = hrm;
+    this.emit('hrm_status', { connection: 'connected', connectedDeviceId: deviceId });
+
+    this.hrmInterval = setInterval(() => {
+      const data = this.connectedHrm.update();
+      this.emit('hrm_telemetry', data);
+    }, 1000);
+
+    this.log('info', `Connected to ${hrm.name}`);
+    return true;
+  }
+
+  async disconnectHrm() {
+    if (this.hrmInterval) {
+      clearInterval(this.hrmInterval);
+      this.hrmInterval = null;
+    }
+    this.connectedHrm = null;
+    this.emit('hrm_status', { connection: 'disconnected', connectedDeviceId: null });
+    this.log('info', 'Disconnected from emulated HR monitor');
+  }
+
+  getDiscoveredHrmDevices() {
+    return Array.from(this.discoveredHrmDevices.values());
+  }
+
+  /**
    * Get discovered devices
    */
   getDiscoveredDevices() {
@@ -353,6 +446,7 @@ export class AntManagerEmulator extends EventEmitter {
   async shutdown() {
     this.log('info', 'Shutting down emulated ANT+ manager...');
     await this.disconnect();
+    await this.disconnectHrm();
     this.setDongleStatus('disconnected');
   }
 
