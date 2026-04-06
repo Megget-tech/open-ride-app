@@ -14,6 +14,8 @@ import {
 import { saveRouteRide } from '../services/dataManager';
 import { useWakeLock } from '../hooks/useWakeLock';
 import RouteSynthwaveCanvas from '../components/RouteSynthwaveCanvas';
+import { generateTCX, downloadTCX } from '../utils/tcxExport';
+import { isStravaConnected, uploadToStrava, initiateStravaAuth, getStravaAthleteName } from '../utils/stravaService';
 import '../styles/route.css';
 import '../styles/synthwave.css';
 
@@ -356,9 +358,11 @@ export default function RoutePage() {
   // Synthwave view
   const [showSynthwave, setShowSynthwave] = useState(false);
 
-  // Completion summary
-  const [showSummary,   setShowSummary]   = useState(false);
-  const [summaryStats,  setSummaryStats]  = useState(null);
+  // Completion summary + export
+  const [showSummary,      setShowSummary]      = useState(false);
+  const [summaryStats,     setSummaryStats]      = useState(null);
+  const [completeTCX,      setCompleteTCX]       = useState(null);
+  const [stravaUploadStatus, setStravaUploadStatus] = useState(null);
 
   // Refs for interval
   const speedRef           = useRef(0);
@@ -369,6 +373,9 @@ export default function RoutePage() {
   const lastGradeRef       = useRef(-999);
   const ridePowerAccRef    = useRef({ total: 0, count: 0 });
   const rideCadenceAccRef  = useRef({ total: 0, count: 0 });
+  const trackpointsRef     = useRef([]);
+  const rideStartTimeRef   = useRef(null);
+  const heartRateRef       = useRef(0);
 
   const fileInputRef = useRef(null);
 
@@ -380,9 +387,10 @@ export default function RoutePage() {
   const routeIdRef      = useRef(routeId);
 
   // Keep telemetry refs current for interval
-  useEffect(() => { speedRef.current   = telemetry.speed;   }, [telemetry.speed]);
-  useEffect(() => { powerRef.current   = telemetry.power;   }, [telemetry.power]);
-  useEffect(() => { cadenceRef.current = telemetry.cadence; }, [telemetry.cadence]);
+  useEffect(() => { speedRef.current     = telemetry.speed;     }, [telemetry.speed]);
+  useEffect(() => { powerRef.current     = telemetry.power;     }, [telemetry.power]);
+  useEffect(() => { cadenceRef.current   = telemetry.cadence;   }, [telemetry.cadence]);
+  useEffect(() => { heartRateRef.current = telemetry.heartRate; }, [telemetry.heartRate]);
 
   // Keep route info refs current
   useEffect(() => { routePointsRef.current = routePoints; }, [routePoints]);
@@ -480,6 +488,15 @@ export default function RoutePage() {
 
     setSummaryStats(stats);
     setShowSummary(true);
+
+    const tcx = generateTCX(
+      trackpointsRef.current,
+      { duration: stats.duration, distance: Math.round(stats.distance * 1000), calories: 0 },
+      stats.routeName || 'Route Ride',
+      rideStartTimeRef.current || new Date().toISOString(),
+    );
+    setCompleteTCX(tcx);
+    setStravaUploadStatus(null);
   }, [isRiding]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // ── File upload ──────────────────────────────────────────────────────────────
@@ -592,6 +609,13 @@ export default function RoutePage() {
         rideCadenceAccRef.current.count += 1;
       }
 
+      trackpointsRef.current.push({
+        time:    new Date().toISOString(),
+        power:   Math.round(powerRef.current    || 0),
+        hr:      Math.round(heartRateRef.current || 0),
+        cadence: Math.round(cadenceRef.current   || 0),
+      });
+
       const distanceRidden = distanceRiddenRef.current;
 
       let idx = 0;
@@ -641,6 +665,10 @@ export default function RoutePage() {
     lastGradeRef.current            = -999;
     ridePowerAccRef.current         = { total: 0, count: 0 };
     rideCadenceAccRef.current       = { total: 0, count: 0 };
+    trackpointsRef.current          = [];
+    rideStartTimeRef.current        = new Date().toISOString();
+    setCompleteTCX(null);
+    setStravaUploadStatus(null);
     setCurrentIndex(0);
     setIsPaused(false);
     setLiveStats({ distanceRidden: 0, ele: routePoints[0]?.ele ?? 0, grade: 0, duration: 0 });
@@ -1011,6 +1039,42 @@ export default function RoutePage() {
                 </div>
               )}
             </div>
+
+            {completeTCX && (
+              <div className="complete-export">
+                <button
+                  className="complete-btn export"
+                  onClick={() => {
+                    const date = new Date().toISOString().slice(0, 10);
+                    const name = (summaryStats.routeName || 'route').replace(/\s+/g, '-').toLowerCase();
+                    downloadTCX(completeTCX, `${name}-${date}.tcx`);
+                  }}
+                >
+                  ↓ Download .tcx
+                </button>
+                <button
+                  className="complete-btn strava"
+                  disabled={stravaUploadStatus === 'uploading' || stravaUploadStatus === 'done'}
+                  onClick={() => {
+                    if (isStravaConnected()) {
+                      setStravaUploadStatus('uploading');
+                      uploadToStrava(completeTCX, summaryStats.routeName || 'Route Ride')
+                        .then(() => setStravaUploadStatus('done'))
+                        .catch(() => setStravaUploadStatus('error'));
+                    } else {
+                      initiateStravaAuth({ tcxContent: completeTCX, workoutName: summaryStats.routeName || 'Route Ride' });
+                    }
+                  }}
+                >
+                  {stravaUploadStatus === 'uploading' && 'Uploading…'}
+                  {stravaUploadStatus === 'done'      && '✓ Uploaded to Strava'}
+                  {stravaUploadStatus === 'error'     && 'Upload failed — retry?'}
+                  {!stravaUploadStatus && (isStravaConnected()
+                    ? `Upload to Strava${getStravaAthleteName() ? ` (${getStravaAthleteName()})` : ''}`
+                    : 'Connect & Upload to Strava')}
+                </button>
+              </div>
+            )}
 
             <div className="route-complete-actions">
               <button className="route-complete-btn secondary" onClick={() => navigate('/')}>

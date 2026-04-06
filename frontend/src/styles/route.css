@@ -693,3 +693,51 @@
 .route-complete-btn.secondary:hover {
   background: rgba(255, 255, 255, 0.14);
 }
+
+/* ── Export buttons (TCX download + Strava upload) ─────────────────────────── */
+
+.complete-export {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.complete-btn {
+  padding: 0.85rem 1.5rem;
+  border-radius: 8px;
+  border: none;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+  flex: 1;
+  min-width: 0;
+}
+
+.complete-btn.export {
+  background: var(--overlay-lg);
+  color: var(--text-secondary);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.complete-btn.export:hover {
+  background: var(--overlay-xl);
+  color: var(--text-primary);
+}
+
+.complete-btn.strava {
+  background: #fc4c02;
+  color: #fff;
+}
+
+.complete-btn.strava:hover:not(:disabled) {
+  background: #e04400;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(252, 76, 2, 0.45);
+}
+
+.complete-btn.strava:disabled {
+  opacity: 0.7;
+  cursor: default;
+}
