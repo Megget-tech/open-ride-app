@@ -120,6 +120,7 @@ export default function WorkoutPage() {
   const workoutElementsRef = useRef(null);
   const trackpointsRef = useRef([]);        // per-second telemetry for TCX export
   const workoutStartTimeRef = useRef(null); // ISO string of workout start
+  const startDistanceRef = useRef(0);       // trainer distance at workout start (metres)
   const workoutStatsRef = useRef({
     totalPower: 0,
     powerReadings: 0,
@@ -387,8 +388,9 @@ export default function WorkoutPage() {
       totalCadence: 0,
       cadenceReadings: 0
     };
-    trackpointsRef.current    = [];
+    trackpointsRef.current      = [];
     workoutStartTimeRef.current = new Date().toISOString();
+    startDistanceRef.current    = telemetryRef.current.distance || 0;
 
     // Set initial target power with intensity bias applied
     if (executionPlan[0] && connectedDevice) {
@@ -488,7 +490,7 @@ export default function WorkoutPage() {
     const avgCadence = workoutStatsRef.current.cadenceReadings > 0
       ? Math.round(workoutStatsRef.current.totalCadence / workoutStatsRef.current.cadenceReadings)
       : 0;
-    const distance = telemetryRef.current.distance || 0;
+    const distance = Math.max(0, (telemetryRef.current.distance || 0) - startDistanceRef.current);
     const totalKJ = (avgPower * duration) / 1000;
     const calories = Math.round(totalKJ / 4.184);
     const intensityFactor = ftp > 0 ? (avgPower / ftp).toFixed(2) : '--';
@@ -783,7 +785,7 @@ export default function WorkoutPage() {
                 <div className="metric-card distance">
                   <div className="metric-label">DISTANCE</div>
                   <div className="metric-value">
-                    <span>{(telemetry.distance / 1000).toFixed(2)}</span>
+                    <span>{(Math.max(0, telemetry.distance - startDistanceRef.current) / 1000).toFixed(2)}</span>
                     <span className="metric-unit">km</span>
                   </div>
                 </div>
